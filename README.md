@@ -13,3 +13,9 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 cd ceinvatam
 npm install
 ```
+
+## Docs
+
+https://vuejsexamples.com/vue-3-multiselect-component-with-multiselect-and-tagging-options/
+
+https://blog.ninja-squad.com/2021/09/30/script-setup-syntax-in-vue-3/

@@ -12,9 +12,9 @@ let toggleNavbar = function(){
   <nav class="relative flex flex-wrap items-center justify-between px-2 py-4 border-solid">
     <div class="container flex flex-wrap items-center justify-between">
       <div class="w-full relative flex justify-between lg:w-auto  px-4 lg:static lg:block lg:justify-start">
-        <a class="text-xl font-bold leading-relaxed inline-block py-2 whitespace-nowrap uppercase text-gray-600" href="#pablo">
+        <router-link to="/" class="text-xl font-bold leading-relaxed inline-block py-2 whitespace-nowrap uppercase text-gray-600" >
           Logo
-        </a>
+        </router-link>
 
         <button class="text-gray-600 cursor-pointer leading-none py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none" type="button" v-on:click="toggleNavbar()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

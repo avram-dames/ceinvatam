@@ -1,18 +1,23 @@
 <script setup>
 import { ref } from "vue";
 import Multiselect from "@vueform/multiselect";
+
 components: {
   Multiselect;
 }
 
-const multiSelection = ref({})
+const value = ref([])
 
 const options = [
   "București",
+  "Chișinău",
+  "Cluj",
+  "Timișoara",
   "Craiova",
   "Aiud",
   "Râmnicu Vâlcea",
   "Pitești",
+  "Brașov",
   "Sibiu",
   "Constanța",
   "Alba-Iulia",
@@ -311,7 +316,6 @@ const options = [
 .multiselect-group {
   padding: 0;
   margin: 0;
-  @apply p-0 m-0;
 }
 .multiselect-group-label {
   padding: var(--ms-group-label-py, 0.3rem) var(--ms-group-label-px, 0.75rem);

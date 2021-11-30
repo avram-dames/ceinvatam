@@ -11,7 +11,7 @@ import SearchBox from "../components/SearchBox.vue";
       <SearchBox class="mt-12"></SearchBox>
     </div>
 
-    <div class="mt-32">
+    <!-- <div class="mt-32">
       <h2 class="text-center">Categorii</h2>
       <div class="flex space-x-4 justify-center mt-8">
         <div class="flex bg-red-200 w-40 h-40 justify-center items-center">
@@ -21,6 +21,6 @@ import SearchBox from "../components/SearchBox.vue";
           <div class="border">Beauty</div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>

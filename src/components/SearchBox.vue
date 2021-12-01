@@ -25,9 +25,8 @@ const durationUnits = {
 
 async function fetchData() {
   let resp = await fetch('/.netlify/functions/sbFetchClasses')
-  let data = await resp.json()
-  console.log(data)
-  store.setSearchResults(data)
+  let body = await resp.json()
+  store.setSearchResults(body.data)
   router.push('results')
 }
 

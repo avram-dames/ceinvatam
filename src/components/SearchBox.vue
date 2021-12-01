@@ -2,12 +2,11 @@
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
 import SearchBoxMultiSelect from "./SearchBoxMultiSelect.vue";
+import store from "../store"
 
 const router = useRouter();
 
 const searchInput = ref("")
-
-const searchResults = ref({})
 
 const targetUsers = {
   0: "",
@@ -65,6 +64,7 @@ const classes = [
 
 function searchClassesInDatabase() {
   console.log(`Searching for ${searchInput.value} classes.`)
+  store.setSearchResults(classes)
   router.push('results')
 }
 

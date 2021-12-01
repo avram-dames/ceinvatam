@@ -2,12 +2,11 @@
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
 import SearchBoxMultiSelect from "./SearchBoxMultiSelect.vue";
+import store from "../store"
 
 const router = useRouter();
 
 const searchInput = ref("")
-
-const searchResults = ref({})
 
 const targetUsers = {
   0: "",
@@ -28,14 +27,16 @@ const classes = [
   {
     id: 1,
     company: "LINK Academy",
-    name: "Software Testing and QA",
+    title: "Software Testing and QA",
     url: "https://www.link-academy.com/software-testing-and-qa-program-educational",
     domain: "IT",
     cities: ["București", "Timișoara", "Chișinău"],
     inPerson: true,
     online: false,
     targetUsers: [1, 2],
-    duration: 188,
+    duration: "188 ore",
+    score: 9,
+    scoreCount: 6,
     durationUnit: 0,
     certificartions: [
       "ISTQB® - Foundation Level",
@@ -49,14 +50,16 @@ const classes = [
     {
     id: 2,
     company: "Friendly School",
-    name: "Curs de limba engelză",
+    title: "Curs de limba engelză",
     url: "http://www.friendlyschool.md/",
     domain: "Limbi Străine",
     cities: ["Chișinău"],
     inPerson: true,
     online: true,
     targetUser: [1, 2],
-    duration: 0,
+    duration: "3 luni",
+    score: 9,
+    scoreCount: 6,
     durationUnit: 0,
     certificartions: [],
     description: "",
@@ -65,6 +68,7 @@ const classes = [
 
 function searchClassesInDatabase() {
   console.log(`Searching for ${searchInput.value} classes.`)
+  store.setSearchResults(classes)
   router.push('results')
 }
 

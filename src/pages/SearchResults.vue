@@ -2,6 +2,9 @@
 import ClassCard from "../components/ClassCard.vue";
 import SearchResultFilterTagsVue from "../components/SearchResultFilterTags.vue";
 import SearchResultFilterTags from "../components/SearchResultFilterTags.vue";
+import store from "../store"
+
+const results = store.state.searchResults
 </script>
 
 <template>
@@ -9,8 +12,6 @@ import SearchResultFilterTags from "../components/SearchResultFilterTags.vue";
       <SearchResultFilterTags></SearchResultFilterTags>
   </div>
   <div class="mt-8">
-    <ClassCard></ClassCard>
-    <ClassCard></ClassCard>
-    <ClassCard></ClassCard>
+    <ClassCard v-for="result in results" :key="result.id" v-bind="result"></ClassCard>
   </div>
 </template>

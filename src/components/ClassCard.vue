@@ -1,31 +1,31 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 
-const classDetails = ref({
-        title: 'Software Testing and QA',
-        company: 'LINK Academy',
-        score: 8.3,
-        duration: '252 ore',
-        scoreCount: 95
+const props = defineProps({
+  duration: String,
+  score: Number,
+  scoreCount: Number,
+  title: String,
+  company: String
 })
 </script>
 
 <template>
   <div class="px-2">
     <div class="flex justify-between">
-      <span>{{ classDetails.duration }}</span>
+      <span>{{ duration }}</span>
       <div>
-        <span class="text-white px-2 py-1 bg-purple-700 rounded-md">{{ classDetails.score }}</span>
-        <span class="pl-2">{{ classDetails.scoreCount }} evaluări</span>
+        <span class="text-white px-2 py-1 bg-purple-700 rounded-md">{{ score }}</span>
+        <span class="pl-2">{{ scoreCount }} evaluări</span>
       </div>
     </div>
 
     <div class="mt-4">
-      <h2>{{ classDetails.title }}</h2>
+      <h2>{{ title }}</h2>
     </div>
 
     <div class="mt-4">
-      <p>{{ classDetails.company }}</p>
+      <p>{{ company }}</p>
     </div>
   </div>
 

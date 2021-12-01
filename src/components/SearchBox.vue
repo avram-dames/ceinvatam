@@ -23,59 +23,27 @@ const durationUnits = {
   4: "perioană nedeterminată"
 }
 
-const classes = [
-  {
-    id: 1,
-    company: "LINK Academy",
-    title: "Software Testing and QA",
-    url: "https://www.link-academy.com/software-testing-and-qa-program-educational",
-    domain: "IT",
-    cities: ["București", "Timișoara", "Chișinău"],
-    inPerson: true,
-    online: false,
-    targetUsers: [1, 2],
-    duration: "188 ore",
-    score: 9,
-    scoreCount: 6,
-    durationUnit: 0,
-    certificartions: [
-      "ISTQB® - Foundation Level",
-      "Cambridge International A&AS Level Computer Science",
-      "LINK Academy Certified Software Testing and QA Engineer",
-      "LINK English",
-      "LINK German",
-    ],
-    description: "Software Testing and QA - stăpânește abilitățile bine plătite și devino expertul dorit de fiecare companie IT. Odată cu dezvoltarea programării și a complexității soluțiilor software, s-a ajuns la o cerere tot mai mare de verificare a corectitudinii, a calității și a vitezei de funcționare a produselor. Creșterea echipei, erorile frecvente, lucrul din mai multe locații, arhivarea fișierelor de proiect, optimizarea constantă și creșterea programului sunt doar câțiva dintre factorii care au dus la nevoia tot mai mare de joburi de software tester. Software Testing and Quality Assurance este procesul de căutare a erorilor (bugs) în sistemele sau programele computerizate pentru a se asigura că acestea îndeplinesc standardele necesare. Aceasta este una din carierele profitable din lumea IT, în care taskul vostru va fi să verificați dacă produsul software are calitatea corespunzătoare. Prin urmare, se recomandă tuturor perfecționiștilor sau celor cu ochi vigilent.",
-  },
-    {
-    id: 2,
-    company: "Friendly School",
-    title: "Curs de limba engelză",
-    url: "http://www.friendlyschool.md/",
-    domain: "Limbi Străine",
-    cities: ["Chișinău"],
-    inPerson: true,
-    online: true,
-    targetUser: [1, 2],
-    duration: "3 luni",
-    score: 9,
-    scoreCount: 6,
-    durationUnit: 0,
-    certificartions: [],
-    description: "",
-  },
-]
+async function fetchData() {
+  let resp = await fetch('/.netlify/functions/sbFetchClasses')
+  let data = await resp.json()
+  console.log(data)
+  store.setSearchResults(data)
+  router.push('results')
+}
 
 function searchClassesInDatabase() {
   console.log(`Searching for ${searchInput.value} classes.`)
-  store.setSearchResults(classes)
-  router.push('results')
+  fetchData()
 }
 
 </script>
 
-<template>  
-  <form action="" v-on:submit.prevent="searchClassesInDatabase" class="flex flex-col lg:space-x-2 space-y-4 lg:space-y-0 px-4 lg:flex-row">
+<template>
+  <form
+    action=""
+    v-on:submit.prevent="searchClassesInDatabase"
+    class="flex flex-col lg:space-x-2 space-y-4 lg:space-y-0 px-4 lg:flex-row"
+  >
     <input
       type="text"
       placeholder="ce dorești să înveți?"
@@ -83,8 +51,10 @@ function searchClassesInDatabase() {
       class="px-4 py-2 border border-gray-400 rounded-md lg:w-1/3 h-12"
     />
     <div class="lg:w-1/3">
-    <SearchBoxMultiSelect></SearchBoxMultiSelect>
+      <SearchBoxMultiSelect></SearchBoxMultiSelect>
     </div>
-    <button type="submit" class="px-4 py-2 bg-green-400 rounded-md lg:w-48 h-12">Caută</button>
+    <button class="px-4 py-2 bg-green-400 rounded-md lg:w-48 h-12">
+      Caută
+    </button>
   </form>
 </template>

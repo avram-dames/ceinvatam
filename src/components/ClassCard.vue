@@ -1,13 +1,17 @@
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 
 const props = defineProps({
+  id: Number,
   duration: String,
   score: Number,
   scoreCount: Number,
   title: String,
   company: String
 })
+
+console.log("Inside class card")
+console.log(props)
 </script>
 
 <template>

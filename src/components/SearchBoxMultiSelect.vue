@@ -1,38 +1,31 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 import Multiselect from "@vueform/multiselect";
+import store from "../store"
 
 components: {
   Multiselect;
 }
 
-const value = ref([])
+const multiSelection = ref()
 
-const options = [
-  "București",
-  "Chișinău",
-  "Cluj",
-  "Timișoara",
-  "Craiova",
-  "Aiud",
-  "Râmnicu Vâlcea",
-  "Pitești",
-  "Brașov",
-  "Sibiu",
-  "Constanța",
-  "Alba-Iulia",
-];
+function updateCityFilter() {
+  store.setCityFilter(store.state.cities.filter(obj => multiSelection.value.includes(obj.name)).map(obj => obj.id))
+}
+
 </script>
 
 <template>
   <div>
     <Multiselect
       placeholder="Selectează orașul dorit"
-      v-model="value"
+      v-model="multiSelection"
+      @select="updateCityFilter"
       mode="tags"
+      
       :searchable="true"
       :createTag="true"
-      :options="options"
+      :options="store.state.cities.map(obj => obj.name)"
     />
   </div>
 </template>

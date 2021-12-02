@@ -23,16 +23,27 @@ const durationUnits = {
   4: "perioană nedeterminată"
 }
 
-async function fetchData() {
-  let resp = await fetch('/.netlify/functions/sbFetchClasses')
+async function fetchData(query) {
+  if (query) {
+    console.log('Searching for ' + query + ' in the database')
+  }
+  const SB_API_URL = '/.netlify/functions/sbFetchClasses'
+  const queryUrlParam = `?query=${query}`
+  const filterUrlParam = store.state.cityFilter.map(id => '&filter=' + id).join('')
+  
+  let sbApiUrl = SB_API_URL + queryUrlParam
+  if (store.state.cityFilter) {sbApiUrl += filterUrlParam}
+
+  let resp = await fetch(sbApiUrl)
   let body = await resp.json()
+  
   store.setSearchResults(body.data)
   router.push('results')
 }
 
 function searchClassesInDatabase() {
   console.log(`Searching for ${searchInput.value} classes.`)
-  fetchData()
+  fetchData(searchInput.value)
 }
 
 </script>

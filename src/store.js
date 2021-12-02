@@ -4,7 +4,25 @@ const store = {
     debug: true,
 
     state: reactive({
-        searchResults: []
+        searchResults: [],
+        cityFilter: [],
+        cities: [{
+                id: 1,
+                name: 'București'
+            },
+            {
+                id: 2,
+                name: 'Timișoara'
+            },
+            {
+                id: 3,
+                name: 'Cluj Napoca'
+            },
+            {
+                id: 4,
+                name: 'Chișinău'
+            },
+        ]
     }),
 
     setSearchResults(newResults) {
@@ -21,6 +39,21 @@ const store = {
         }
 
         this.state.searchResults = []
+    },
+    setCityFilter(newResults) {
+        if (store.debug) {
+            console.log(`setCityFilter triggered with ${newResults}`);
+
+            this.state.cityFilter = newResults
+        }
+    },
+
+    clearCityFilter() {
+        if (store.debug) {
+            console.log('clearCityFilter triggered')
+        }
+
+        this.state.cityFilter = []
     }
 }
 

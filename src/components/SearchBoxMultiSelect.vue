@@ -1,40 +1,32 @@
 <script setup>
-import { ref } from "vue";
-import Multiselect from "@vueform/multiselect";
+import { ref } from "vue"
+import Multiselect from "@vueform/multiselect"
+import store from "../store"
 
 components: {
   Multiselect;
 }
 
-const value = ref([])
+const multiSelection = ref()
 
-const options = [
-  "București",
-  "Chișinău",
-  "Cluj",
-  "Timișoara",
-  "Craiova",
-  "Aiud",
-  "Râmnicu Vâlcea",
-  "Pitești",
-  "Brașov",
-  "Sibiu",
-  "Constanța",
-  "Alba-Iulia",
-];
+const props = defineProps({
+  searchCitySelection: Array,
+});
+
+const emits = defineEmits(["update:searchCitySelection"]);
+
 </script>
 
 <template>
-  <div>
-    <Multiselect
-      placeholder="Selectează orașul dorit"
-      v-model="value"
-      mode="tags"
-      :searchable="true"
-      :createTag="true"
-      :options="options"
-    />
-  </div>
+  <Multiselect
+    placeholder="Selectează orașul dorit"
+    v-model="multiSelection"
+    @select="$emit('update:searchCitySelection', multiSelection)"
+    mode="tags"
+    :searchable="true"
+    :createTag="true"
+    :options="store.getCityOptions()"
+  />
 </template>
 
 
@@ -121,7 +113,7 @@ const options = [
   align-items: center;
 }
 .multiselect-tag {
-  background: var(--ms-tag-bg, #B5DAEE);
+  background: var(--ms-tag-bg, #b5daee);
   color: var(--ms-tag-color, #000);
   font-size: var(--ms-tag-font-size, 0.875rem);
   line-height: var(--ms-tag-line-height, 1.25rem);

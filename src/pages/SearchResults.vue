@@ -1,10 +1,11 @@
 <script setup>
-import ClassCard from "../components/ClassCard.vue";
-import SearchResultFilterTagsVue from "../components/SearchResultFilterTags.vue";
-import SearchResultFilterTags from "../components/SearchResultFilterTags.vue";
+import {ref} from "vue"
+import ClassCard from "../components/ClassCard.vue"
+import SearchResultFilterTagsVue from "../components/SearchResultFilterTags.vue"
+import SearchResultFilterTags from "../components/SearchResultFilterTags.vue"
 import store from "../store"
 
-const results = store.state.searchResults
+const results = ref(store.state.searchResults)
 </script>
 
 <template>

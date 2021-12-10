@@ -6,7 +6,7 @@ export default defineConfig({
     plugins: [vue()],
     server: {
         proxy: {
-            '/query': 'https://ceinvatam-net-workers.lalatech.workers.dev/',
+            '/api/query': 'https://ceinvatam.avram.dev',
             // '/query': 'http://127.0.0.1:8787/',
         }
     }

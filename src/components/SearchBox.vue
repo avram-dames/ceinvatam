@@ -25,7 +25,7 @@ function validateSearchInputs() {
  *
  */
 async function searchClasses() {
-  const apiUrl = "/query";
+  const apiUrl = "/api/query";
   const apiRequestOptions = {
     method: "POST",
     headers: {
@@ -34,8 +34,8 @@ async function searchClasses() {
     },
     body: JSON.stringify({
       query: {
-        searchTerms: searchText.value,
-        cityFilter: searchCitySelection.value,
+        searchText: searchText.value,
+        cityFilterIds: searchCitySelection.value,
       },
     }),
   };
@@ -45,7 +45,7 @@ async function searchClasses() {
   
     if (response.status !== 200) {
       showHelper.value = true;
-      helperMessage.value = "This is not a valid query. Please try again."
+      helperMessage.value = "Something went wrong. Please try again."
       return 0
     }
     

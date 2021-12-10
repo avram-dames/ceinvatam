@@ -21,12 +21,27 @@ const store = {
                 id: 4,
                 name: 'Chișinău'
             },
+            {
+                id: 5,
+                name: 'Argeș'
+            },
+            {
+                id: 6,
+                name: 'Iași'
+            },
+            {
+                id: 7,
+                name: 'Sîngerei'
+            },
         ],
         cityOptions: {
             1: 'București',
             2: 'Timișoara',
             3: 'Cluj Napoca',
-            4: 'Chișinău'
+            4: 'Chișinău',
+            5: 'Argeș',
+            6: 'Iași',
+            7: 'Sîngerei'
         },
         targetUsers: {
             0: "",

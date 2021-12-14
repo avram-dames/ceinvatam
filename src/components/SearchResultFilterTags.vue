@@ -2,11 +2,24 @@
 </script>
 
 <template>
+  <!-- Sorters -->
   <div class="flex space-x-1 overflow-x-auto hide-scroll-bar">
-    <div class="flex flex-shrink-0 items-center space-x-1 bg-gray-200 rounded-2xl px-4 py-1">
+    <!-- Sort by name -->
+    <div
+      class="
+        flex flex-shrink-0
+        items-center
+        space-x-1
+        bg-gray-200
+        rounded-2xl
+        px-4
+        py-1
+      "
+    >
       <span>Nume</span>
     </div>
-    <div class="flex space-x-1 flex-shrink-0 ">
+
+    <div class="flex space-x-1 flex-shrink-0">
       <div
         class="flex items-center space-x-1 bg-green-200 rounded-2xl px-4 py-1"
       >
@@ -30,15 +43,22 @@
       </div>
 
       <div
-        class="flex flex-shrink-0  items-center space-x-1 bg-gray-200 rounded-2xl px-4 py-1"
+        class="
+          flex flex-shrink-0
+          items-center
+          space-x-1
+          bg-gray-200
+          rounded-2xl
+          px-4
+          py-1
+        "
       >
         <span>Durată</span>
       </div>
 
       <div
         class="
-        flex-shrink-0 
-          flex
+          flex-shrink-0 flex
           items-center
           space-x-1
           bg-gray-200
@@ -52,7 +72,7 @@
     </div>
   </div>
 
-    <!-- Filters -->
+  <!-- Filters -->
   <div class="flex space-x-1 mt-2">
     <div class="flex items-center space-x-1 bg-blue-300 rounded-2xl px-4 py-1">
       <span>Doar Cursuri</span
@@ -81,9 +101,7 @@
 </template>
 
 <style>
-
 .hide-scroll-bar::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-
 </style>

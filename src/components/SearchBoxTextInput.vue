@@ -22,17 +22,22 @@ function updateSuggestionsOnUserInput() {
   );
 }
 
+// not the cleanest code ever, should be refactored
 watch(userInput, (val, preVal) =>  {
   emits('update:searchText', val)
-  if (suggestions.value.length === 1 && suggestions.value[0] === val) {
-
-  } else if (val.length > 1) {
+  if (val.length > 1) {
     updateSuggestionsOnUserInput();
-    showSuggestionsDropdown.value = true;
   } else {
     suggestions.value = [];
-    showSuggestionsDropdown.value = false;
     arrowCounter.value = 0;
+  }
+
+  if (suggestions.value.length === 0) {
+    showSuggestionsDropdown.value = false
+  } else if (suggestions.value.length === 1 && val === suggestions.value[0].name) {
+    showSuggestionsDropdown.value = false
+  } else {
+    showSuggestionsDropdown.value = true
   }
 })
 
@@ -84,6 +89,7 @@ onUnmounted(() => {
       type="text"
       placeholder="ce dorești să înveți?"
       v-model="userInput"
+      @keydown.enter.prevent
       @keydown.down.prevent
       @keydown.up.prevent
       @keydown.down="onArrowDown"

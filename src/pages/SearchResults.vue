@@ -1,7 +1,6 @@
 <script setup>
 import {ref} from "vue"
 import ClassCard from "../components/ClassCard.vue"
-import SearchResultFilterTagsVue from "../components/SearchResultFilterTags.vue"
 import SearchResultFilterTags from "../components/SearchResultFilterTags.vue"
 import store from "../store"
 

@@ -4,6 +4,7 @@ const store = {
     debug: true,
 
     state: reactive({
+        searchSuggestions: [],
         searchResults: [],
         cities: [{
                 id: 1,
@@ -74,20 +75,8 @@ const store = {
         this.state.searchResults = []
     },
 
-    setCityFilter(newResults) {
-        if (store.debug) {
-            console.log(`setCityFilter triggered with ${newResults}`);
-
-            this.state.cityFilter = newResults
-        }
-    },
-
-    clearCityFilter() {
-        if (store.debug) {
-            console.log('clearCityFilter triggered')
-        }
-
-        this.state.cityFilter = []
+    setSearchSuggestions(data) {
+        this.state.searchSuggestions = data
     },
 
     getCityIds() {

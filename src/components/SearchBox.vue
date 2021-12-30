@@ -2,10 +2,10 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import SearchBoxMultiSelect from "./SearchBoxMultiSelect.vue";
+import SearchBoxTextInput from "./SearchBoxTextInput.vue";
 import store from "../store";
 
 const router = useRouter();
-
 const searchText = ref("");
 const searchCitySelection = ref([]);
 
@@ -21,9 +21,6 @@ function validateSearchInputs() {
   return true;
 }
 
-/**
- *
- */
 async function searchClasses() {
   const apiUrl = "/api/query";
   const apiRequestOptions = {
@@ -41,47 +38,48 @@ async function searchClasses() {
   };
 
   if (validateSearchInputs()) {
-    let response = await fetch(apiUrl, apiRequestOptions)
-  
+    let response = await fetch(apiUrl, apiRequestOptions);
+
     if (response.status !== 200) {
       showHelper.value = true;
-      helperMessage.value = "Something went wrong. Please try again."
-      return 0
+      helperMessage.value = "Something went wrong. Please try again.";
+      return 0;
     }
-    
+
     const data = await response.json();
-  
+
     if (data.data.length > 0) {
       store.setSearchResults(data.data);
       router.push("results");
     } else {
       showHelper.value = true;
-      helperMessage.value = "There are no classes that meet your requirements. Please try again."
-      return 0
+      helperMessage.value =
+        "There are no classes that meet your requirements. Please try again.";
+      return 0;
     }
   }
+}
+
+function updateTextSearch(value) {
+  searchText.value = value;
 }
 </script>
 
 <template>
   <form
-    action=""
-    v-on:submit.prevent="searchClasses"
+    @submit.prevent
     class="flex flex-col lg:space-x-2 space-y-4 lg:space-y-0 px-4 lg:flex-row"
   >
-    <input
-      type="text"
-      placeholder="ce dorești să înveți?"
-      v-model="searchText"
-      class="px-4 py-2 border border-gray-400 rounded-md lg:w-1/3 h-12"
-    />
+    <div class="lg:w-1/3">
+      <SearchBoxTextInput v-model:search-text="searchText"></SearchBoxTextInput>
+    </div>
     <div class="lg:w-1/3">
       <SearchBoxMultiSelect
         v-model:search-city-selection="searchCitySelection"
       ></SearchBoxMultiSelect>
     </div>
     <button
-      type="submit"
+      @click="searchClasses"
       class="px-4 py-2 bg-green-400 rounded-md lg:w-48 h-12"
     >
       Caută

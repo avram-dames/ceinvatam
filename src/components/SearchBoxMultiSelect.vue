@@ -3,18 +3,17 @@ import { ref } from "vue"
 import Multiselect from "@vueform/multiselect"
 import store from "../store"
 
-components: {
-  Multiselect;
-}
-
 const multiSelection = ref()
+const multiSelectionOptions = store.getCityOptions()
 
+
+// bind parent's searchCitySelection to the value of multiSelectionOptions using 
+// an event called update:searchCitySelection
 const props = defineProps({
   searchCitySelection: Array,
 });
 
 const emits = defineEmits(["update:searchCitySelection"]);
-
 </script>
 
 <template>
@@ -25,7 +24,7 @@ const emits = defineEmits(["update:searchCitySelection"]);
     mode="tags"
     :searchable="true"
     :createTag="true"
-    :options="store.getCityOptions()"
+    :options="multiSelectionOptions"
   />
 </template>
 

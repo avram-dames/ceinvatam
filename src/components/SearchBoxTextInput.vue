@@ -55,9 +55,11 @@ function onArrowUp() {
 }
 
 function onEnter() {
-  userInput.value = suggestions.value[arrowCounter.value].name;
-  arrowCounter.value = -1;
-  showSuggestionsDropdown.value = false;
+  if (showSuggestionsDropdown.value) {
+    userInput.value = suggestions.value[arrowCounter.value].name;
+    arrowCounter.value = -1;
+    showSuggestionsDropdown.value = false;
+  }
 }
 
 function onClick(item) {

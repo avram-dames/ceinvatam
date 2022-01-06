@@ -21,6 +21,7 @@ const emits = defineEmits(["update:searchCitySelection"]);
     placeholder="Selectează orașul dorit"
     v-model="multiSelection"
     @select="$emit('update:searchCitySelection', multiSelection)"
+    @deselect="$emit('update:searchCitySelection', multiSelection)"
     mode="tags"
     :searchable="true"
     :createTag="true"

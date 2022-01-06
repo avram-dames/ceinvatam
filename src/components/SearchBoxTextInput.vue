@@ -89,7 +89,7 @@ onUnmounted(() => {
     <!-- User Input -->
     <input
       type="text"
-      placeholder="ce dorești să înveți?"
+      placeholder="Ce dorești să înveți?"
       v-model="userInput"
       @keydown.enter.prevent
       @keydown.down.prevent
@@ -97,7 +97,7 @@ onUnmounted(() => {
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
       @keydown.enter="onEnter"
-      class="w-full px-4 py-2 border border-gray-400 rounded-md h-12 autocomplete"
+      class="w-full px-4 py-2 border border-gray-300 rounded-md h-12 autocomplete"
     />
     <!-- Dropdown Suggestions List -->
     <ul class="autocomplete-results" v-show="showSuggestionsDropdown">

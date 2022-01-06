@@ -80,7 +80,7 @@ function updateTextSearch(value) {
     </div>
     <button
       @click="searchClasses"
-      class="px-4 py-2 bg-green-400 rounded-md lg:w-48 h-12"
+      class="px-4 py-2 bg-purple-400 rounded-md lg:w-48 h-12"
     >
       Caută
     </button>

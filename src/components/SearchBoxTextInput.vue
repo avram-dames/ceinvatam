@@ -16,14 +16,21 @@ const props = defineProps({
 });
 const emits = defineEmits(["update:searchText"]);
 
+// make string lowercase and remove accents
+function udfNormalize(str) {
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+}
+
+// match user input with items in the suggestion list
 function updateSuggestionsOnUserInput() {
   suggestions.value = store.state.searchSuggestions.filter(
     (item) =>
-      item.name.toLowerCase().indexOf(userInput.value.toLowerCase()) > -1
+      udfNormalize(item.name).indexOf(udfNormalize(userInput.value)) > -1
   );
 }
 
-// not the cleanest code ever, should be refactored
+// listens for changes in user input and runs logic
+// ~~ not the cleanest code ever, should be refactored ~~
 watch(userInput, (val, preVal) => {
   emits("update:searchText", val);
   if (val.length > 2) {
@@ -32,12 +39,14 @@ watch(userInput, (val, preVal) => {
     suggestions.value = [];
     arrowCounter.value = 0;
   }
+  
+  const phrases = suggestions.value.filter((item) => item.rank === 1)
 
   if (suggestions.value.length === 0) {
     showSuggestionsDropdown.value = false;
   } else if (
-    suggestions.value.length === 1 &&
-    val === suggestions.value[0].name
+    phrases.length === 1 &&
+    val === phrases[0].name
   ) {
     showSuggestionsDropdown.value = false;
   } else {
@@ -59,11 +68,13 @@ function onArrowUp() {
 }
 
 function onEnter() {
-  if (suggestions.value[arrowCounter.value].entity === "class") {
+  if (arrowCounter.value === -1) {
+    return 0
+  } else if (suggestions.value[arrowCounter.value].entity === "class") {
     router.push("results");
   } else if (suggestions.value[arrowCounter.value].entity === "partner") {
     router.push("results");
-  } else if (showSuggestionsDropdown.value) {
+  } else {
     userInput.value = suggestions.value[arrowCounter.value].name;
     arrowCounter.value = -1;
     showSuggestionsDropdown.value = false;
@@ -121,7 +132,6 @@ onUnmounted(() => {
         z-50
         bg-white
         border
-        rounded-md
         border-gray-200
         w-auto
       "
@@ -197,6 +207,5 @@ onUnmounted(() => {
 .autocomplete-result.is-active {
   background-color: #c084fc;
   color: white;
-  border-radius: 0.375rem;
 }
 </style>

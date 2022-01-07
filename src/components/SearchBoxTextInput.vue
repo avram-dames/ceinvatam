@@ -72,9 +72,9 @@ function onEnter(event) {
     // unfocus element if the user presses enter twice if the option is already selected
     document.activeElement.blur()
   } else if (suggestions.value[arrowCounter.value].entity === "class") {
-    router.push("results");
+    router.push("class");
   } else if (suggestions.value[arrowCounter.value].entity === "partner") {
-    router.push("results");
+    router.push("partner");
   } else {
     userInput.value = suggestions.value[arrowCounter.value].name;
     arrowCounter.value = -1;
@@ -86,9 +86,9 @@ function onClick(item) {
   userInput.value = item.name;
   showSuggestionsDropdown.value = false;
   if (item.entity === "partner") {
-    router.push("results");
+    router.push("partner");
   } else if (item.entity === "class") {
-    router.push("results");
+    router.push("class");
   }
 }
 

@@ -67,9 +67,10 @@ function onArrowUp() {
   }
 }
 
-function onEnter() {
+function onEnter(event) {
   if (arrowCounter.value === -1) {
-    return 0
+    // unfocus element if the user presses enter twice if the option is already selected
+    document.activeElement.blur()
   } else if (suggestions.value[arrowCounter.value].entity === "class") {
     router.push("results");
   } else if (suggestions.value[arrowCounter.value].entity === "partner") {
@@ -121,19 +122,19 @@ onUnmounted(() => {
       @keydown.up.prevent
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
-      class="w-full px-4 py-2 border border-gray-300 rounded-md h-12 relative"
+      class="relative h-12 w-full m-0 px-4 py-2 border border-gray-300 rounded-md"
     />
     <!-- Dropdown Suggestions List -->
     <ul
       class="
         absolute
-        mr-4
         mt-1
         z-50
         bg-white
         border
         border-gray-200
-        w-auto
+        w-full-w-margins
+        lg:w-1/2
       "
       v-show="showSuggestionsDropdown"
     >

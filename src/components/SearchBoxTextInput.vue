@@ -149,7 +149,7 @@ onUnmounted(() => {
           <svg
             v-if="item.entity === 'class'"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 shrink-0"
+            class="h-6 w-6 flex-none"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -169,7 +169,7 @@ onUnmounted(() => {
           <svg
             v-if="item.entity === 'partner'"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 shrink-0"
+            class="h-6 w-6 flex-none"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -184,7 +184,7 @@ onUnmounted(() => {
           <svg
             v-if="item.entity === 'phrase'"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 shrink-0"
+            class="h-6 w-6 flex-none"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -196,7 +196,7 @@ onUnmounted(() => {
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
           </svg>
-          <span class="pl-2 grow-0">{{ item.name }}</span>
+          <span class="pl-2">{{ item.name }}</span>
         </div>
       </li>
     </ul>
@@ -205,7 +205,7 @@ onUnmounted(() => {
 
 <style>
 .autocomplete-result.is-active {
-  background-color: #c084fc;
+  background-color: #bc7dfc;
   color: white;
 }
 </style>

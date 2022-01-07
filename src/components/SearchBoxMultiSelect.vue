@@ -42,7 +42,7 @@ const emits = defineEmits(["update:searchCitySelection"]);
   cursor: pointer;
   outline: none;
   border: var(--ms-border-width, 1px) solid var(--ms-border-color, #d1d5db);
-  border-radius: var(--ms-radius, 4px);
+  border-radius: 0.375rem;
   background: var(--ms-bg, #fff);
   font-size: var(--ms-font-size, 1rem);
   min-height: 3rem;
@@ -58,8 +58,7 @@ const emits = defineEmits(["update:searchCitySelection"]);
   background: var(--ms-bg-disabled, #f3f4f6);
 }
 .multiselect.is-active {
-  box-shadow: 0 0 0 var(--ms-ring-width, 3px)
-    var(--ms-ring-color, rgba(16, 185, 129, 0.18823529411764706));
+  border: 2px solid #2563eb;
 }
 .multiselect-multiple-label,
 .multiselect-placeholder,
@@ -113,7 +112,7 @@ const emits = defineEmits(["update:searchCitySelection"]);
   align-items: center;
 }
 .multiselect-tag {
-  background: var(--ms-tag-bg, #b5daee);
+  background: var(--ms-tag-bg, #d8b4fe);
   color: var(--ms-tag-color, #000);
   font-size: var(--ms-tag-font-size, 0.875rem);
   line-height: var(--ms-tag-line-height, 1.25rem);
@@ -205,7 +204,7 @@ const emits = defineEmits(["update:searchCitySelection"]);
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
-  background-color: var(--ms-spinner-color, #10b981);
+  background-color: var(--ms-spinner-color, #bc7dfc);
   width: 1rem;
   height: 1rem;
   z-index: 10;
@@ -267,11 +266,10 @@ const emits = defineEmits(["update:searchCitySelection"]);
   position: absolute;
   left: calc(var(--ms-border-width, 1px) * -1);
   right: calc(var(--ms-border-width, 1px) * -1);
-  bottom: 0;
+  bottom: -0.475rem;
   transform: translateY(100%);
-  border: var(--ms-dropdown-border-width, 1px) solid
-    var(--ms-dropdown-border-color, #d1d5db);
-  margin-top: calc(var(--ms-border-width, 1px) * -1);
+  border: 1px solid #e5e7eb;
+  margin-top: calc(var(--ms-border-width, 1px) * );
   max-height: 15rem;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -279,8 +277,6 @@ const emits = defineEmits(["update:searchCitySelection"]);
   background: var(--ms-dropdown-bg, #fff);
   display: flex;
   flex-direction: column;
-  border-radius: 0 0 var(--ms-dropdown-radius, 4px)
-    var(--ms-dropdown-radius, 4px);
   outline: none;
 }
 .multiselect-dropdown.is-top {
@@ -365,7 +361,7 @@ const emits = defineEmits(["update:searchCitySelection"]);
   text-align: left;
 }
 .multiselect-option.is-pointed {
-  background: var(--ms-option-bg-pointed, #f3f4f6);
+  background: var(--ms-option-bg-pointed, #bc7dfc);
   color: var(--ms-option-color-pointed, #1f2937);
 }
 .multiselect-option.is-selected {

@@ -1,8 +1,9 @@
 <script setup>
 import {ref} from "vue"
 import store from "../store"
+import HeaderCardPartner from "../components/HeaderCardPartner.vue"
 </script>
 
 <template>
-<h1>Partner Page</h1>
+<HeaderCardPartner></HeaderCardPartner>
 </template>

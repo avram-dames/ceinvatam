@@ -1,9 +1,22 @@
 <script setup>
-import {ref} from "vue"
-import store from "../store"
-import HeaderCardPartner from "../components/HeaderCardPartner.vue"
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+
+import store from "../store";
+import HeaderCardPartner from "../components/HeaderCardPartner.vue";
+
+const router = useRouter();
+const route = useRoute();
+const partnerId = ref(Number(route.params.id));
 </script>
 
 <template>
-<HeaderCardPartner></HeaderCardPartner>
+  <Suspense>
+    <template #default>
+      <HeaderCardPartner :partnerId="partnerId"></HeaderCardPartner>
+    </template>
+    <template #fallback>
+      Loading...
+    </template>
+  </Suspense>
 </template>

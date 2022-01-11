@@ -15,7 +15,8 @@ const router = createRouter({
             component: SearchResults
         },
         {
-            path: '/partner',
+            path: '/partner/:id',
+            name: 'Partner',
             component: Partner
         },
         {

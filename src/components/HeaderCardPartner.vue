@@ -1,16 +1,24 @@
-<script setup>
+<script async setup>
 import { ref } from "vue";
 
 const props = defineProps({
-  url: String,
+  partnerId: Number,
 });
+
+async function getPartnerInfo(id) {
+  const apiUrl = `/api/partner/${id}`;
+  const response = await fetch(apiUrl);
+  return await response.json();
+}
+const { partner } = await getPartnerInfo(props.partnerId)
+const partnerInfo = partner[0]
 </script>
 
 <template>
   <div class="px-4 mt-4">
     <!-- Title -->
     <div>
-      <h1>Link Academy</h1>
+      <h1>{{ partnerInfo.name }}</h1>
 
       <div class="mt-2">București, Timișoara, Chișinău</div>
     </div>
@@ -29,11 +37,7 @@ const props = defineProps({
     <div class="mt-16">
       <h2>Despre Companie</h2>
       <p class="mt-4">
-        Cea mai practică școală pentru obținerea rapidă a unui loc de muncă în
-        sectorul IT al unei companii autohtone sau străine Doriți un loc de
-        muncă bine plătit în sectorul IT al unei companii de mărime mare sau
-        medie? Poziția unui căutat leader al echipelor de proiect? Sau a unui
-        specialist în calculatoare al unei ambițioase firme ”start up”?
+        {{ partnerInfo.about}}
       </p>
     </div>
   </div>

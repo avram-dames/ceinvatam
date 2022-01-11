@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 const props = defineProps({
   duration: String,
@@ -11,8 +12,12 @@ const props = defineProps({
   rank: Number,
   id: Number
 })
-
+const router = useRouter();
 const duration_obj = JSON.parse(props.duration)
+
+function navigateToClass(id) {
+  router.push({name: "Class", params: { id: id }});
+}
 </script>
 
 <template>
@@ -21,7 +26,7 @@ const duration_obj = JSON.parse(props.duration)
       <p>{{ partner }}</p>
     </div>
 
-    <div class="mt-2">
+    <div class="mt-2 cursor-pointer" @click="navigateToClass(id)">
       <h2>{{ name }}</h2>
     </div>
 

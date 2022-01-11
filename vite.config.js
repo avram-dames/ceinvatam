@@ -11,7 +11,9 @@ export default defineConfig({
     server: {
         proxy: {
             '/api/query': host,
-            '/api/searchsuggestions': host,
+            '/api': host,
+            '/api/partner/\d+': host,
+            '/api/partner/\d+/addresses': host,
         }
     }
 })

@@ -74,7 +74,7 @@ function onEnter(event) {
   } else if (suggestions.value[arrowCounter.value].entity === "class") {
     router.push("class");
   } else if (suggestions.value[arrowCounter.value].entity === "partner") {
-    router.push("partner");
+    router.push({name: "Partner", params: { id: suggestions.value[arrowCounter.value].target_id }});
   } else {
     userInput.value = suggestions.value[arrowCounter.value].name;
     arrowCounter.value = -1;
@@ -86,7 +86,7 @@ function onClick(item) {
   userInput.value = item.name;
   showSuggestionsDropdown.value = false;
   if (item.entity === "partner") {
-    router.push("partner");
+    router.push({name: "Partner", params: { id: item.target_id }});
   } else if (item.entity === "class") {
     router.push("class");
   }

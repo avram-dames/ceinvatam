@@ -1,29 +1,31 @@
 <script async setup>
 import { ref } from "vue";
 
-import HeaderCardPartnerCityList from "./HeaderCardPartnerCityList.vue"
+import HeaderCardClassCityList from "./HeaderCardClassCityList.vue"
 
 const props = defineProps({
-  partnerId: Number,
+  classId: Number,
 });
 
 async function getPartnerInfo(id) {
-  const apiUrl = `/api/partner/${id}`;
+  const apiUrl = `/api/class/${id}`;
   const response = await fetch(apiUrl);
   return await response.json();
 }
-const { data } = await getPartnerInfo(props.partnerId)
-const partnerInfo = data[0]
+const { data } = await getPartnerInfo(props.classId)
+const classInfo = data[0]
+console.log(classInfo);
 </script>
 
 <template>
   <div class="px-4 mt-4">
     <!-- Title -->
     <div>
-      <h1>{{ partnerInfo.name }}</h1>
+      <h1>{{ classInfo.name }}</h1>
+      <div class="text-xl mt-2">{{ classInfo.partners.name }}</div>
       <Suspense>
         <template #default>
-          <HeaderCardPartnerCityList :partnerId="partnerId"></HeaderCardPartnerCityList>
+          <HeaderCardClassCityList :classId="classId"></HeaderCardClassCityList>
         </template>
         <template #fallback><div class="mt-2 h-8 w-40 bg-gray-100"></div></template>
       </Suspense>
@@ -43,7 +45,7 @@ const partnerInfo = data[0]
     <div class="mt-16">
       <h2>Despre Companie</h2>
       <p class="mt-4">
-        {{ partnerInfo.about}}
+        {{ classInfo.description }}
       </p>
     </div>
   </div>

@@ -13,6 +13,7 @@ export default defineConfig({
             '/api/query': host,
             '/api': host,
             '/api/partner/\d+': host,
+            '/api/partner/\d+/addresses': host,
         }
     }
 })

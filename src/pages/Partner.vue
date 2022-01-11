@@ -4,6 +4,7 @@ import { useRouter, useRoute } from "vue-router";
 
 import store from "../store";
 import HeaderCardPartner from "../components/HeaderCardPartner.vue";
+import HeaderCardPartnerFallback from "../components/HeaderCardPartnerFallback.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -16,7 +17,7 @@ const partnerId = ref(Number(route.params.id));
       <HeaderCardPartner :partnerId="partnerId"></HeaderCardPartner>
     </template>
     <template #fallback>
-      Loading...
+      <HeaderCardPartnerFallback></HeaderCardPartnerFallback>
     </template>
   </Suspense>
 </template>

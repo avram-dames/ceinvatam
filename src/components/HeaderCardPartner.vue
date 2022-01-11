@@ -1,6 +1,8 @@
 <script async setup>
 import { ref } from "vue";
 
+import HeaderCardPartnerCityList from "./HeaderCardPartnerCityList.vue"
+
 const props = defineProps({
   partnerId: Number,
 });
@@ -10,8 +12,8 @@ async function getPartnerInfo(id) {
   const response = await fetch(apiUrl);
   return await response.json();
 }
-const { partner } = await getPartnerInfo(props.partnerId)
-const partnerInfo = partner[0]
+const { data } = await getPartnerInfo(props.partnerId)
+const partnerInfo = data[0]
 </script>
 
 <template>
@@ -19,8 +21,12 @@ const partnerInfo = partner[0]
     <!-- Title -->
     <div>
       <h1>{{ partnerInfo.name }}</h1>
-
-      <div class="mt-2">București, Timișoara, Chișinău</div>
+      <Suspense>
+        <template #default>
+          <HeaderCardPartnerCityList :partnerId="partnerId"></HeaderCardPartnerCityList>
+        </template>
+        <template #fallback>Cities Loading ...</template>
+      </Suspense>
     </div>
     
     <!-- CTA -->
@@ -41,4 +47,6 @@ const partnerInfo = partner[0]
       </p>
     </div>
   </div>
+
+  
 </template>

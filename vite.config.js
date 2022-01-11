@@ -14,6 +14,7 @@ export default defineConfig({
             '/api': host,
             '/api/partner/\d+': host,
             '/api/partner/\d+/addresses': host,
+            '/api/class/\d+': host,
         }
     }
 })

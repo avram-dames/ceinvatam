@@ -20,7 +20,8 @@ const router = createRouter({
             component: Partner
         },
         {
-            path: '/class',
+            path: '/class/:id',
+            name: 'Class',
             component: Class
         }
     ]

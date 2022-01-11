@@ -72,7 +72,7 @@ function onEnter(event) {
     // unfocus element if the user presses enter twice if the option is already selected
     document.activeElement.blur()
   } else if (suggestions.value[arrowCounter.value].entity === "class") {
-    router.push("class");
+    router.push({name: "Class", params: { id: suggestions.value[arrowCounter.value].target_id }});
   } else if (suggestions.value[arrowCounter.value].entity === "partner") {
     router.push({name: "Partner", params: { id: suggestions.value[arrowCounter.value].target_id }});
   } else {
@@ -88,7 +88,7 @@ function onClick(item) {
   if (item.entity === "partner") {
     router.push({name: "Partner", params: { id: item.target_id }});
   } else if (item.entity === "class") {
-    router.push("class");
+    router.push({name: "Class", params: { id: item.target_id }});
   }
 }
 

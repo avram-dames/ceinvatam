@@ -9,10 +9,19 @@ import './index.css'
 const store = createStore({
   state() {
     return {
+      searchPhrase: "",
+      cityFilterIds: [],
       searchSuggestions: [],
       searchResults: [],
       cities: [],
       errors: []
+    }
+  },
+  getters: {
+    cityOptions(state) {
+      return state.cities.reduce(
+        (obj, item) => (obj[item.id] = item.name, obj)
+        , {});
     }
   },
   actions: {
@@ -26,9 +35,24 @@ const store = createStore({
       const data = await response.json();
 
       commit('setSearchSuggestions', data.suggestions)
+    },
+    async fetchCities({ commit }) {
+      const apiUrl = "/api/cities";
+      const response = await fetch(apiUrl);
+      
+      if (response.status !== 200) {
+        commit('addErrorMessage', 'Unable to load cities.');
+      }
+      const data = await response.json();
+
+      commit('setCities', data.cities)
     }
   },
   mutations: {
+    updateSearchPhrase(state, payload) {
+      state.searchPhrase = payload
+    },
+
     setSearchSuggestions(state, payload) {
       state.searchSuggestions = payload
     },
@@ -39,6 +63,14 @@ const store = createStore({
 
     popErrorMessage(state) {
       state.errors.pop()
+    },
+
+    setCities(state, payload) {
+      state.cities = payload
+    },
+
+    setCityFilterId(state, payload) {
+      state.cityFilterIds = payload
     }
   }
 })

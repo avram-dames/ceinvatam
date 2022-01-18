@@ -1,12 +1,14 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import SearchBoxMultiSelect from "./SearchBoxMultiSelect.vue";
 import SearchBoxTextInput from "./SearchBoxTextInput.vue";
 import store from "../store";
+import { useStore } from "vuex";
 
+const vstore = useStore(); 
 const router = useRouter();
-const searchText = ref("");
+const searchText = computed(() => vstore.state.searchPhrase)
 const searchCitySelection = ref([]);
 
 const showHelper = ref(false);
@@ -59,10 +61,6 @@ async function searchClasses() {
     }
   }
 }
-
-function updateTextSearch(value) {
-  searchText.value = value;
-}
 </script>
 
 <template>
@@ -71,7 +69,7 @@ function updateTextSearch(value) {
     class="flex flex-col lg:space-x-2 space-y-4 lg:space-y-0 px-4 lg:flex-row"
   >
     <div class="lg:w-1/3">
-      <SearchBoxTextInput v-model:search-text="searchText"></SearchBoxTextInput>
+      <SearchBoxTextInput></SearchBoxTextInput>
     </div>
     <div class="lg:w-1/3">
       <SearchBoxMultiSelect

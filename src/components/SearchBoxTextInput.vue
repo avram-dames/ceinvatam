@@ -4,11 +4,6 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { udfNormalize } from "../utils/parsers";
 
-const props = defineProps({
-  searchText: String,
-});
-const emits = defineEmits(["update:searchText"]);
-
 const store = useStore();
 const router = useRouter();
 
@@ -25,7 +20,7 @@ store.dispatch("fetchSearchSuggestions");
 // listens for changes in user input and runs logic
 // ~~ not the cleanest code ever, should be refactored ~~
 watch(userInput, (val, preVal) => {
-  emits("update:searchText", val);
+  store.commit('updateSearchPhrase', userInput.value)
 
   const phrases = suggestions.value.filter((item) => item.rank === 1);
 

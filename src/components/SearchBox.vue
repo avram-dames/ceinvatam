@@ -9,7 +9,7 @@ import { useStore } from "vuex";
 const vstore = useStore(); 
 const router = useRouter();
 const searchText = computed(() => vstore.state.searchPhrase)
-const searchCitySelection = ref([]);
+const searchCitySelection = computed(() => vstore.state.cityFilterIds)
 
 const showHelper = ref(false);
 const helperMessage = ref("");
@@ -72,9 +72,7 @@ async function searchClasses() {
       <SearchBoxTextInput></SearchBoxTextInput>
     </div>
     <div class="lg:w-1/3">
-      <SearchBoxMultiSelect
-        v-model:search-city-selection="searchCitySelection"
-      ></SearchBoxMultiSelect>
+      <SearchBoxMultiSelect></SearchBoxMultiSelect>
     </div>
     <button
       @click="searchClasses"

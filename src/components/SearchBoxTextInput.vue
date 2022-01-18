@@ -1,53 +1,37 @@
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
-import store from "../store";
+import { useStore } from "vuex";
+import { udfNormalize } from "../utils/parsers";
 
-const router = useRouter();
-const root = ref(null);
-const userInput = ref("");
-const suggestions = ref([]);
-const showSuggestionsDropdown = ref(false);
-const arrowCounter = ref(-1);
-
-// bind parent's searchText to userInput using update:searchText event
 const props = defineProps({
   searchText: String,
 });
 const emits = defineEmits(["update:searchText"]);
 
-// make string lowercase and remove accents
-function udfNormalize(str) {
-  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-}
+const store = useStore();
+const router = useRouter();
 
-// match user input with items in the suggestion list
-function updateSuggestionsOnUserInput() {
-  suggestions.value = store.state.searchSuggestions.filter(
-    (item) =>
-      udfNormalize(item.name).indexOf(udfNormalize(userInput.value)) > -1
-  );
-}
+const root = ref(null);
+const userInput = ref("");
+const arrowCounter = ref(-1);
+
+const showSuggestionsDropdown = ref(false);
+const suggestions = computed(() => store.state.searchSuggestions.filter(
+  (item) => udfNormalize(item.name).indexOf(udfNormalize(userInput.value)) > -1
+));
+store.dispatch("fetchSearchSuggestions");
 
 // listens for changes in user input and runs logic
 // ~~ not the cleanest code ever, should be refactored ~~
 watch(userInput, (val, preVal) => {
   emits("update:searchText", val);
-  if (val.length > 2) {
-    updateSuggestionsOnUserInput();
-  } else {
-    suggestions.value = [];
-    arrowCounter.value = 0;
-  }
-  
-  const phrases = suggestions.value.filter((item) => item.rank === 1)
+
+  const phrases = suggestions.value.filter((item) => item.rank === 1);
 
   if (suggestions.value.length === 0) {
     showSuggestionsDropdown.value = false;
-  } else if (
-    phrases.length === 1 &&
-    val === phrases[0].name
-  ) {
+  } else if (phrases.length === 1 && val === phrases[0].name) {
     showSuggestionsDropdown.value = false;
   } else {
     showSuggestionsDropdown.value = true;
@@ -70,11 +54,17 @@ function onArrowUp() {
 function onEnter(event) {
   if (arrowCounter.value === -1) {
     // unfocus element if the user presses enter twice if the option is already selected
-    document.activeElement.blur()
+    document.activeElement.blur();
   } else if (suggestions.value[arrowCounter.value].entity === "class") {
-    router.push({name: "Class", params: { id: suggestions.value[arrowCounter.value].target_id }});
+    router.push({
+      name: "Class",
+      params: { id: suggestions.value[arrowCounter.value].target_id },
+    });
   } else if (suggestions.value[arrowCounter.value].entity === "partner") {
-    router.push({name: "Partner", params: { id: suggestions.value[arrowCounter.value].target_id }});
+    router.push({
+      name: "Partner",
+      params: { id: suggestions.value[arrowCounter.value].target_id },
+    });
   } else {
     userInput.value = suggestions.value[arrowCounter.value].name;
     arrowCounter.value = -1;
@@ -86,9 +76,9 @@ function onClick(item) {
   userInput.value = item.name;
   showSuggestionsDropdown.value = false;
   if (item.entity === "partner") {
-    router.push({name: "Partner", params: { id: item.target_id }});
+    router.push({ name: "Partner", params: { id: item.target_id } });
   } else if (item.entity === "class") {
-    router.push({name: "Class", params: { id: item.target_id }});
+    router.push({ name: "Class", params: { id: item.target_id } });
   }
 }
 
@@ -122,7 +112,16 @@ onUnmounted(() => {
       @keydown.up.prevent
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
-      class="relative h-12 w-full m-0 px-4 py-2 border border-gray-300 rounded-md"
+      class="
+        relative
+        h-12
+        w-full
+        m-0
+        px-4
+        py-2
+        border border-gray-300
+        rounded-md
+      "
     />
     <!-- Dropdown Suggestions List -->
     <ul
@@ -131,8 +130,7 @@ onUnmounted(() => {
         mt-1
         z-50
         bg-white
-        border
-        border-gray-200
+        border border-gray-200
         w-full-w-margins
         lg:w-1/2
       "

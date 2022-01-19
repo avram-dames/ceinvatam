@@ -1,66 +1,21 @@
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import SearchBoxMultiSelect from "./SearchBoxMultiSelect.vue";
 import SearchBoxTextInput from "./SearchBoxTextInput.vue";
-import store from "../store";
 import { useStore } from "vuex";
 
-const vstore = useStore(); 
+const store = useStore(); 
 const router = useRouter();
-const searchText = computed(() => vstore.state.searchPhrase)
-const searchCitySelection = computed(() => vstore.state.cityFilterIds)
 
 const showHelper = ref(false);
 const helperMessage = ref("");
 
-function validateSearchInputs() {
-  if (!searchText.value && searchCitySelection.value.length == 0) {
-    showHelper.value = true;
-    helperMessage.value = "Please select a city or a search phrase.";
-    return false;
-  }
-  return true;
+function showResults() {
+  store.dispatch('fetchSearchResults')
+  router.push('/results')
 }
 
-async function searchClasses() {
-  const apiUrl = "/api/query";
-  const apiRequestOptions = {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: {
-        searchText: searchText.value,
-        cityFilterIds: searchCitySelection.value,
-      },
-    }),
-  };
-
-  if (validateSearchInputs()) {
-    let response = await fetch(apiUrl, apiRequestOptions);
-
-    if (response.status !== 200) {
-      showHelper.value = true;
-      helperMessage.value = "Something went wrong. Please try again.";
-      return 0;
-    }
-
-    const data = await response.json();
-
-    if (data.data.length > 0) {
-      store.setSearchResults(data.data);
-      router.push("results");
-    } else {
-      showHelper.value = true;
-      helperMessage.value =
-        "There are no classes that meet your requirements. Please try again.";
-      return 0;
-    }
-  }
-}
 </script>
 
 <template>
@@ -75,7 +30,8 @@ async function searchClasses() {
       <SearchBoxMultiSelect></SearchBoxMultiSelect>
     </div>
     <button
-      @click="searchClasses"
+      @click.prevent
+      @click="showResults"
       class="px-4 py-2 text-white bg-purple-400 hover:bg-purple-300 rounded-md lg:w-48 h-12"
     >
       Caută

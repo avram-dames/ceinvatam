@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
-import store from "../store";
 import HeaderCardPartner from "../components/HeaderCardPartner.vue";
 import HeaderCardPartnerFallback from "../components/HeaderCardPartnerFallback.vue";
 

@@ -3,12 +3,21 @@ import { createStore } from 'vuex'
 export default createStore({
     state() {
       return {
-        searchPhrase: "",
-        cityFilterIds: [],
-        searchSuggestions: [],
-        searchResults: [],
         cities: [],
+        searchSuggestions: [],
         errors: [],
+        searchResults: [],
+        searchPhrase: "",
+        filterSearchBy: {
+          cityIds: [],
+          online: true,
+          offline: true,
+        },
+        orderSearchBy: {
+          name: false,
+          score: true,
+          scoreCount: false
+        }
       }
     },
     getters: {
@@ -63,7 +72,8 @@ export default createStore({
           body: JSON.stringify({
             query: {
               searchText: state.searchPhrase,
-              cityFilterIds: state.cityFilterIds,
+              filterBy: state.filterSearchBy,
+              sortBy: state.orderSearchBy
             },
           }),
         };
@@ -106,7 +116,7 @@ export default createStore({
       },
   
       setCityFilterId(state, payload) {
-        state.cityFilterIds = payload
+        state.filterBy.cityIds = payload
       }
     }
   })

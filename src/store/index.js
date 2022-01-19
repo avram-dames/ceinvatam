@@ -10,8 +10,8 @@ export default createStore({
         searchPhrase: "",
         filterSearchBy: {
           cityIds: [],
-          online: true,
-          offline: true,
+          online: false,
+          offline: false,
         },
         orderSearchBy: {
           name: false,
@@ -29,6 +29,16 @@ export default createStore({
       
       userInputIsEmpty(state) {
         return state.searchText === '' && state.setCityFilterId.length === 0
+      },
+
+      searchResults(state) {
+        if (state.filterSearchBy.online == state.orderSearchBy.offline) {
+          return state.searchResults
+        } else if (state.filterSearchBy.offline) {
+          return state.searchResults.filter( (item) => item.offline)
+        } else {
+          return state.searchResults.filter( (item) => item.online)
+        }
       }
     },
     actions: {
@@ -73,7 +83,7 @@ export default createStore({
             query: {
               searchText: state.searchPhrase,
               filterBy: state.filterSearchBy,
-              sortBy: state.orderSearchBy
+              orderBy: state.orderSearchBy
             },
           }),
         };
@@ -116,7 +126,23 @@ export default createStore({
       },
   
       setCityFilterId(state, payload) {
-        state.filterBy.cityIds = payload
+        state.filterSearchBy.cityIds = payload
+      },
+
+      switchShowOnlyOfflineClasses(state) {
+        state.filterSearchBy.offline = !state.filterSearchBy.offline
+        
+        if (state.filterSearchBy.offline) {
+          state.filterSearchBy.online = false
+        }
+      },
+
+      switchShowOnlyOnlineClasses(state) {
+        state.filterSearchBy.online = !state.filterSearchBy.online
+                
+        if (state.filterSearchBy.online) {
+          state.filterSearchBy.offline = false
+        }
       }
     }
   })

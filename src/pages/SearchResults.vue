@@ -5,7 +5,7 @@ import ClassCard from "../components/ClassCard.vue"
 import SearchResultFilterTags from "../components/SearchResultFilterTags.vue"
 
 const store = useStore()
-const results = computed(() => store.state.searchResults)
+const results = computed(() => store.getters.searchResults)
 </script>
 
 <template>

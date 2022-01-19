@@ -10,7 +10,9 @@ const props = defineProps({
   partner: String,
   city_ids: Array,
   rank: Number,
-  id: Number
+  id: Number,
+  online: Boolean,
+  offline: Boolean,
 })
 const router = useRouter();
 const duration_obj = JSON.parse(props.duration)

@@ -31,14 +31,9 @@ export default createStore({
         return state.searchText === '' && state.setCityFilterId.length === 0
       },
 
+      // this solution is temporary as it will need re-implemented with pagination
       searchResults(state) {
-        if (state.filterSearchBy.online == state.orderSearchBy.offline) {
-          return state.searchResults
-        } else if (state.filterSearchBy.offline) {
-          return state.searchResults.filter( (item) => item.offline)
-        } else {
-          return state.searchResults.filter( (item) => item.online)
-        }
+        return state.searchResults
       }
     },
     actions: {
@@ -127,6 +122,24 @@ export default createStore({
   
       setCityFilterId(state, payload) {
         state.filterSearchBy.cityIds = payload
+      },
+
+      orderSearchByName(state) {
+        state.orderSearchBy.name = true
+        state.orderSearchBy.score = false
+        state.orderSearchBy.scoreCount = false
+      },
+
+      orderSearchByScore(state) {
+        state.orderSearchBy.name = false
+        state.orderSearchBy.score = true
+        state.orderSearchBy.scoreCount = false
+      },
+
+      orderSearchByScoreCount(state) {
+        state.orderSearchBy.name = false
+        state.orderSearchBy.score = false
+        state.orderSearchBy.scoreCount = true
       },
 
       switchShowOnlyOfflineClasses(state) {

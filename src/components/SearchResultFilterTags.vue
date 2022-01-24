@@ -10,7 +10,7 @@ const store = useStore();
     <div class="px-2 flex space-x-1 overflow-x-auto hide-scroll-bar">
       <!-- Sort by name -->
       <div
-        @click="store.commit('orderSearchByName')"
+        @click="store.dispatch('orderResultsByName')"
         class="
           flex
           items-center
@@ -28,7 +28,7 @@ const store = useStore();
 
       <!-- Sort by score -->
       <div
-        @click="store.commit('orderSearchByScore')"
+        @click="store.dispatch('orderResultsByScore')"
         class="
           flex
           items-center
@@ -46,7 +46,7 @@ const store = useStore();
 
       <!-- Sort by score count -->
       <div
-        @click="store.commit('orderSearchByScoreCount')"
+        @click="store.dispatch('orderResultsByScoreCount')"
         class="
           flex
           items-center
@@ -66,7 +66,7 @@ const store = useStore();
     <!-- Filters -->
     <div class="px-2 flex space-x-1 mt-2 lg:mt-0 lg:px-0">
       <div
-        @click="store.commit('switchShowOnlyOnlineClasses')"
+        @click="store.dispatch('showOnlyOnlineClasses')"
         class="
           flex
           items-center
@@ -83,7 +83,7 @@ const store = useStore();
       </div>
 
       <div
-        @click="store.commit('switchShowOnlyOfflineClasses')"
+        @click="store.dispatch('showOnlyOfflineClasses')"
         class="
           flex
           items-center

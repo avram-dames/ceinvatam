@@ -19,3 +19,25 @@ npm install
 https://vuejsexamples.com/vue-3-multiselect-component-with-multiselect-and-tagging-options/
 
 https://blog.ninja-squad.com/2021/09/30/script-setup-syntax-in-vue-3/
+
+
+## TODOs
+
+```javascript
+async fetchSearchResults({ state, commit, getters }) {
+      if (getters.userInputIsEmpty) {
+        commit('addErrorMessage', 'Please select a city or a search phrase.')
+        return;
+      }
+
+      let { data: classes, error } = await supabase
+        .from('classes')
+        .select(`id, name, score, score_count, offline, online, duration, 
+          cities:class2cities(city_id), partner:partners(name)`
+        )
+        .textSearch('textsearch_idx_col', prepareTextSearchTerms(state.searchPhrase), { config: 'romanian' })
+        .in('cities.city_id', [7, ])
+
+      commit('setSearchResults', classes);
+    }
+```

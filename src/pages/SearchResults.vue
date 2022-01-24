@@ -1,12 +1,11 @@
 <script setup>
-import {ref} from "vue"
+import { computed, ref } from "vue"
+import { useStore } from "vuex";
 import ClassCard from "../components/ClassCard.vue"
 import SearchResultFilterTags from "../components/SearchResultFilterTags.vue"
-import store from "../store"
 
-
-const results = ref(store.state.searchResults)
-
+const store = useStore()
+const results = computed(() => store.getters.searchResults)
 </script>
 
 <template>

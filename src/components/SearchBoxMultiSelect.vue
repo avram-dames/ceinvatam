@@ -1,27 +1,25 @@
 <script setup>
-import { ref } from "vue"
-import Multiselect from "@vueform/multiselect"
-import store from "../store"
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import Multiselect from "@vueform/multiselect";
 
+const store = useStore();
 const multiSelection = ref()
-const multiSelectionOptions = store.getCityOptions()
+const multiSelectionOptions = computed(() => store.getters.cityOptions)
 
+function setCityFilterId() { 
+  store.commit('setCityFilterId', multiSelection.value)
+}
 
-// bind parent's searchCitySelection to the value of multiSelectionOptions using 
-// an event called update:searchCitySelection
-const props = defineProps({
-  searchCitySelection: Array,
-});
-
-const emits = defineEmits(["update:searchCitySelection"]);
+store.dispatch("fetchCities");
 </script>
 
 <template>
   <Multiselect
     placeholder="Selectează orașul dorit"
     v-model="multiSelection"
-    @select="$emit('update:searchCitySelection', multiSelection)"
-    @deselect="$emit('update:searchCitySelection', multiSelection)"
+    @select="setCityFilterId"
+    @deselect="setCityFilterId"
     mode="tags"
     :searchable="true"
     :createTag="true"

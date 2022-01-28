@@ -1,6 +1,5 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   duration: String,

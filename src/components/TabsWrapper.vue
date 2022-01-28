@@ -10,7 +10,7 @@ provide("selectedTitle", selectedTitle);
 
 <template>
   <div class="divide-y divide-solid">
-    <ul class="flex">
+    <ul class="flex overflow-x-auto hide-scroll-bar">
       <li
         class="px-4 py-2 cursor-pointer rounded-t-md"
         :class="{'bg-blue-200' : title == selectedTitle}"

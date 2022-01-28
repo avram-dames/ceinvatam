@@ -3,6 +3,7 @@ import Home from '../pages/Home.vue'
 import SearchResults from '../pages/SearchResults.vue'
 import Partner from '../pages/Partner.vue'
 import Class from '../pages/Class.vue'
+import ClassReview from '../pages/ClassReview.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -23,6 +24,11 @@ const router = createRouter({
             path: '/class/:id',
             name: 'Class',
             component: Class
+        },
+        {
+            path: '/class/:id/review',
+            name: 'ClassReview',
+            component: ClassReview
         }
     ]
 })

@@ -9,6 +9,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^1.29.3",
     "@vueform/multiselect": "^2.2.1",
+    "@vueform/slider": "^2.0.8",
     "autoprefixer": "^10.4.0",
     "postcss": "^8.3.11",
     "tailwindcss": "^2.2.19",

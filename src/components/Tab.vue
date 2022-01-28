@@ -4,7 +4,6 @@ import { inject } from "vue";
 const props = defineProps(['title'])
 const selectedTitle = inject('selectedTitle')
 
-
 </script>
 
 <template>

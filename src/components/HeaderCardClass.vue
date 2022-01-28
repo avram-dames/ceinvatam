@@ -1,20 +1,19 @@
 <script async setup>
 import { ref, reactive } from "vue";
+import { useRouter } from "vue-router";
 
 import HeaderCardClassCityList from "./HeaderCardClassCityList.vue";
 import TabsWrapper from "./TabsWrapper.vue";
 import Tab from "./Tab.vue";
+import ReviewCard from "./ReviewCard.vue";
+import ReviewCardFallback from "./ReviewCardFallback.vue";
+
 
 const props = defineProps({
   classId: Number,
 });
+const router = useRouter()
 
-const reviewTxt = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam expedita
-  cupiditate, quasi quo aperiam consequatur, aliquam in dolorem
-  dignissimos autem facere at quas repudiandae, enim officiis sunt magni
-  veniam quos?`;
-
-const items = [reviewTxt, reviewTxt, reviewTxt]
 
 async function getPartnerInfo(id) {
   const apiUrl = `/api/class/${id}`;
@@ -23,6 +22,11 @@ async function getPartnerInfo(id) {
 }
 const { data } = await getPartnerInfo(props.classId);
 const classInfo = ref(data[0]);
+console.log(classInfo.value)
+
+function addReview() {
+  router.push({name: 'ClassReview'})
+}
 </script>
 
 <template>
@@ -47,30 +51,25 @@ const classInfo = ref(data[0]);
         <span class="text-white px-2 py-1 bg-purple-700 rounded-md">9</span>
         <span class="pl-1 pr-2">12 evaluări</span>
       </div>
-
-      <button class="px-2 py-1 bg-green-200 rounded-md">Adauga recenzie</button>
+      <button class="px-2 py-1 bg-green-200 rounded-md" @click="addReview">Adauga recenzie</button>
     </div>
 
     <div class="mt-16">
       <TabsWrapper>
         <Tab title="Descriere">
           <!-- Info -->
-          <div class="mt-16">
-            <h2>Despre Curs</h2>
-            <p class="mt-4">
+          <div class="mt-8">
+            <p class="">
               {{ classInfo.description }}
             </p>
           </div>
         </Tab>
         <Tab title="Recenzii">
           <!-- Reviews -->
-          <div class="mt-16">
-            <h2>Recenzii</h2>
-            <div v-for="item in items" :key="item">
-              <h3 class="mt-4">Title</h3>
-              <p class="mt-2">{{ item }}</p>
-            </div>
-            <div></div>
+          <div class="mt-8 divide-y divide-solid">
+            <ReviewCard></ReviewCard>
+            <ReviewCard></ReviewCard>
+            <ReviewCard></ReviewCard>
           </div>
         </Tab>
         <Tab title="Certificări">
@@ -82,6 +81,12 @@ const classInfo = ref(data[0]);
           </div>
         </Tab>
       </TabsWrapper>
+    </div>
+    
+    <div class="mt-12 flex justify-around">
+      <a :href="classInfo.url" class="px-4 py-2 bg-blue-200 rounded-md">
+        Viziteaza pagina cursului
+        </a>
     </div>
   </div>
 </template>

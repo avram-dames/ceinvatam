@@ -12,7 +12,7 @@ provide("selectedTitle", selectedTitle);
   <div class="divide-y divide-solid">
     <ul class="flex">
       <li
-        class="px-4 py-2 cursor-pointer"
+        class="px-4 py-2 cursor-pointer rounded-t-md"
         :class="{'bg-blue-200' : title == selectedTitle}"
         v-for="title in tabTitles"
         :key="title"

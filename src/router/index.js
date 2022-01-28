@@ -4,15 +4,18 @@ import SearchResults from '../pages/SearchResults.vue'
 import Partner from '../pages/Partner.vue'
 import Class from '../pages/Class.vue'
 import ClassReview from '../pages/ClassReview.vue'
+import ClassReviewThankYou from '../pages/ClassReviewThankYou.vue'
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [{
             path: '/',
+            name: 'Home',
             component: Home
         },
         {
             path: '/results',
+            name: 'SearchResults',
             component: SearchResults
         },
         {
@@ -29,6 +32,11 @@ const router = createRouter({
             path: '/class/:id/review',
             name: 'ClassReview',
             component: ClassReview
+        },
+        {
+            path: '/class/:id/review/thankyou',
+            name: 'ClassReviewThankYou',
+            component: ClassReviewThankYou
         }
     ]
 })

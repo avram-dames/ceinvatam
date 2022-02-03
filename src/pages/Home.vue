@@ -1,12 +1,39 @@
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 import ClassCard from "../components/ClassCard.vue";
 import SearchBox from "../components/SearchBox.vue";
+import CategoryBoxes from "../components/CategoryBoxes.vue";
 
+const store = useStore();
+const router = useRouter();
 const showHelper = ref(false);
 const helperMessage = ref("");
+const showCategories = ref(true);
+const categories = computed(() => store.state.categories);
+const allTopics = computed(() => store.state.topics);
+const topicDrillDown = ref([]);
+
+function categoryDrillDown(category) {
+  showCategories.value = false;
+  console.log(allTopics.value);
+  topicDrillDown.value = allTopics.value.filter(
+    (item) => item.category === category
+  );
+  console.log(topicDrillDown.value);
+}
+
+function showResultsByTopic(topic) {
+  store.dispatch('fetchResultsByTopic', topic);
+  router.push({name: 'SearchResults'})
+}
+
+store.dispatch("fetchSearchSuggestions");
+store.dispatch("fetchCategories");
+store.dispatch("fetchTopics");
 </script>
 
 <template>
@@ -19,16 +46,24 @@ const helperMessage = ref("");
       </p>
     </div>
 
-    <!-- <div class="mt-32">
-      <h2 class="text-center">Categorii</h2>
-      <div class="flex space-x-4 justify-center mt-8">
-        <div class="flex bg-red-200 w-40 h-40 justify-center items-center">
-          <div class="border">IT</div>
-        </div>
-        <div class="flex bg-yellow-200 w-40 h-40 justify-center items-center">
-          <div class="border">Beauty</div>
+    <div class="mt-32">
+      <h2 v-if="showCategories" class="text-center">Categorii</h2>
+      <div v-else>
+        <h2 class="text-center">Topics</h2>
+        <div @click="showCategories = true" class="mt-4 pr-4 text-right w-full text-gray-600">
+          Înapoi la categorii
         </div>
       </div>
-    </div> -->
+      <CategoryBoxes
+        v-if="showCategories"
+        @drill-down-by="categoryDrillDown"
+        :items="categories"
+      ></CategoryBoxes>
+      <CategoryBoxes
+        v-else
+        @drill-down-by="showResultsByTopic"
+        :items="topicDrillDown"
+      ></CategoryBoxes>
+    </div>
   </div>
 </template>

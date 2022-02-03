@@ -27,6 +27,8 @@ export default createStore({
     return {
       cities: [],
       searchSuggestions: [],
+      categories: [],
+      topics: [],
       errors: [],
       searchResults: [],
       searchPhrase: "",
@@ -67,6 +69,24 @@ export default createStore({
       if (error) throw error
 
       commit('setSearchSuggestions', search_suggestions)
+    },
+
+    async fetchCategories({ commit }) {
+      let { data: classes, error } = await supabase
+      .from('categories_by_classes')
+      .select('name:category, count:available_classes')
+      if (error) throw error
+      
+      commit('setCategories', classes)
+    },
+
+    async fetchTopics({ commit }) {
+      let { data: classes, error } = await supabase
+      .from('topics_by_classes')
+      .select('category, name:topic, count:available_classes')
+      if (error) throw error
+      
+      commit('setTopics', classes)
     },
 
     async fetchCities({ commit }) {
@@ -113,6 +133,13 @@ export default createStore({
 
       commit('setSearchResults', classes);
     },
+    async fetchResultsByTopic({ state, commit, getters }, topic) {
+      let { data: classes, error } = await supabase
+        .from('classes')
+        .select("id, name, score, score_count, offline, online, duration")
+        .eq('topic', topic)
+      commit('setSearchResults', classes);
+    },
     orderResultsByName({ dispatch, commit }) {
       commit('orderSearchByName')
       dispatch('fetchSearchResults')
@@ -135,6 +162,14 @@ export default createStore({
     },
   },
   mutations: {
+    setCategories(state, payload) {
+      state.categories = payload
+    },
+
+    setTopics(state, payload) {
+      state.topics = payload
+    },
+
     updateSearchPhrase(state, payload) {
       state.searchPhrase = payload
     },

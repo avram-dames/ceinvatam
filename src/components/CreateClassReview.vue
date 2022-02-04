@@ -8,8 +8,6 @@ const sliderValue = ref(0);
 const textAreaValue = ref('');
 
 function submitReview() {
-  console.log(sliderValue.value)
-  console.log(textAreaValue.value)
   router.push({name: 'ClassReviewThankYou'})
 }
 </script>

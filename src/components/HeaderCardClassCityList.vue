@@ -10,7 +10,6 @@ async function getCityList(id) {
 }
 const { data } = await getCityList(props.classId)
 const cities = data.map( (item) => item.cities.name).join(', ')
-console.log(cities);
 </script>
 
 <template>

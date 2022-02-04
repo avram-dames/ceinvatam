@@ -12,8 +12,9 @@ const showHelper = ref(false);
 const helperMessage = ref("");
 
 function showResults() {
+  store.commit('switchOffSearchByTopic');
   store.dispatch('fetchSearchResults')
-  router.push('/results')
+  router.push({name: "SearchResults"})
 }
 
 </script>

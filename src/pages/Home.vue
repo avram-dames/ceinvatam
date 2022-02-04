@@ -19,16 +19,15 @@ const topicDrillDown = ref([]);
 
 function categoryDrillDown(category) {
   showCategories.value = false;
-  console.log(allTopics.value);
   topicDrillDown.value = allTopics.value.filter(
     (item) => item.category === category
   );
-  console.log(topicDrillDown.value);
 }
 
 function showResultsByTopic(topic) {
-  store.dispatch('fetchResultsByTopic', topic);
-  router.push({name: 'SearchResults'})
+  store.commit('switchOnSearchByTopic', topic);
+  store.dispatch('fetchSearchResults');
+  router.push({name: 'SearchResults'});
 }
 
 store.dispatch("fetchSearchSuggestions");
@@ -50,7 +49,7 @@ store.dispatch("fetchTopics");
       <h2 v-if="showCategories" class="text-center">Categorii</h2>
       <div v-else>
         <h2 class="text-center">Topics</h2>
-        <div @click="showCategories = true" class="mt-4 pr-4 text-right w-full text-gray-600">
+        <div @click="showCategories = true" class="mt-4 pr-4 text-right w-full text-gray-600 cursor-pointer">
           Înapoi la categorii
         </div>
       </div>

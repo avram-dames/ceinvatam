@@ -22,7 +22,6 @@ async function getPartnerInfo(id) {
 }
 const { data } = await getPartnerInfo(props.classId);
 const classInfo = ref(data[0]);
-console.log(classInfo.value)
 
 function addReview() {
   router.push({name: 'ClassReview'})

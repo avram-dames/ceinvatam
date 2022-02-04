@@ -1,4 +1,4 @@
-import { createStore } from 'vuex';
+import { createStore, storeKey } from 'vuex';
 import supabase from '../utils/supabase';
 
 function prepareTextSearchTerms(text) {
@@ -22,11 +22,22 @@ function prepareCityFilter(citiesList) {
   return citiesList.map(city => Number(city))
 }
 
+function flattenRecord(rec) {
+  rec['partner'] = rec['partners']['name']
+  rec['city_ids'] = rec['class2cities'].forEach((item) => item.city_id)
+  delete rec.partners
+  delete rec.class2cities
+  return rec
+}
+
 export default createStore({
   state() {
     return {
       cities: [],
       searchSuggestions: [],
+      searchByTopic: false,
+      categories: [],
+      topics: [],
       errors: [],
       searchResults: [],
       searchPhrase: "",
@@ -69,6 +80,24 @@ export default createStore({
       commit('setSearchSuggestions', search_suggestions)
     },
 
+    async fetchCategories({ commit }) {
+      let { data: classes, error } = await supabase
+        .from('categories_by_classes')
+        .select('name:category, count:available_classes')
+      if (error) throw error
+
+      commit('setCategories', classes)
+    },
+
+    async fetchTopics({ commit }) {
+      let { data: classes, error } = await supabase
+        .from('topics_by_classes')
+        .select('category, name:topic, count:available_classes')
+      if (error) throw error
+
+      commit('setTopics', classes)
+    },
+
     async fetchCities({ commit }) {
       let { data: cities, error } = await supabase
         .from('cities')
@@ -86,11 +115,17 @@ export default createStore({
       }
       let query;
 
-      if (state.searchPhrase === '') {
+      if (state.searchByTopic) {
+        query = supabase.from('classes')
+          .select("id, name, score, score_count, offline, online, duration, partners(name), class2cities(city_id)")
+          .eq('topic', state.searchByTopic)
+      }
+      else if (state.searchPhrase === '') {
         query = supabase.rpc('query_classes_by_cityids', {
           cityid_filter: prepareCityFilter(state.filterSearchBy.cityIds)
         })
-      } else {
+      }
+      else {
         query = supabase.rpc('query_classes', {
           search_term: prepareTextSearchTerms(state.searchPhrase),
           cityid_filter: prepareCityFilter(state.filterSearchBy.cityIds)
@@ -110,6 +145,8 @@ export default createStore({
       let { data: classes, error } = await query
 
       if (error) throw error
+      
+      if (state.searchByTopic) { classes.forEach(flattenRecord) }
 
       commit('setSearchResults', classes);
     },
@@ -135,6 +172,20 @@ export default createStore({
     },
   },
   mutations: {
+    switchOnSearchByTopic(state, payload) {
+      state.searchByTopic = payload
+    },
+    switchOffSearchByTopic(state) {
+      state.searchByTopic = ''
+    },
+    setCategories(state, payload) {
+      state.categories = payload
+    },
+
+    setTopics(state, payload) {
+      state.topics = payload
+    },
+
     updateSearchPhrase(state, payload) {
       state.searchPhrase = payload
     },

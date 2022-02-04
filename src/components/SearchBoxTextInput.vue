@@ -15,7 +15,6 @@ const showSuggestionsDropdown = ref(false);
 const suggestions = computed(() => store.state.searchSuggestions.filter(
   (item) => udfNormalize(item.name).indexOf(udfNormalize(userInput.value)) > -1
 ));
-store.dispatch("fetchSearchSuggestions");
 
 // listens for changes in user input and runs logic
 // ~~ not the cleanest code ever, should be refactored ~~

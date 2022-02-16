@@ -10,7 +10,7 @@ const showMenu = ref(false);
 const userIsAuthenticated = computed(() => store.getters.userIsAuthenticated);
 
 let toggleNavbar = function () {
-  this.showMenu = !this.showMenu;
+  showMenu.value = !showMenu.value;
 };
 
 async function login() {

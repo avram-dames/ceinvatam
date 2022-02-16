@@ -7,6 +7,24 @@ import router from './router/'
 
 import './index.css'
 
+router.beforeEach(async (to, from) => {
+    if (store.state.redirect) {
+        const redirect = store.state.redirect
+        store.commit('deleteRedirect')
+        return { path: redirect }
+    }
+
+    if (to.name === 'SignIn' && store.getters.userIsAuthenticated) return {
+        name: 'Home'
+    }
+
+    if (to.meta.requiresAuth && !store.getters.userIsAuthenticated) {
+        store.commit('pushAlert', {msg: 'Înainte de a accesa această pagină e nevoie să te autentifici.'})
+        return {
+            path: '/signin', query: { redirect: to.fullPath }
+        }
+    }
+})
 
 const app = createApp(App)
 app.use(router)

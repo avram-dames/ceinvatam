@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from "vue"
 import { useStore } from "vuex";
+
+import Navbar from "../components/Navbar.vue";
 import ClassCard from "../components/ClassCard.vue"
 import SearchResultFilterTags from "../components/SearchResultFilterTags.vue"
 
@@ -9,6 +11,7 @@ const results = computed(() => store.getters.searchResults)
 </script>
 
 <template>
+<Navbar class=""></Navbar>
   <div>
       <SearchResultFilterTags></SearchResultFilterTags>
   </div>

@@ -33,12 +33,15 @@ function flattenRecord(rec) {
 export default createStore({
   state() {
     return {
+      user: null,
+      redirect: null,
       cities: [],
       searchSuggestions: [],
       searchByTopic: false,
       categories: [],
       topics: [],
       errors: [],
+      alerts: [],
       searchResults: [],
       searchPhrase: "",
       filterSearchBy: {
@@ -60,12 +63,55 @@ export default createStore({
         , {});
     },
 
+    userIsAuthenticated(state) {
+      return state.user?.role === 'authenticated'
+    },
+
+    userIsReviewer(state) {
+      return state.user?.user_metadata.is_reviewer
+    },
+
     userInputIsEmpty(state) {
       return state.searchText === '' && state.setCityFilterId.length === 0
     },
 
     searchResults(state) {
       return state.searchResults
+    },
+    userEmail(state) {
+      return state.user?.email
+    },
+    userFirstName(state) {
+      const defaultValue = state.user?.user_metadata?.user_first_name;
+      const fullNameArray = state.user?.user_metadata?.full_name?.split(" ");
+      return defaultValue || fullNameArray?.slice(0, fullNameArray.length - 1).join(' ');
+    },
+    userLastName(state) {
+      const defaultValue = state.user?.user_metadata?.user_last_name;
+      const fullNameArray = state.user?.user_metadata?.full_name?.split(" ") || [];
+      return defaultValue || fullNameArray[fullNameArray.length - 1];
+    },
+    userFullName(state) {
+      const defaultValue = state.user?.user_metadata?.user_full_name;
+      const socialFullName = state.user?.user_metadata?.full_name || state.user?.user_metadata?.name
+      return defaultValue || socialFullName
+    },
+    userAvatar(state) {
+      const defaultAvatarUrl = 'https://res.cloudinary.com/avram-dev/image/upload/v1644927764/test/default_avatar_pnkzp3.svg';
+      const userAvatar = state.user?.user_metadata?.user_avatar;
+      const socialAvatar = state.user?.user_metadata?.avatar_url || state.user?.user_metadata?.picture
+      return userAvatar || socialAvatar || defaultAvatarUrl
+    },
+    userLinkedAccounts(state) {
+      if (state.user?.role === 'authenticated') {
+        const providers = state.user.identities.map(
+          (item) => item.provider
+        )
+        return providers
+      }
+    },
+    popAlert(state) {
+      return state.alerts.pop()
     }
   },
   actions: {
@@ -145,7 +191,7 @@ export default createStore({
       let { data: classes, error } = await query
 
       if (error) throw error
-      
+
       if (state.searchByTopic) { classes.forEach(flattenRecord) }
 
       commit('setSearchResults', classes);
@@ -246,6 +292,26 @@ export default createStore({
       if (state.filterSearchBy.online) {
         state.filterSearchBy.offline = false
       }
+    },
+
+    storeUser(state, payload) {
+      state.user = payload
+    },
+
+    setRedirect(state, payload) {
+      state.redirect = payload
+    },
+
+    deleteRedirect(state) {
+      state.redirect = null
+    },
+
+    pushAlert(state, payload) {
+      state.alerts.push(payload)
+    },
+
+    deleteAlerts(state) {
+      state.alerts = []
     }
-  }
+  },
 })

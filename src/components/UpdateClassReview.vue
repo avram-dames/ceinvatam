@@ -1,47 +1,48 @@
 <script async setup>
-import { computed, ref } from "vue";
-import Slider from "@vueform/slider";
+import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+
 import supabase from "../utils/supabase";
-import { useStore } from "vuex";
+
+import Slider from "@vueform/slider";
 
 const router = useRouter();
 const route = useRoute();
-const store = useStore();
 
-const classId = ref(Number(route.params.id));
-const userFirstName = computed(() => store.getters.userFirstName);
-const userAvatar = computed(() => store.getters.userAvatar);
-
+const classReviewId = Number(route.params.id)
 const sliderValue = ref(0);
-const textAreaValue = ref("");
+const textAreaValue = ref('');
 
-async function upgradeUserToReviewer() {
-  const { user, error } = await supabase.auth.update({
-    data: { is_reviewer: true },
-  });
+async function fetchReviewData() {
+  let { data: class_reviews, error } = await supabase
+    .from("class_reviews")
+    .select("text, score")
+    .eq("id", classReviewId)
+    .single();
 
   if (error) throw error
+
+  sliderValue.value = class_reviews.score
+  textAreaValue.value = class_reviews.text
 }
 
-async function submitReview() {
-  const { data, error } = await supabase.from("class_reviews").insert([
-    {
+async function editReview() {
+  const { data, error } = await supabase
+    .from("class_reviews")
+    .update({
+
       text: textAreaValue.value,
-      class_id: classId.value,
-      score: sliderValue.value,
-      user_id: store.state.user.id,
-      first_name: userFirstName.value,
-      avatar_url: userAvatar.value,
-    },
-  ]);
+      score: Number(sliderValue.value),
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", classReviewId);
 
   if (error) throw error;
-  
-  upgradeUserToReviewer()
- 
- router.push({ name: "ClassReviewThankYou" });
+
+  router.push({ name: "CustomerReviews" });
 }
+
+fetchReviewData()
 </script>
 
 <template>
@@ -66,8 +67,8 @@ async function submitReview() {
     </div>
     <div class="flex justify-end space-x-4">
       <button class="px-4 py-2 bg-gray-200 rounded-md">Anulează</button>
-      <button class="px-4 py-2 bg-green-200 rounded-md" @click="submitReview()">
-        Adaugă Evaluarea
+      <button class="px-4 py-2 bg-green-200 rounded-md" @click="editReview()">
+        Salvează Evaluarea
       </button>
     </div>
   </div>

@@ -7,6 +7,7 @@ import { useRouter } from "vue-router";
 import ClassCard from "../components/ClassCard.vue";
 import SearchBox from "../components/SearchBox.vue";
 import CategoryBoxes from "../components/CategoryBoxes.vue";
+import Navbar from "../components/Navbar.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -15,7 +16,9 @@ const helperMessage = ref("");
 const showCategories = ref(true);
 const categories = computed(() => store.state.categories);
 const allTopics = computed(() => store.state.topics);
+const userIsAuthenticated = computed(() => store.getters.userIsAuthenticated);
 const topicDrillDown = ref([]);
+const firstName = computed(() => store.getters.userFirstName)
 
 function categoryDrillDown(category) {
   showCategories.value = false;
@@ -25,9 +28,9 @@ function categoryDrillDown(category) {
 }
 
 function showResultsByTopic(topic) {
-  store.commit('switchOnSearchByTopic', topic);
-  store.dispatch('fetchSearchResults');
-  router.push({name: 'SearchResults'});
+  store.commit("switchOnSearchByTopic", topic);
+  store.dispatch("fetchSearchResults");
+  router.push({ name: "SearchResults" });
 }
 
 store.dispatch("fetchSearchSuggestions");
@@ -36,20 +39,27 @@ store.dispatch("fetchTopics");
 </script>
 
 <template>
+  <Navbar class=""></Navbar>
   <div class="flex flex-col">
-    <div class="mt-32">
-      <h1 class="px-4 text-4xl">Descoperă cursul potrivit pentru tine</h1>
+      <h1 v-if="userIsAuthenticated" class="mt-12 px-4 text-3xl font-semibold">
+        Bine ai revenit{{ firstName ? ', ' + firstName : '' }}
+      </h1>
+      <h1 v-else class="px-4 text-4xl mt-32 ">
+        Descoperă cursul potrivit pentru tine
+      </h1>
       <SearchBox class="mt-12"></SearchBox>
       <p v-show="showHelper" class="px-4 mt-4 text-red-500">
         {{ helperMessage }}
       </p>
-    </div>
 
     <div class="mt-32">
       <h2 v-if="showCategories" class="text-center">Categorii</h2>
       <div v-else>
         <h2 class="text-center">Topics</h2>
-        <div @click="showCategories = true" class="mt-4 pr-4 text-right w-full text-gray-600 cursor-pointer">
+        <div
+          @click="showCategories = true"
+          class="mt-4 pr-4 text-right w-full text-gray-600 cursor-pointer"
+        >
           Înapoi la categorii
         </div>
       </div>

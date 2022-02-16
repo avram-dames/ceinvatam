@@ -1,6 +1,7 @@
 <script async setup>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import supabase from "../utils/supabase";
 
 import HeaderCardClassCityList from "./HeaderCardClassCityList.vue";
 import TabsWrapper from "./TabsWrapper.vue";
@@ -22,6 +23,19 @@ async function getPartnerInfo(id) {
 }
 const { data } = await getPartnerInfo(props.classId);
 const classInfo = ref(data[0]);
+
+async function getReviews(classId) {
+  let { data: class_reviews, error } = await supabase
+  .from('class_reviews')
+  .select('id, text, score, created_at, first_name, avatar_url')
+  .eq('class_id', classId)
+
+  if(error) throw error
+
+  return class_reviews
+}
+
+const reviews = ref(await getReviews(props.classId))
 
 function addReview() {
   router.push({name: 'ClassReview'})
@@ -66,9 +80,7 @@ function addReview() {
         <Tab title="Recenzii">
           <!-- Reviews -->
           <div class="mt-8 divide-y divide-solid">
-            <ReviewCard></ReviewCard>
-            <ReviewCard></ReviewCard>
-            <ReviewCard></ReviewCard>
+            <ReviewCard v-for="review in reviews" v-bind="review" :key="review.id"></ReviewCard>
           </div>
         </Tab>
         <Tab title="Certificări">

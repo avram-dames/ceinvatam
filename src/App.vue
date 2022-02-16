@@ -1,9 +1,16 @@
 <script setup>
-import Navbar from "./components/Navbar.vue";
+import { useStore } from 'vuex';
+import supabase from './utils/supabase';
+
+const store = useStore();
+
+supabase.auth.onAuthStateChange((event, session) => {
+  store.commit('storeUser', session?.user || null)
+});
+
 </script>
 
 <template>
-  <Navbar class=""></Navbar>
   <router-view></router-view>
   <div class="h-12"></div>
 </template>

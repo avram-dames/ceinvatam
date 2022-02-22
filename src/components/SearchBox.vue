@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import SearchBoxMultiSelect from "./SearchBoxMultiSelect.vue";
 import SearchBoxTextInput from "./SearchBoxTextInput.vue";
@@ -7,11 +7,13 @@ import { useStore } from "vuex";
 
 const store = useStore(); 
 const router = useRouter();
-
-const showHelper = ref(false);
-const helperMessage = ref("");
+const userInputIsEmpty = computed(() => store.getters.userInputIsEmpty)
 
 function showResults() {
+  if (userInputIsEmpty.value) {
+    alert('Please provide a search phrase or a city filter.')
+    return
+  }
   store.commit('switchOffSearchByTopic');
   store.dispatch('fetchSearchResults')
   router.push({name: "SearchResults"})
@@ -37,6 +39,5 @@ function showResults() {
     >
       Caută
     </button>
-    <p v-show="showHelper" class="mt-4 text-red-500">{{ helperMessage }}</p>
   </form>
 </template>

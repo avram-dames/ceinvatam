@@ -62,8 +62,8 @@ function onEnter(event) {
   } else {
     userInput.value = suggestions.value[arrowCounter.value].name;
     arrowCounter.value = -1;
-    showSuggestionsDropdown.value = false;
   }
+  showSuggestionsDropdown.value = false;
 }
 
 function onClick(item) {
@@ -106,6 +106,7 @@ onUnmounted(() => {
       @keydown.up.prevent
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
+      @keydown.tab="onEnter"
       class="
         relative
         h-12

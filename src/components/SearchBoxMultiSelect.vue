@@ -4,10 +4,18 @@ import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
 
 const store = useStore();
-const multiSelection = ref()
+const multiSelection = ref([0])
 const multiSelectionOptions = computed(() => store.getters.cityOptions)
 
 function setCityFilterId() { 
+  const size  = multiSelection.value.length - 1
+  if (multiSelection.value[size] === '0') { 
+    multiSelection.value = [0]
+    store.commit('setCityFilterId', [])
+    return
+  } else if (multiSelection.value[0] === '0') {
+    multiSelection.value = [multiSelection.value[1]]
+  }
   store.commit('setCityFilterId', multiSelection.value)
 }
 

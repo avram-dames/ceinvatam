@@ -72,7 +72,7 @@ export default createStore({
     },
 
     userInputIsEmpty(state) {
-      return state.searchText === '' && state.setCityFilterId.length === 0
+      return state.searchPhrase === '' && state.filterSearchBy.cityIds.length === 0
     },
 
     searchResults(state) {
@@ -155,10 +155,6 @@ export default createStore({
     },
 
     async fetchSearchResults({ state, commit, getters }) {
-      if (getters.userInputIsEmpty) {
-        commit('addErrorMessage', 'Please select a city or a search phrase.')
-        return;
-      }
       let query;
 
       if (state.searchByTopic) {

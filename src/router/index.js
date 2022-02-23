@@ -1,12 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Home from '../pages/Home.vue'
-import SearchResults from '../pages/SearchResults.vue'
-import ClassReview from '../pages/ClassReview.vue'
-import ClassReviewThankYou from '../pages/ClassReviewThankYou.vue'
 import CustomerProfile from '../pages/CustomerProfile.vue'
 import CustomerReviews from '../pages/CustomerReviews.vue'
-import ClassReviewUpdate from '../pages/ClassReviewUpdate.vue'
+
 
 import store from '../store'
 
@@ -15,13 +11,13 @@ const router = createRouter({
     routes: [{
         path: '/',
         name: 'Home',
-        component: Home,
+        component: () => import('../pages/Home.vue'),
         meta: { requiresAuth: false }
     },
     {
         path: '/results',
-        name: 'SearchResults',
-        component: SearchResults,
+        name: 'Results',
+        component: () => import('../pages/Results.vue'),
         meta: { requiresAuth: false }
     },
     {
@@ -37,9 +33,9 @@ const router = createRouter({
         meta: { requiresAuth: false }
     },
     {
-        path: '/class/:id/review',
-        name: 'ClassReview',
-        component: ClassReview,
+        path: '/details/partner/:partner_id(\\d+)/review/create',
+        name: 'ReviewPartnerCreate',
+        component: () => import('../pages/ReviewPartner.vue'),
         meta: { requiresAuth: true },
         beforeEnter(to, from) {
             if (store.getters.userFirstName) { return true }
@@ -51,15 +47,35 @@ const router = createRouter({
         }
     },
     {
-        path: '/class_review/:id/update',
-        name: 'ClassReviewUpdate',
-        component: ClassReviewUpdate,
+        path: '/details/partner/:partner_id(\\d+)/review/:id(\\d+)/update',
+        name: 'ReviewPartnerUpdate',
+        component: () => import('../pages/ReviewPartner.vue'),
         meta: { requiresAuth: true },
     },
     {
-        path: '/class/:id/review/thankyou',
-        name: 'ClassReviewThankYou',
-        component: ClassReviewThankYou,
+        path: '/details/class/:class_id(\\d+)/review/create',
+        name: 'ReviewClassCreate',
+        component: () => import('../pages/ReviewClass.vue'),
+        meta: { requiresAuth: true },
+        beforeEnter(to, from) {
+            if (store.getters.userFirstName) { return true }
+            store.commit(
+                'pushAlert',
+                { msg: 'Înainte de a lăsa o recenzie e nevoie să-ți actualizezi profilul.' }
+            )
+            return { name: 'CustomerProfile' }
+        }
+    },
+    {
+        path: '/details/class/:class_id(\\d+)/review/:id(\\d+)/update',
+        name: 'ReviewClassUpdate',
+        component: () => import('../pages/ReviewClass.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/details/:entity/:entity_id/review/thankyou',
+        name: 'ReviewConfirmed',
+        component: () => import('../pages/ReviewConfirmed.vue'),
         meta: { requiresAuth: false }
     },
     {

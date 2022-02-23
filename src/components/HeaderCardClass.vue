@@ -55,7 +55,7 @@ const reviews = ref(await getReviews(props.classId));
 const certifications = ref(await getCertifications(props.classId));
 
 function addReview() {
-  router.push({ name: "ClassReview" });
+  router.push({ name: "ReviewClassCreate", params: {class_id: props.classId} });
 }
 </script>
 

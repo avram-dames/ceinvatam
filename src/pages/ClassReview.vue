@@ -1,9 +1,0 @@
-<script setup>
-import Navbar from "../components/Navbar.vue";
-import CreateClassReview from "../components/CreateClassReview.vue";
-</script>
-
-<template>
-  <Navbar class=""></Navbar>
-  <CreateClassReview></CreateClassReview>
-</template>

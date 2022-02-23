@@ -30,7 +30,7 @@ function categoryDrillDown(category) {
 function showResultsByTopic(topic) {
   store.commit("switchOnSearchByTopic", topic);
   store.dispatch("fetchSearchResults");
-  router.push({ name: "SearchResults" });
+  router.push({ name: "Results" });
 }
 
 store.dispatch("fetchSearchSuggestions");

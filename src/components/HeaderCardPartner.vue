@@ -41,7 +41,7 @@ const partnerInfo = await getPartnerInfo(props.partnerId);
 const classes = await getPartnerClasses(partnerInfo.id)
 
 function addReview() {
-  router.push({ name: "ClassReview" });
+  router.push({ name: "ReviewPartnerCreate", params: { partner_id: props.partnerId } });
 }
 </script>
 

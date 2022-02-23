@@ -6,7 +6,12 @@ import Navbar from "../components/Navbar.vue";
 const router = useRouter();
 const route = useRoute();
 
-const classId = ref(Number(route.params.id));
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const entityId = ref(Number(route.params.entity_id));
+const entity = ref(capitalizeFirstLetter(route.params.entity))
 </script>
 
 <template>
@@ -20,9 +25,9 @@ const classId = ref(Number(route.params.id));
     <div class="flex space-x-4 mt-4">
       <button
         class="px-4 py-2 bg-gray-200 rounded-md"
-        @click="router.push({ name: 'Class', params: { id: classId } })"
+        @click="router.push({ name: entity, params: { id: entityId } })"
       >
-        Detalii despre curs
+        Pagina precedentă
       </button>
       <button
         class="px-4 py-2 bg-green-200 rounded-md"

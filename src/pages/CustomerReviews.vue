@@ -16,7 +16,7 @@ const reviews = ref();
 async function getData() {
   let { data: class_reviews, error } = await supabase
     .from("class_reviews")
-    .select("id, text, score, created_at, first_name, avatar_url")
+    .select("id, text, score, created_at, first_name, avatar_url, class_id")
     .eq("user_id", store.state.user.id);
 
   if (class_reviews.length === 0) {
@@ -46,8 +46,8 @@ async function deleteReview(reviewId) {
   getData();
 }
 
-function editReview(id) {
-  router.push({ path: `/class_review/${id}/update` })
+function editReview(class_id, review_id) {
+  router.push({ path: `/details/class/${class_id}/review/${review_id}/update` })
 }
 
 getData();
@@ -61,7 +61,7 @@ getData();
         <div v-for="review in reviews" :key="review.id">
           <ReviewCard v-bind="review"></ReviewCard>
           <div class="flex justify-end space-x-4">
-            <button id="edit-icon" @click="editReview(review.id)">
+            <button id="edit-icon" @click="editReview(review.class_id, review.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-8 w-8"

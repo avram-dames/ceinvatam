@@ -16,7 +16,7 @@ function showResults() {
   }
   store.commit('switchOffSearchByTopic');
   store.dispatch('fetchSearchResults')
-  router.push({name: "SearchResults"})
+  router.push({name: "Results"})
 }
 
 </script>

@@ -28,7 +28,7 @@ async function registerEmail() {
 
   if (error) throw error;
 
-  router.push({ name: "ConfirmationScreen" });
+  router.push({ name: "SignUpConfirmed" });
 }
 
 async function loginWithSocial(provider) {

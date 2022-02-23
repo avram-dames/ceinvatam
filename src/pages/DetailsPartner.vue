@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 import HeaderCardPartner from "../components/HeaderCardPartner.vue";
-import HeaderCardPartnerFallback from "../components/HeaderCardPartnerFallback.vue";
+import HeaderCardFallback from "../components/HeaderCardFallback.vue";
 import Navbar from "../components/Navbar.vue";
 
 const router = useRouter();
@@ -18,7 +18,7 @@ const partnerId = ref(Number(route.params.id));
       <HeaderCardPartner :partnerId="partnerId"></HeaderCardPartner>
     </template>
     <template #fallback>
-      <HeaderCardPartnerFallback></HeaderCardPartnerFallback>
+      <HeaderCardFallback></HeaderCardFallback>
     </template>
   </Suspense>
 </template>

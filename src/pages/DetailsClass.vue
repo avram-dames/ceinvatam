@@ -3,8 +3,7 @@ import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 import Navbar from "../components/Navbar.vue";
-import HeaderCardPartnerClass from "../components/HeaderCardClass.vue";
-import HeaderCardPartnerFallback from "../components/HeaderCardPartnerFallback.vue";
+import HeaderCardFallback from "../components/HeaderCardFallback.vue";
 import HeaderCardClass from "../components/HeaderCardClass.vue";
 
 const router = useRouter();
@@ -19,7 +18,7 @@ const classId = ref(Number(route.params.id));
       <HeaderCardClass :classId="classId"></HeaderCardClass>
     </template>
     <template #fallback>
-      <HeaderCardPartnerFallback></HeaderCardPartnerFallback>
+      <HeaderCardFallback></HeaderCardFallback>
     </template>
   </Suspense>
 </template>

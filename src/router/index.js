@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '../pages/Home.vue'
 import SearchResults from '../pages/SearchResults.vue'
-import Partner from '../pages/Partner.vue'
-import Class from '../pages/Class.vue'
 import ClassReview from '../pages/ClassReview.vue'
 import ClassReviewThankYou from '../pages/ClassReviewThankYou.vue'
 import CustomerProfile from '../pages/CustomerProfile.vue'
@@ -27,15 +25,15 @@ const router = createRouter({
         meta: { requiresAuth: false }
     },
     {
-        path: '/partner/:id',
+        path: '/details/partner/:id',
         name: 'Partner',
-        component: Partner,
+        component: () => import('../pages/DetailsPartner.vue'),
         meta: { requiresAuth: false }
     },
     {
-        path: '/class/:id',
+        path: '/details/class/:id',
         name: 'Class',
-        component: Class,
+        component: () => import('../pages/DetailsClass.vue'),
         meta: { requiresAuth: false }
     },
     {

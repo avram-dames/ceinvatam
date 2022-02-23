@@ -20,7 +20,7 @@ async function login() {
 
 async function logout() {
   let { error } = await supabase.auth.signOut();
-  router.push({ name: 'Home' })
+  router.push({ name: "Home" });
 }
 </script>
 

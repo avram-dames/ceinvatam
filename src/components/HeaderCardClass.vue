@@ -14,13 +14,19 @@ const props = defineProps({
 });
 const router = useRouter();
 
-async function getPartnerInfo(id) {
-  const apiUrl = `/api/class/${id}`;
-  const response = await fetch(apiUrl);
-  return await response.json();
+async function getClassInfo(id) {
+  const { data: classes, error } = await supabase
+    .from('classes')
+    .select('id, description, url, name, partners(name)')
+    .eq('id', id)
+    .single()
+
+  if (error) throw error
+
+  return classes
 }
-const { data } = await getPartnerInfo(props.classId);
-const classInfo = ref(data[0]);
+const data = await getClassInfo(props.classId);
+const classInfo = ref(data);
 
 async function getReviews(classId) {
   let { data: class_reviews, error } = await supabase

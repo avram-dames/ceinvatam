@@ -1,5 +1,10 @@
 import { createStore, storeKey } from 'vuex';
+import VuexPersistence from 'vuex-persist'
 import supabase from '../utils/supabase';
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 function prepareTextSearchTerms(text) {
   console.debug(`Cleaning up user text input: ${text}`)
@@ -240,6 +245,10 @@ export default createStore({
       state.searchResults = payload
     },
 
+    clearSearchPhrase(state) {
+      state.searchPhrase = ""
+    },
+
     addErrorMessage(state, payload) {
       state.errors.push(payload)
     },
@@ -310,4 +319,5 @@ export default createStore({
       state.alerts = []
     }
   },
+  plugins: [vuexLocal.plugin]
 })

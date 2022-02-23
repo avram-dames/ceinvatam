@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import supabase from "../utils/supabase";
 
-import Navbar from "../components/Navbar.vue";
+import NavbarPlaceholder from "../components/NavbarPlaceholder.vue";
 
 import fbLogoUrl from "../assets/fb_logo.png";
 import gLogoUrl from "../assets/g_logo.png";
@@ -28,7 +28,7 @@ async function registerEmail() {
 
   if (error) throw error;
 
-  router.push({ name: "Home" });
+  router.push({ name: "ConfirmationScreen" });
 }
 
 async function loginWithSocial(provider) {
@@ -43,10 +43,12 @@ async function loginWithSocial(provider) {
 </script>
 
 <template>
-  <Navbar class=""></Navbar>
+  <NavbarPlaceholder class=""></NavbarPlaceholder>
   <div class="px-4 py-12 m-auto max-w-md text-gray-600">
-    <h2 class="text-3xl font-medium text-gray-800">Crează un cont nou</h2>
-
+    <h2 class="text-4xl font-bold text-gray-800">Crează un cont nou</h2>
+    <p class="py-2 text-gray-400">Crează un cont pentru a putea lăsa recenzii la cursurile urmate și multe
+      alte beneficii.
+    </p>
     <!-- Social Login -->
     <div class="mt-8 flex flex-col">
       <button

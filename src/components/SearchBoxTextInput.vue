@@ -7,6 +7,8 @@ import { udfNormalize } from "../utils/parsers";
 const store = useStore();
 const router = useRouter();
 
+store.commit('clearSearchPhrase')
+
 const root = ref(null);
 const userInput = ref("");
 const arrowCounter = ref(-1);
@@ -100,6 +102,7 @@ onUnmounted(() => {
       type="text"
       placeholder="Ce dorești să înveți?"
       v-model="userInput"
+      @focus="moveToTop"
       @keydown.enter.prevent
       @keydown.enter="onEnter"
       @keydown.down.prevent
@@ -107,6 +110,7 @@ onUnmounted(() => {
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
       @keydown.tab="onEnter"
+      @focusout="onEnter"
       class="
         relative
         h-12
@@ -128,6 +132,9 @@ onUnmounted(() => {
         border border-gray-200
         w-full-w-margins
         lg:w-1/2
+        max-h-80
+        overflow-scroll
+        overscroll-contain
       "
       v-show="showSuggestionsDropdown"
     >

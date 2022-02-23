@@ -4,7 +4,7 @@ import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import supabase from "../utils/supabase";
 
-import Navbar from "../components/Navbar.vue";
+import NavbarPlaceholder from "../components/NavbarPlaceholder.vue";
 
 import fbLogoUrl from "../assets/fb_logo.png";
 import gLogoUrl from "../assets/g_logo.png";
@@ -13,9 +13,9 @@ const store = useStore();
 const router = useRouter();
 const route = useRoute();
 
-const alerts = ref(store.state.alerts)
-alerts.value.forEach((item) => alert(item.msg))
-store.commit("deleteAlerts")
+const alerts = ref(store.state.alerts);
+alerts.value.forEach((item) => alert(item.msg));
+store.commit("deleteAlerts");
 
 // seems to be a bug either in vuerouter or in my code
 const props = defineProps(["redirect"]); // does not work
@@ -40,11 +40,9 @@ async function loginWithEmail() {
 }
 
 async function loginWithSocial(provider) {
-  return await supabase.auth.signIn(
-    {
-      provider: provider,
-    },
-  );
+  return await supabase.auth.signIn({
+    provider: provider,
+  });
 }
 
 async function handleLogin(provider) {
@@ -52,7 +50,10 @@ async function handleLogin(provider) {
     ? await loginWithSocial(provider)
     : await loginWithEmail();
 
-  if (error) { alert(error.message); throw error; }
+  if (error) {
+    alert(error.message);
+    throw error;
+  }
 
   if (user) {
     router.push({ name: "Home" });
@@ -61,9 +62,9 @@ async function handleLogin(provider) {
 </script>
 
 <template>
-  <Navbar class=""></Navbar>
+  <NavbarPlaceholder class=""></NavbarPlaceholder>
   <div class="px-4 py-12 m-auto max-w-md text-gray-600">
-    <h2 class="text-3xl font-medium text-gray-800">Autentificare</h2>
+    <h2 class="text-4xl font-bold text-gray-800">Autentificare</h2>
 
     <!-- Social Login -->
     <div class="mt-8 flex flex-col">
@@ -102,10 +103,11 @@ async function handleLogin(provider) {
         <!-- Password Input -->
         <div class="flex justify-between">
           <label for="password">Parolă</label>
+          <!-- Forgot Password Link-->
           <router-link
             :to="'/resetpassword?email=' + form.email"
             class="text-blue-600 hover:text-blue-400"
-            >Am uitat parola</router-link
+            >Am uitat parola.</router-link
           >
         </div>
         <input
@@ -115,10 +117,10 @@ async function handleLogin(provider) {
           class="p-2 border rounded-md"
           v-model="form.password"
           required
-          placeholder="Parola"
+          placeholder="parola"
         />
       </div>
-      <!-- Sign In -->
+      <!-- Submit -->
       <button class="p-2 bg-blue-600 text-white rounded-md mt-8 w-full">
         Autentificare
       </button>
@@ -126,8 +128,9 @@ async function handleLogin(provider) {
 
     <!-- Sign Up -->
     <div class="mt-4">
+      Nu ai deja cont?
       <router-link to="/signup" class="text-blue-600 hover:text-blue-400"
-        >Vreau să creez un cont nou</router-link
+        >Crează cont.</router-link
       >
     </div>
   </div>

@@ -14,6 +14,10 @@ import SignInNewPassword from '../pages/SignInNewPassword.vue'
 import CustomerProfile from '../pages/CustomerProfile.vue'
 import CustomerReviews from '../pages/CustomerReviews.vue'
 import ClassReviewUpdate from '../pages/ClassReviewUpdate.vue'
+import SignInPasswordResetInstructions from '../pages/SignInPasswordResetInstructions.vue'
+import NotFound from '../pages/NotFound.vue'
+import Contact from '../pages/Contact.vue'
+import SentMessageConfirmationPage from '../pages/SentMessageConfirmationPage.vue'
 
 import store from '../store'
 
@@ -51,7 +55,7 @@ const router = createRouter({
         beforeEnter(to, from) {
             if (store.getters.userFirstName) { return true }
             store.commit(
-                'pushAlert', 
+                'pushAlert',
                 { msg: 'Înainte de a lăsa o recenzie e nevoie să-ți actualizezi profilul.' }
             )
             return { name: 'CustomerProfile' }
@@ -90,6 +94,12 @@ const router = createRouter({
         meta: { requiresAuth: false }
     },
     {
+        path: '/resetpasswordinstructions',
+        name: 'SignInPasswordResetInstructions',
+        component: SignInPasswordResetInstructions,
+        meta: { requiresAuth: false }
+    },
+    {
         path: '/newpassword',
         name: 'NewPassword',
         component: SignInNewPassword,
@@ -113,7 +123,20 @@ const router = createRouter({
         name: 'CustomerReviews',
         component: CustomerReviews,
         meta: { requiresAuth: true }
-    }
+    },
+    {
+        path: '/contact',
+        name: 'Contact',
+        component: Contact,
+        meta: { requiresAuth: false }
+    },
+    {
+        path: '/messagesent',
+        name: 'SentMessageConfirmationPage',
+        component: SentMessageConfirmationPage,
+        meta: { requiresAuth: false }
+    },
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
     ]
 })
 

@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import supabase from "../utils/supabase";
 
-import Navbar from "../components/Navbar.vue";
+import NavbarPlaceholder from "../components/NavbarPlaceholder.vue";
 
 const router = useRouter();
 const props = defineProps(['query'])
@@ -19,19 +19,19 @@ async function submitPasswordResetRequest() {
 
   if (error) { alert(error.message); throw error; }
 
-  router.push({ name: "Home" });
+  router.push({ name: "SignInPasswordResetInstructions" });
 }
 </script>
 
 <template>
-  <Navbar class=""></Navbar>
+  <NavbarPlaceholder class=""></NavbarPlaceholder>
   <div class="px-4 py-12 m-auto max-w-md text-gray-600">
-    <h2 class="text-3xl font-medium text-gray-800">Resetează parolă</h2>
+    <h2 class="text-4xl font-bold text-gray-800">Resetează parolă</h2>
 
     <form @submit.prevent="submitPasswordResetRequest()">
       <!-- Email Input -->
       <div class="flex flex-col space-y-2 mt-12">
-        <label for="email">Email-ul pentru care doriți să resetați parola</label>
+        <label for="email">Adresa de email pentru care doriți să resetați parola</label>
         <input
           type="email"
           name="email"

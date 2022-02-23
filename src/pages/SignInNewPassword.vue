@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import supabase from "../utils/supabase";
 
-import Navbar from "../components/Navbar.vue";
+import NavbarPlaceholder from "../components/NavbarPlaceholder.vue";
 
 const router = useRouter();
 const store = useStore();
@@ -23,9 +23,9 @@ async function updateUserPassword() {
 </script>
 
 <template>
-  <Navbar class=""></Navbar>
+  <NavbarPlaceholder class=""></NavbarPlaceholder>
   <div class="px-4 py-12 m-auto max-w-md text-gray-600">
-    <h2 class="text-3xl font-medium text-gray-800">Creare parolă nouă</h2>
+    <h2 class="text-4xl font-bold text-gray-800">Creare parolă nouă</h2>
     <!-- Email Login -->
     <form @submit.prevent="updateUserPassword()">
       <!-- Email Input -->

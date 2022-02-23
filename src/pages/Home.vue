@@ -42,7 +42,7 @@ store.dispatch("fetchTopics");
   <Navbar class=""></Navbar>
   <div class="flex flex-col">
       <h1 v-if="userIsAuthenticated" class="mt-12 px-4 text-3xl font-semibold">
-        Bine ai revenit{{ firstName ? ', ' + firstName : '' }}
+        Bine ai venit{{ firstName ? ', ' + firstName : '' }}
       </h1>
       <h1 v-else class="px-4 text-4xl mt-32 ">
         Descoperă cursul potrivit pentru tine

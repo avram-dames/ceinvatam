@@ -22,7 +22,7 @@ async function sendMessage() {
 
   if (error) throw error
 
-  router.push({name: 'SentMessageConfirmationPage'})
+  router.push({name: 'ContactFormConfirmation'})
 }
 
 </script>

@@ -105,7 +105,7 @@ async function loginWithSocial(provider) {
     <!-- Sign Up -->
     <div class="mt-4">
       Am deja cont, vreau să mă
-      <router-link to="/signin" class="text-blue-600 hover:text-blue-400"
+      <router-link to="/auth/login" class="text-blue-600 hover:text-blue-400"
         >autentific.</router-link
       >
     </div>

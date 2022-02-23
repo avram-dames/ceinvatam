@@ -6,18 +6,9 @@ import Partner from '../pages/Partner.vue'
 import Class from '../pages/Class.vue'
 import ClassReview from '../pages/ClassReview.vue'
 import ClassReviewThankYou from '../pages/ClassReviewThankYou.vue'
-import SignIn from '../pages/SignIn.vue'
-import SignUp from '../pages/SignUp.vue'
-import SignInPaswordReset from '../pages/SignInPaswordReset.vue'
-import SignUpConfirmationScreen from '../pages/SignUpConfirmationScreen.vue'
-import SignInNewPassword from '../pages/SignInNewPassword.vue'
 import CustomerProfile from '../pages/CustomerProfile.vue'
 import CustomerReviews from '../pages/CustomerReviews.vue'
 import ClassReviewUpdate from '../pages/ClassReviewUpdate.vue'
-import SignInPasswordResetInstructions from '../pages/SignInPasswordResetInstructions.vue'
-import NotFound from '../pages/NotFound.vue'
-import Contact from '../pages/Contact.vue'
-import SentMessageConfirmationPage from '../pages/SentMessageConfirmationPage.vue'
 
 import store from '../store'
 
@@ -74,41 +65,41 @@ const router = createRouter({
         meta: { requiresAuth: false }
     },
     {
-        path: '/signin',
+        path: '/auth/login',
         name: 'SignIn',
-        component: SignIn,
+        component: () => import('../pages/AuthSignIn.vue'),
         meta: { requiresAuth: false },
         porps: route => ({ redirect: route.query.redirect })
     },
     {
-        path: '/signup',
+        path: '/auth/register',
         name: 'SignUp',
-        component: SignUp,
+        component: () => import('../pages/AuthSignUp.vue'),
         meta: { requiresAuth: false }
     },
     {
-        path: '/resetpassword',
-        name: 'ResetPasword',
-        component: SignInPaswordReset,
+        path: '/auth/register/confirmation',
+        name: 'SignUpConfirmed',
+        component: () => import('../pages/AuthSignupConfirmed.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
+        path: '/auth/password/forgot',
+        name: 'PasswordForgot',
+        component: () => import('../pages/AuthPasswordForgot.vue'),
         props: route => ({ query: route.query.email }),
         meta: { requiresAuth: false }
     },
     {
-        path: '/resetpasswordinstructions',
-        name: 'SignInPasswordResetInstructions',
-        component: SignInPasswordResetInstructions,
+        path: '/auth/password/reset-email-sent',
+        name: 'PasswordResetEmailSent',
+        component: () => import('../pages/AuthPasswordResetEmailSent.vue'),
         meta: { requiresAuth: false }
     },
     {
-        path: '/newpassword',
-        name: 'NewPassword',
-        component: SignInNewPassword,
-        meta: { requiresAuth: false }
-    },
-    {
-        path: '/confirmationscreen',
-        name: 'ConfirmationScreen',
-        component: SignUpConfirmationScreen,
+        path: '/auth/password/reset',
+        name: 'PasswordReset',
+        component: () => import('../pages/AuthPasswordReset.vue'),
         meta: { requiresAuth: false }
     },
     {
@@ -127,16 +118,20 @@ const router = createRouter({
     {
         path: '/contact',
         name: 'Contact',
-        component: Contact,
+        component: () => import('../pages/Contact.vue'),
         meta: { requiresAuth: false }
     },
     {
-        path: '/messagesent',
-        name: 'SentMessageConfirmationPage',
-        component: SentMessageConfirmationPage,
+        path: '/contact/confirmation',
+        name: 'ContactFormConfirmation',
+        component: () => import('../pages/ContactFormConfirmation.vue'),
         meta: { requiresAuth: false }
     },
-    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('../pages/NotFound.vue')
+    },
     ]
 })
 

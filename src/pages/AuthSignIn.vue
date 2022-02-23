@@ -105,7 +105,7 @@ async function handleLogin(provider) {
           <label for="password">Parolă</label>
           <!-- Forgot Password Link-->
           <router-link
-            :to="'/resetpassword?email=' + form.email"
+            :to="'/auth/password/forgot?email=' + form.email"
             class="text-blue-600 hover:text-blue-400"
             >Am uitat parola.</router-link
           >
@@ -129,7 +129,7 @@ async function handleLogin(provider) {
     <!-- Sign Up -->
     <div class="mt-4">
       Nu ai deja cont?
-      <router-link to="/signup" class="text-blue-600 hover:text-blue-400"
+      <router-link to="/auth/register" class="text-blue-600 hover:text-blue-400"
         >Crează cont.</router-link
       >
     </div>

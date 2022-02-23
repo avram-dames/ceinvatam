@@ -19,7 +19,7 @@ async function submitPasswordResetRequest() {
 
   if (error) { alert(error.message); throw error; }
 
-  router.push({ name: "SignInPasswordResetInstructions" });
+  router.push({ name: "PasswordResetEmailSent" });
 }
 </script>
 

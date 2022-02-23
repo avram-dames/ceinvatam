@@ -19,7 +19,6 @@ router.beforeEach(async (to, from) => {
     }
 
     if (to.meta.requiresAuth && !store.getters.userIsAuthenticated) {
-        store.commit('pushAlert', {msg: 'Înainte de a accesa această pagină e nevoie să te autentifici.'})
         return {
             path: '/signin', query: { redirect: to.fullPath }
         }

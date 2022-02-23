@@ -156,7 +156,7 @@ async function logout() {
               <span class="ml-2">Recenziile Mele</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li v-if="store.getters.userIsAuthenticated" class="nav-item">
             <a
               class="
                 px-3
@@ -190,7 +190,7 @@ async function logout() {
                 hover:opacity-75
               "
             >
-              <span class="ml-2">Login</span>
+              <span class="ml-2">Autentificare</span>
             </button>
           </li>
 
@@ -209,7 +209,7 @@ async function logout() {
                 hover:opacity-75
               "
             >
-              <span class="ml-2">Logout</span>
+              <span class="ml-2">Ieșire Cont</span>
             </button>
           </li>
         </ul>

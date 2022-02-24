@@ -7,7 +7,7 @@ const store = useStore();
 <template>
   <div class="lg:flex">
     <!-- Sorters -->
-    <div class="px-2 flex space-x-1 overflow-x-auto hide-scroll-bar">
+    <div class="flex space-x-1 overflow-x-auto hide-scroll-bar">
       <!-- Sort by name -->
       <div
         @click="store.dispatch('orderResultsByName')"
@@ -64,7 +64,7 @@ const store = useStore();
     </div>
 
     <!-- Filters -->
-    <div class="px-2 flex space-x-1 mt-2 lg:mt-0 lg:px-0">
+    <div class="flex space-x-1 mt-2 lg:mt-0 lg:px-0">
       <div
         @click="store.dispatch('showOnlyOnlineClasses')"
         class="

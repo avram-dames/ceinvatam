@@ -4,7 +4,7 @@ import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
 
 const store = useStore();
-const multiSelection = ref([0])
+const multiSelection = ref([0, ])
 const multiSelectionOptions = computed(() => store.getters.cityOptions)
 
 function setCityFilterId() { 

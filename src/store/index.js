@@ -249,6 +249,14 @@ export default createStore({
       state.searchPhrase = ""
     },
 
+    clearFilterSearchByCityIds(state) {
+      state.filterSearchBy.cityIds =  []
+    },
+
+    clearSearchResults(state) {
+      state.searchResults = []
+    },
+
     addErrorMessage(state, payload) {
       state.errors.push(payload)
     },

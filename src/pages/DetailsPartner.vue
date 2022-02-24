@@ -1,24 +1,65 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 
-import HeaderCardPartner from "../components/HeaderCardPartner.vue";
-import HeaderCardFallback from "../components/HeaderCardFallback.vue";
+import supabase from "../utils/supabase";
+
 import Navbar from "../components/Navbar.vue";
+import DetailsPartnerHeader from "../components/DetailsPartnerHeader.vue";
+import DetailsHeaderFallback from "../components/DetailsHeaderFallback.vue";
+import DetailsPartnerBody from "../components/DetailsPartnerBody.vue";
 
-const router = useRouter();
 const route = useRoute();
-const partnerId = ref(Number(route.params.id));
+const partnerInfo = ref({
+  id: Number(route.params.id),
+  name: '',
+  about: '',
+  homepage: '',
+  cities: []
+});
+
+async function fetchPartnerInfo() {
+  const { data: partners, error } = await supabase
+    .from('partners')
+    .select('name, about, homepage')
+    .eq('id', partnerInfo.value.id)
+    .single()
+  
+  if (error) throw error
+
+  partnerInfo.value.name = partners.name
+  partnerInfo.value.about = partners.about
+  partnerInfo.value.homepage = partners.homepage
+}
+
+async function fetchPartnerCities() {
+  const { data: addresses, error } = await supabase
+    .from('addresses')
+    .select('cities(name)')
+    .eq('partner_id', partnerInfo.value.id)
+  
+  if (error) throw error
+
+  partnerInfo.value.cities = addresses.map((item) => item.cities.name)
+}
+
+fetchPartnerInfo()
+fetchPartnerCities()
 </script>
 
 <template>
-  <Navbar class=""></Navbar>
-  <Suspense>
-    <template #default>
-      <HeaderCardPartner :partnerId="partnerId"></HeaderCardPartner>
-    </template>
-    <template #fallback>
-      <HeaderCardFallback></HeaderCardFallback>
-    </template>
-  </Suspense>
+  <Navbar></Navbar>
+  <div class="px-4">
+    <Suspense>
+      <template #default>
+        <div class="flex flex-col space-y-12">
+          <DetailsPartnerHeader v-bind="partnerInfo"></DetailsPartnerHeader>
+          <DetailsPartnerBody v-bind="partnerInfo"></DetailsPartnerBody>
+        </div>
+      </template>
+      <template #fallback>
+        <DetailsHeaderFallback></DetailsHeaderFallback>
+      </template>
+    </Suspense>
+  </div>
 </template>

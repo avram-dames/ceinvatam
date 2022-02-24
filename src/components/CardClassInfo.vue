@@ -22,7 +22,7 @@ function navigateToClass(id) {
 </script>
 
 <template>
-  <div class="px-2">
+  <div>
     <div class="mt-2">
       <p>{{ partner }}</p>
     </div>
@@ -39,6 +39,6 @@ function navigateToClass(id) {
       </div>
     </div>
   </div>
-
+  
   <div class="border-b border-gray-200 mt-4"></div>
 </template>

@@ -9,6 +9,10 @@ const store = useStore();
 const router = useRouter();
 const userInputIsEmpty = computed(() => store.getters.userInputIsEmpty)
 
+store.commit('clearSearchPhrase');
+store.commit('clearFilterSearchByCityIds');
+store.commit('clearSearchResults');
+
 function fetchResultsAndGo2ResultsPage() {
   if (userInputIsEmpty.value) {
     alert('Please provide a search phrase or a city filter.')

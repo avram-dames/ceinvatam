@@ -1,24 +1,69 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
+
+import supabase from "../utils/supabase";
 
 import Navbar from "../components/Navbar.vue";
-import HeaderCardFallback from "../components/HeaderCardFallback.vue";
-import HeaderCardClass from "../components/HeaderCardClass.vue";
+import DetailsClassHeader from "../components/DetailsClassHeader.vue";
+import DetailsHeaderFallback from "../components/DetailsHeaderFallback.vue";
+import DetailsClassBody from "../components/DetailsClassBody.vue";
 
-const router = useRouter();
 const route = useRoute();
-const classId = ref(Number(route.params.id));
+const classInfo = ref({
+  id: Number(route.params.id),
+  name: '',
+  description: '',
+  url: '',
+  partnerId: null,
+  partnerName: '',
+  cities: []
+});
+
+async function fetchClassInfo() {
+  const { data: classes, error } = await supabase
+    .from('classes')
+    .select('name, description, url, partners(id, name)')
+    .eq('id', classInfo.value.id)
+    .single()
+  
+  if (error) throw error
+
+  classInfo.value.name = classes.name
+  classInfo.value.description = classes.description
+  classInfo.value.url = classes.url
+  classInfo.value.partnerName = classes.partners.name
+  classInfo.value.partnerId = classes.partners.id
+}
+
+async function fetchClassCities() {
+  const { data: class2cities, error } = await supabase
+    .from('class2cities')
+    .select('cities(name)')
+    .eq('class_id', classInfo.value.id)
+  
+  if (error) throw error
+
+  classInfo.value.cities = class2cities.map((item) => item.cities.name)
+}
+
+fetchClassInfo()
+fetchClassCities()
 </script>
 
 <template>
-  <Navbar class=""></Navbar>
-  <Suspense>
-    <template #default>
-      <HeaderCardClass :classId="classId"></HeaderCardClass>
-    </template>
-    <template #fallback>
-      <HeaderCardFallback></HeaderCardFallback>
-    </template>
-  </Suspense>
+  <Navbar></Navbar>
+  <div class="px-4">
+    <Suspense>
+      <template #default>
+        <div class="flex flex-col space-y-12">
+          <DetailsClassHeader v-bind="classInfo"></DetailsClassHeader>
+          <DetailsClassBody v-bind="classInfo"></DetailsClassBody>
+        </div>
+      </template>
+      <template #fallback>
+        <DetailsHeaderFallback></DetailsHeaderFallback>
+      </template>
+    </Suspense>
+  </div>
 </template>

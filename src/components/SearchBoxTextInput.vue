@@ -70,6 +70,7 @@ function onEnter(event) {
 }
 
 function onClick(item) {
+  console.log(item)
   userInput.value = item.name;
   showSuggestionsDropdown.value = false;
   if (item.entity === "partner") {

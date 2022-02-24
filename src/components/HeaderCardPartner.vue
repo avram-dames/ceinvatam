@@ -8,7 +8,7 @@ import TabsWrapper from "./TabsWrapper.vue";
 import Tab from "./Tab.vue";
 import ReviewCard from "./ReviewCard.vue";
 import ReviewCardFallback from "./ReviewCardFallback.vue";
-import ClassCard from "./ClassCard.vue";
+import DetailsClassCard from "./DetailsClassCard.vue";
 
 const props = defineProps({
   partnerId: Number,
@@ -86,7 +86,7 @@ function addReview() {
         </Tab>
         <Tab title="Cursuri">
           <div class="mt-8">
-          <ClassCard v-for="cl in classes" :key="cl.id" v-bind="cl"></ClassCard>
+          <DetailsClassCard v-for="cl in classes" :key="cl.id" v-bind="cl"></DetailsClassCard>
           </div>
         </Tab>
         <Tab title="Recenzii">

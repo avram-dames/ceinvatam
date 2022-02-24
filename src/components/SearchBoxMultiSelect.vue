@@ -275,7 +275,7 @@ store.dispatch("fetchCities");
   bottom: -0.475rem;
   transform: translateY(100%);
   border: 1px solid #e5e7eb;
-  margin-top: calc(var(--ms-border-width, 1px) * );
+  margin-top: calc(var(--ms-border-width, 1px) * -1);
   max-height: 15rem;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;

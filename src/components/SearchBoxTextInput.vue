@@ -70,7 +70,6 @@ function onEnter(event) {
 }
 
 function onClick(item) {
-  console.log(item)
   userInput.value = item.name;
   showSuggestionsDropdown.value = false;
   if (item.entity === "partner") {
@@ -112,7 +111,6 @@ onUnmounted(() => {
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
       @keydown.tab="onEnter"
-      @focusout="onEnter"
       class="
         relative
         h-12

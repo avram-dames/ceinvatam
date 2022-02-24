@@ -32,8 +32,7 @@ function fetchResultsAndGo2ResultsPage() {
       <SearchBoxMultiSelect></SearchBoxMultiSelect>
     </div>
     <button
-      @click.prevent
-      @click="showResults"
+      @click="fetchResultsAndGo2ResultsPage"
       class="text-white bg-purple-400 hover:bg-purple-300 rounded-md lg:w-48 h-12"
     >
       Caută

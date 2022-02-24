@@ -94,7 +94,7 @@ const router = createRouter({
     {
         path: '/auth/register/confirmation',
         name: 'SignUpConfirmed',
-        component: () => import('../pages/AuthSignupConfirmed.vue'),
+        component: () => import('../pages/AuthSignUpConfirmed.vue'),
         meta: { requiresAuth: false }
     },
     {

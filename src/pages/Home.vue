@@ -1,78 +1,24 @@
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
 
-import ClassCard from "../components/ClassCard.vue";
-import SearchBox from "../components/SearchBox.vue";
-import CategoryBoxes from "../components/CategoryBoxes.vue";
 import Navbar from "../components/Navbar.vue";
+import SearchBox from "../components/SearchBox.vue";
+import CategoryDrillDown from "../components/CategoryDrillDown.vue";
 
 const store = useStore();
-const router = useRouter();
-const showHelper = ref(false);
-const helperMessage = ref("");
-const showCategories = ref(true);
-const categories = computed(() => store.state.categories);
-const allTopics = computed(() => store.state.topics);
-const userIsAuthenticated = computed(() => store.getters.userIsAuthenticated);
-const topicDrillDown = ref([]);
-const firstName = computed(() => store.getters.userFirstName)
-
-function categoryDrillDown(category) {
-  showCategories.value = false;
-  topicDrillDown.value = allTopics.value.filter(
-    (item) => item.category === category
-  );
-}
-
-function showResultsByTopic(topic) {
-  store.commit("switchOnSearchByTopic", topic);
-  store.dispatch("fetchSearchResults");
-  router.push({ name: "Results" });
-}
-
-store.dispatch("fetchSearchSuggestions");
-store.dispatch("fetchCategories");
-store.dispatch("fetchTopics");
+const firstName = computed(() => store.getters.userFirstName);
 </script>
 
 <template>
-  <Navbar class=""></Navbar>
-  <div class="flex flex-col">
-      <h1 v-if="userIsAuthenticated" class="mt-12 px-4 text-3xl font-semibold">
-        Bine ai venit{{ firstName ? ', ' + firstName : '' }}
-      </h1>
-      <h1 v-else class="px-4 text-4xl mt-32 ">
-        Descoperă cursul potrivit pentru tine
-      </h1>
-      <SearchBox class="mt-12"></SearchBox>
-      <p v-show="showHelper" class="px-4 mt-4 text-red-500">
-        {{ helperMessage }}
-      </p>
-
-    <div class="mt-32">
-      <h2 v-if="showCategories" class="text-center">Categorii</h2>
-      <div v-else>
-        <h2 class="text-center">Topics</h2>
-        <div
-          @click="showCategories = true"
-          class="mt-4 pr-4 text-right w-full text-gray-600 cursor-pointer"
-        >
-          Înapoi la categorii
-        </div>
-      </div>
-      <CategoryBoxes
-        v-if="showCategories"
-        @drill-down-by="categoryDrillDown"
-        :items="categories"
-      ></CategoryBoxes>
-      <CategoryBoxes
-        v-else
-        @drill-down-by="showResultsByTopic"
-        :items="topicDrillDown"
-      ></CategoryBoxes>
-    </div>
+  <Navbar></Navbar>
+  <div class="px-4">
+    <h1 class="mt-12 text-3xl font-semibold">
+      <span v-if="firstName">Bine ai venit, {{ firstName }}</span>
+      <span v-else>Descoperă cursul potrivit pentru tine</span>
+    </h1>
+    <SearchBox class="mt-12"></SearchBox>
+    <CategoryDrillDown class="mt-32"></CategoryDrillDown>
   </div>
 </template>

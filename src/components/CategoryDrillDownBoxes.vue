@@ -8,7 +8,7 @@ function drillDownBy(item) {
 </script>
 
 <template>
-    <div class="px-4 grid grid-cols-2 lg:grid-cols-4 gap-4 place-items-center mt-8">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 place-items-center mt-8">
       <div
         v-for="item in items"
         :key="item"

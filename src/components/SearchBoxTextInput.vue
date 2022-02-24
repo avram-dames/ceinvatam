@@ -7,7 +7,8 @@ import { udfNormalize } from "../utils/parsers";
 const store = useStore();
 const router = useRouter();
 
-store.commit('clearSearchPhrase')
+store.commit('clearSearchPhrase');
+store.dispatch("fetchSearchSuggestions");
 
 const root = ref(null);
 const userInput = ref("");

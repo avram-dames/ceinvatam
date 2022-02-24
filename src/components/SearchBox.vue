@@ -9,7 +9,7 @@ const store = useStore();
 const router = useRouter();
 const userInputIsEmpty = computed(() => store.getters.userInputIsEmpty)
 
-function showResults() {
+function fetchResultsAndGo2ResultsPage() {
   if (userInputIsEmpty.value) {
     alert('Please provide a search phrase or a city filter.')
     return
@@ -18,13 +18,12 @@ function showResults() {
   store.dispatch('fetchSearchResults')
   router.push({name: "Results"})
 }
-
 </script>
 
 <template>
   <form
     @submit.prevent
-    class="flex flex-col lg:space-x-2 space-y-4 lg:space-y-0 px-4 lg:flex-row"
+    class="flex flex-col space-y-4 lg:flex-row lg:space-x-2 lg:space-y-0"
   >
     <div class="lg:w-1/3">
       <SearchBoxTextInput></SearchBoxTextInput>
@@ -35,7 +34,7 @@ function showResults() {
     <button
       @click.prevent
       @click="showResults"
-      class="px-4 py-2 text-white bg-purple-400 hover:bg-purple-300 rounded-md lg:w-48 h-12"
+      class="text-white bg-purple-400 hover:bg-purple-300 rounded-md lg:w-48 h-12"
     >
       Caută
     </button>

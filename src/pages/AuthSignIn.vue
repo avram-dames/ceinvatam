@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import supabase from "../utils/supabase";
@@ -13,14 +13,16 @@ const store = useStore();
 const router = useRouter();
 const route = useRoute();
 
+// the following trick is used to handle the situation when a social provider takes
+// longer to return the auth user object
+const userIsAuthenticated = computed(() => store.getters.userIsAuthenticated)
+watch(userIsAuthenticated, () => router.push('Home'))
+
 const alerts = ref(store.state.alerts);
 alerts.value.forEach((item) => alert(item.msg));
 store.commit("deleteAlerts");
 
-// seems to be a bug either in vuerouter or in my code
-const props = defineProps(["redirect"]); // does not work
-// untill the router query props bug is fixed, will use the state
-store.commit("setRedirect", route.query.redirect); // this works
+store.commit("setRedirect", route.query.redirect);
 
 const form = ref({
   email: "",

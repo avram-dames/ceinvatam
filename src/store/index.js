@@ -48,6 +48,7 @@ export default createStore({
       errors: [],
       alerts: [],
       searchResults: [],
+      searchResultsType: 'class',
       loadingResults: false,
       searchPhrase: "",
       filterSearchBy: {
@@ -121,6 +122,12 @@ export default createStore({
     },
     loadingResults(state) {
       return state.loadingResults
+    },
+    searchByTopic(state) {
+      return state.searchByTopic
+    },
+    searchResultsType(state) {
+      return state.searchResultsType
     }
   },
   actions: {
@@ -173,9 +180,13 @@ export default createStore({
           .eq('topic', state.searchByTopic)
       }
       else if (state.searchPhrase === '') {
-        query = supabase.rpc('query_classes_by_cityids', {
-          cityid_filter: prepareCityFilter(state.filterSearchBy.cityIds)
-        })
+        // query = supabase.rpc('query_classes_by_cityids', {
+        //   cityid_filter: prepareCityFilter(state.filterSearchBy.cityIds)
+        // })
+        commit('setSearchTypeToPartner')
+        query = supabase.from('partners_with_cities')
+          .select('id, name, score, score_count, offline, online, cities, city_ids')
+          .contains('city_ids', prepareCityFilter(state.filterSearchBy.cityIds))
       }
       else {
         query = supabase.rpc('query_classes', {
@@ -193,7 +204,7 @@ export default createStore({
       if (state.orderSearchBy.name) { query = query.order('name') }
       if (state.orderSearchBy.score) { query = query.order('score', { ascending: false }) }
       if (state.orderSearchBy.scoreCount) { query = query.order('score_count', { ascending: false }) }
-
+      
       let { data: classes, error } = await query
 
       if (error) throw error
@@ -339,7 +350,15 @@ export default createStore({
 
     doneLoadingResults(state) {
       state.loadingResults = false
-    }
+    },
+
+    setSearchTypeToClass(state) {
+      state.searchResultsType = 'class'
+    },
+
+    setSearchTypeToPartner(state) {
+      state.searchResultsType = 'partner'
+    },
   },
   plugins: [vuexLocal.plugin]
 })

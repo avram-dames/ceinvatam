@@ -171,7 +171,7 @@ async function logout() {
               "
               href="/profile"
             >
-              <span class="ml-2">Account</span>
+              <span class="ml-2">Cont</span>
             </a>
           </li>
 

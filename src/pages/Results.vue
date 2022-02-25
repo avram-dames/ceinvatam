@@ -4,12 +4,16 @@ import { useStore } from "vuex";
 
 import Navbar from "../components/Navbar.vue";
 import CardClassInfo from "../components/CardClassInfo.vue";
+import CardPartnerInfo from "../components/CardPartnerInfo.vue";
 import ResultsSortersAndFilters from "../components/ResultsSortersAndFilters.vue";
 import ResultsNotFound from "../components/ResultsNotFound.vue";
+import HomeVue from "./Home.vue";
 
 const store = useStore();
 const loadingResults = computed(() => store.getters.loadingResults);
 const results = computed(() => store.getters.searchResults);
+const resultsType = computed(() => store.getters.searchResultsType);
+const cardComponent = resultsType.value === 'class' ? CardClassInfo : CardPartnerInfo
 </script>
 
 <template>
@@ -27,11 +31,11 @@ const results = computed(() => store.getters.searchResults);
       </div>
 
       <div v-if="results.length > 0" class="mt-2">
-        <CardClassInfo
+        <component :is="cardComponent"
           v-for="result in results"
           :key="result.id"
           v-bind="result"
-        ></CardClassInfo>
+        ></component>
       </div>
       <div v-else class="mt-12 text-center font-bold">
         <ResultsNotFound></ResultsNotFound>

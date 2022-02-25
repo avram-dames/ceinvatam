@@ -20,7 +20,7 @@ const router = createRouter({
         component: () => import('../pages/Results.vue'),
         meta: { requiresAuth: false },
         beforeEnter(to, from) {
-            if (store.getters.userInputIsEmpty) {
+            if (store.getters.userInputIsEmpty && !store.getters.searchByTopic) {
                 alert('User input is empty')
                 return false
             }

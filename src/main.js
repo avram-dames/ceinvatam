@@ -20,7 +20,7 @@ router.beforeEach(async (to, from) => {
 
     if (to.meta.requiresAuth && !store.getters.userIsAuthenticated) {
         return {
-            path: '/signin', query: { redirect: to.fullPath }
+            path: '/auth/login', query: { redirect: to.fullPath }
         }
     }
 })

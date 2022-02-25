@@ -48,6 +48,7 @@ export default createStore({
       errors: [],
       alerts: [],
       searchResults: [],
+      loadingResults: false,
       searchPhrase: "",
       filterSearchBy: {
         cityIds: [],
@@ -117,6 +118,9 @@ export default createStore({
     },
     popAlert(state) {
       return state.alerts.pop()
+    },
+    loadingResults(state) {
+      return state.loadingResults
     }
   },
   actions: {
@@ -160,6 +164,7 @@ export default createStore({
     },
 
     async fetchSearchResults({ state, commit, getters }) {
+      commit('startLoadingResults');
       let query;
 
       if (state.searchByTopic) {
@@ -196,6 +201,7 @@ export default createStore({
       if (state.searchByTopic) { classes.forEach(flattenRecord) }
 
       commit('setSearchResults', classes);
+      commit('doneLoadingResults')
     },
     orderResultsByName({ dispatch, commit }) {
       commit('orderSearchByName')
@@ -325,6 +331,14 @@ export default createStore({
 
     deleteAlerts(state) {
       state.alerts = []
+    },
+
+    startLoadingResults(state) {
+      state.loadingResults = true
+    },
+
+    doneLoadingResults(state) {
+      state.loadingResults = false
     }
   },
   plugins: [vuexLocal.plugin]

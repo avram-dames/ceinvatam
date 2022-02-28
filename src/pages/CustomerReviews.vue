@@ -98,7 +98,7 @@ if (classReviews.value) {
             <div class="flex justify-end space-x-4">
               <button
                 id="edit-icon"
-                @click="editReview(review.class_id, review.id)"
+                @click="editClassReview(review.class_id, review.id)"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +115,7 @@ if (classReviews.value) {
                   />
                 </svg>
               </button>
-              <button class="delete-icon" @click="deleteReview(review.id)">
+              <button class="delete-icon" @click="deleteClassReview(review.id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-8 w-8"
@@ -142,7 +142,7 @@ if (classReviews.value) {
           <div class="flex justify-end space-x-4">
             <button
               id="edit-icon"
-              @click="editReview(review.class_id, review.id)"
+              @click="editPartnerReview(review.class_id, review.id)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +159,7 @@ if (classReviews.value) {
                 />
               </svg>
             </button>
-            <button class="delete-icon" @click="deleteReview(review.id)">
+            <button class="delete-icon" @click="deletePartnerReview(review.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-8 w-8"

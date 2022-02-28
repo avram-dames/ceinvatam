@@ -27,7 +27,10 @@ const cardComponent = resultsType.value === 'class' ? CardClassInfo : CardPartne
 
     <div v-else>
       <div class="mt-6 text-gray-400 text-right">
-        <span>{{ results.length }} cursuri disponibile</span>
+        <span>{{ results.length }}</span>
+        <span v-if="resultsType.value === 'class'"> cursuri</span> 
+        <span v-else> companii</span> 
+        disponibile
       </div>
 
       <div v-if="results.length > 0" class="mt-2">

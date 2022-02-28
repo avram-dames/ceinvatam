@@ -115,7 +115,7 @@ function returnToPrevPage() {
   router.go(-1);
 }
 
-function handleSubmit() {
+function handleSubmit(partnerId) {
   if (route.path.includes("update")) {
     updateReview();
   } else {
@@ -139,7 +139,7 @@ if (route.path.includes("update")) {
     :textAreaValue="reviewText"
     @update:sliderValue="(newValue) => (reviewScore = newValue)"
     @update:textAreaValue="(newValue) => (reviewText = newValue)"
-    @submit="handleSubmit()"
+    @submit="handleSubmit(partnerId)"
     @cancel="returnToPrevPage()"
   ></ReviewPartnerForm>
 </template>

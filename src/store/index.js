@@ -172,6 +172,7 @@ export default createStore({
 
     async fetchSearchResults({ state, commit, getters }) {
       commit('startLoadingResults');
+      commit('setSearchTypeToClass')
       let query;
 
       if (state.searchByTopic) {
@@ -180,9 +181,6 @@ export default createStore({
           .eq('topic', state.searchByTopic)
       }
       else if (state.searchPhrase === '') {
-        // query = supabase.rpc('query_classes_by_cityids', {
-        //   cityid_filter: prepareCityFilter(state.filterSearchBy.cityIds)
-        // })
         commit('setSearchTypeToPartner')
         query = supabase.from('partners_with_cities')
           .select('id, name, score, score_count, offline, online, cities, city_ids')

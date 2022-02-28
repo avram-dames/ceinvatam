@@ -14,6 +14,8 @@ const partnerInfo = ref({
   id: Number(route.params.id),
   name: '',
   about: '',
+  score: 0,
+  scoreCount: 0,
   homepage: '',
   cities: []
 });
@@ -21,7 +23,7 @@ const partnerInfo = ref({
 async function fetchPartnerInfo() {
   const { data: partners, error } = await supabase
     .from('partners')
-    .select('name, about, homepage')
+    .select('name, about, homepage, score, score_count')
     .eq('id', partnerInfo.value.id)
     .single()
   
@@ -30,6 +32,8 @@ async function fetchPartnerInfo() {
   partnerInfo.value.name = partners.name
   partnerInfo.value.about = partners.about
   partnerInfo.value.homepage = partners.homepage
+  partnerInfo.value.score = partners.score
+  partnerInfo.value.scoreCount = partners.score_count
 }
 
 async function fetchPartnerCities() {

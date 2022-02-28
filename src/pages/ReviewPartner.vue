@@ -28,6 +28,16 @@ async function upgradeUserToReviewer() {
   if (error) throw error;
 }
 
+async function updatePartnerScore(partnerId) {
+  const { data, error } = await supabase
+    .rpc("update_partner_score", {partnerid: partnerId})
+
+  if (error) {
+    console.log(error);
+    alert("Error during update");
+  }
+}
+
 // in case of updates
 async function fetchReview() {
   let { data: partner_reviews, error } = await supabase
@@ -111,6 +121,7 @@ function handleSubmit() {
   } else {
     createReview();
   }
+  updatePartnerScore(partnerId)
 }
 
 if (route.path.includes("update")) {

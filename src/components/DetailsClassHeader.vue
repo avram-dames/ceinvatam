@@ -1,5 +1,5 @@
 <script async setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import supabase from "../utils/supabase";
 
@@ -10,6 +10,8 @@ const props = defineProps({
   name: String,
   partnerId: Number,
   partnerName: String,
+  score: Number,
+  scoreCount: Number,
   cities: Array[String],
 });
 const router = useRouter();
@@ -39,9 +41,12 @@ function addReview() {
     </Suspense>
 
     <div class="mt-8 flex justify-between">
-      <div>
-        <span class="text-white px-2 py-1 bg-purple-700 rounded-md">9</span>
-        <span class="pl-1 pr-2">12 evaluări</span>
+      <div v-if="score">
+        <span class="text-white px-2 py-1 bg-purple-700 rounded-md">{{ score }}</span>
+        <span class="pl-1 pr-2">{{ scoreCount }} evaluări</span>
+      </div>
+      <div v-else>
+        <span class="pl-1 pr-2">Nu există evaluări</span>
       </div>
       <button class="px-2 py-1 bg-green-200 rounded-md" @click="addReview">
         Adauga recenzie

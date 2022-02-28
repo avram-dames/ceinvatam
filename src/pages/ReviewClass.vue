@@ -39,7 +39,7 @@ async function fetchReview() {
   if (error) {
     console.log(error);
     alert("Resursa nu exista");
-    returnToPrevPage()
+    returnToPrevPage();
   }
 
   reviewScore.value = class_reviews.score;
@@ -47,7 +47,7 @@ async function fetchReview() {
   className.value = class_reviews.classes.name;
 }
 
-// when creating a new review
+// in case of create
 async function fetchClassInfo() {
   let { data: classes, error } = await supabase
     .from("classes")
@@ -58,10 +58,20 @@ async function fetchClassInfo() {
   if (error) {
     console.log(error);
     alert("Resursa nu exista");
-    returnToPrevPage()
+    returnToPrevPage();
   }
 
   className.value = classes.name;
+}
+
+async function updateClassScore(classId) {
+  const { data, error } = await supabase
+    .rpc("update_class_score", { classid: classId })
+
+  if (error) {
+    console.log(error);
+    alert("Error during update");
+  }
 }
 
 async function createReview() {
@@ -82,7 +92,7 @@ async function createReview() {
 
   router.push({
     name: "ReviewConfirmed",
-    params: { entity: 'class', entity_id: classId },
+    params: { entity: "class", entity_id: classId },
   });
 }
 
@@ -105,12 +115,13 @@ function returnToPrevPage() {
   router.go(-1);
 }
 
-function handleSubmit() {
+async function handleSubmit() {
   if (route.path.includes("update")) {
-    updateReview();
+    await updateReview();
   } else {
-    createReview();
+    await createReview();
   }
+  await updateClassScore(classId)
 }
 
 if (route.path.includes("update")) {
@@ -118,6 +129,7 @@ if (route.path.includes("update")) {
 } else {
   fetchClassInfo();
 }
+
 </script>
 
 <template>

@@ -17,13 +17,15 @@ const classInfo = ref({
   url: '',
   partnerId: null,
   partnerName: '',
+  score: 0,
+  scoreCount: 0,
   cities: []
 });
 
 async function fetchClassInfo() {
   const { data: classes, error } = await supabase
     .from('classes')
-    .select('name, description, url, partners(id, name)')
+    .select('name, description, url, score, score_count, partners(id, name)')
     .eq('id', classInfo.value.id)
     .single()
   
@@ -34,6 +36,8 @@ async function fetchClassInfo() {
   classInfo.value.url = classes.url
   classInfo.value.partnerName = classes.partners.name
   classInfo.value.partnerId = classes.partners.id
+  classInfo.value.score = classes.score
+  classInfo.value.scoreCount = classes.score_count
 }
 
 async function fetchClassCities() {

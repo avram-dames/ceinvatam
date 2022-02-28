@@ -14,6 +14,26 @@ const router = useRouter();
 const classReviews = ref();
 const partnerReviews = ref();
 
+async function updateClassScore(classId) {
+  const { data, error } = await supabase
+    .rpc("update_class_score", {classid: classId})
+
+  if (error) {
+    console.log(error);
+    alert("Error during update");
+  }
+}
+
+async function updatePartnerScore(partnerId) {
+  const { data, error } = await supabase
+    .rpc("update_partner_score", {partnerid: partnerId})
+
+  if (error) {
+    console.log(error);
+    alert("Error during update");
+  }
+}
+
 async function getClassReviews() {
   let { data: class_reviews, error } = await supabase
     .from("class_reviews")
@@ -40,7 +60,7 @@ async function downgradeUserFromReviewer() {
   if (error) throw error;
 }
 
-async function deleteClassReview(reviewId) {
+async function deleteClassReview(classId, reviewId) {
   const { data, error } = await supabase
     .from("class_reviews")
     .delete()
@@ -48,10 +68,11 @@ async function deleteClassReview(reviewId) {
 
   if (error) throw error;
 
+  updateClassScore(classId);
   getClassReviews();
 }
 
-async function deletePartnerReview(reviewId) {
+async function deletePartnerReview(partnerId, reviewId) {
   const { data, error } = await supabase
     .from("partner_reviews")
     .delete()
@@ -59,6 +80,7 @@ async function deletePartnerReview(reviewId) {
 
   if (error) throw error;
 
+  updatePartnerScore(partnerId);
   getPartnerReviews();
 }
 
@@ -115,7 +137,7 @@ if (classReviews.value) {
                   />
                 </svg>
               </button>
-              <button class="delete-icon" @click="deleteClassReview(review.id)">
+              <button class="delete-icon" @click="deleteClassReview(review.class_id, review.id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-8 w-8"
@@ -142,7 +164,7 @@ if (classReviews.value) {
           <div class="flex justify-end space-x-4">
             <button
               id="edit-icon"
-              @click="editPartnerReview(review.class_id, review.id)"
+              @click="editPartnerReview(review.partner_id, review.id)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +181,7 @@ if (classReviews.value) {
                 />
               </svg>
             </button>
-            <button class="delete-icon" @click="deletePartnerReview(review.id)">
+            <button class="delete-icon" @click="deletePartnerReview(review.partner_id, review.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-8 w-8"

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -7,6 +7,7 @@ import supabase from "../utils/supabase";
 
 import Navbar from "../components/Navbar.vue";
 import ReviewPartnerForm from "../components/ReviewPartnerForm.vue";
+import AlertModal from "../components/AlertModal.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -20,36 +21,54 @@ const reviewScore = ref(0);
 const reviewText = ref("");
 const partnerName = ref("");
 
-async function upgradeUserToReviewer() {
-  const { user, error } = await supabase.auth.update({
-    data: { is_reviewer: true },
-  });
+const alertModal = ref({
+  isOpen: false,
+  title: "",
+  message: "",
+});
 
-  if (error) throw error;
+function openAlertModal(title, message) {
+  alertModal.value.isOpen = true;
+  alertModal.value.title = title;
+  alertModal.value.message = message;
 }
 
-async function updatePartnerScore(partnerId) {
-  const { data, error } = await supabase
-    .rpc("update_partner_score", {partnerid: partnerId})
+function returnToPrevPage() {
+  router.go(-1);
+}
+
+function handleError(error, message) {
+  // alertMessages.value.push(message);
+  // send error somewhere
+  console.log(message);
+  throw error;
+}
+
+// runs a remote procedure on postgres that updates the class score and score_count
+async function updatePartnerScore(id) {
+  const { data, error } = await supabase.rpc("update_partner_score", {
+    partnerid: id,
+  });
 
   if (error) {
-    console.log(error);
-    alert("Error during update");
+    handleError(error, "error when updating the partner score");
   }
 }
 
-// in case of updates
-async function fetchReview() {
+// when updating an existing review
+async function fetchReviewInfo(id) {
   let { data: partner_reviews, error } = await supabase
     .from("partner_reviews")
     .select("text, score, partners(name)")
-    .eq("id", reviewId)
+    .eq("id", id)
     .single();
 
   if (error) {
-    console.log(error);
-    alert("Resursa nu exista");
-    returnToPrevPage()
+    openAlertModal(
+      "Conexiune nereușită",
+      "Recenzia pe care doriți să o editați nu există sau conexiunea cu baza de date nu se poate efectua la acest moment. Reveniți mai târziu."
+    );
+    handleError(error);
   }
 
   reviewScore.value = partner_reviews.score;
@@ -58,17 +77,19 @@ async function fetchReview() {
 }
 
 // when creating a new review
-async function fetchPartnerInfo() {
+async function fetchPartnerInfo(id) {
   let { data: partners, error } = await supabase
     .from("partners")
     .select("name")
-    .eq("id", partnerId)
+    .eq("id", id)
     .single();
 
   if (error) {
-    console.log(error);
-    alert("Resursa nu exista");
-    returnToPrevPage()
+    openAlertModal(
+      "Conexiune nereușită",
+      "Conexiune nereușită cu baza de date. Reveniți mai târziu."
+    );
+    handleError(error);
   }
 
   partnerName.value = partners.name;
@@ -86,17 +107,21 @@ async function createReview() {
     },
   ]);
 
-  if (error) throw error;
-
-  upgradeUserToReviewer();
+  if (error) {
+    openAlertModal(
+      "Conexiune nereușită",
+      "Conexiune nereușită cu baza de date. Receniza nu a fost salvată. Reveniți mai târziu."
+    );
+    handleError(error);
+  }
 
   router.push({
     name: "ReviewConfirmed",
-    params: { entity: 'partner', entity_id: partnerId },
+    params: { entity: "partner", entity_id: partnerId },
   });
 }
 
-async function updateReview() {
+async function updateReview(id) {
   const { data, error } = await supabase
     .from("partner_reviews")
     .update({
@@ -104,42 +129,69 @@ async function updateReview() {
       score: reviewScore.value,
       updated_at: new Date().toISOString(),
     })
-    .eq("id", reviewId);
+    .eq("id", id);
 
-  if (error) throw error;
+  if (error) {
+    openAlertModal(
+      "Conexiune nereușită",
+      "Conexiune nereușită cu baza de date. Receniza nu a fost salvată. Reveniți mai târziu."
+    );
+    handleError(error);
+  }
 
   router.push({ name: "CustomerReviews" });
 }
 
-function returnToPrevPage() {
-  router.go(-1);
-}
-
 function handleSubmit(partnerId) {
   if (route.path.includes("update")) {
-    updateReview();
+    updateReview(partnerId);
   } else {
     createReview();
   }
-  updatePartnerScore(partnerId)
+  updatePartnerScore(partnerId);
 }
 
-if (route.path.includes("update")) {
-  fetchReview();
+async function checkIfUserLeftReviewAlready(partnerId, userId) {
+  let { data: partner_reviews, error } = await supabase
+    .from("partner_reviews")
+    .select("text, score, partners(name)")
+    .eq("partner_id", partnerId)
+    .eq("user_id", userId)
+    .single();
+  console.log(partner_reviews)
+  if (partner_reviews) {
+    openAlertModal(
+      "Recenzie existentă",
+      "Deja ați lăsat o recenzie pentru această companie. Puteți modifica recenzia din secțiunea Contul meu -> Recenziile mele."
+    );
+  }
+}
+
+if (route.path.includes("create")) {
+  fetchPartnerInfo(partnerId);
+  checkIfUserLeftReviewAlready(partnerId, userId.value);
 } else {
-  fetchPartnerInfo();
+  fetchReviewInfo(reviewId);
 }
 </script>
 
 <template>
-  <Navbar></Navbar>
-  <ReviewPartnerForm
-    :partnerName="partnerName"
-    :sliderValue="reviewScore"
-    :textAreaValue="reviewText"
-    @update:sliderValue="(newValue) => (reviewScore = newValue)"
-    @update:textAreaValue="(newValue) => (reviewText = newValue)"
-    @submit="handleSubmit(partnerId)"
-    @cancel="returnToPrevPage()"
-  ></ReviewPartnerForm>
+  <div class="relative">
+    <Navbar></Navbar>
+    <ReviewPartnerForm
+      :partnerName="partnerName"
+      :sliderValue="reviewScore"
+      :textAreaValue="reviewText"
+      @update:sliderValue="(newValue) => (reviewScore = newValue)"
+      @update:textAreaValue="(newValue) => (reviewText = newValue)"
+      @submit="handleSubmit(partnerId)"
+      @cancel="returnToPrevPage()"
+    ></ReviewPartnerForm>
+    <!-- Black overlay in order to make the modal pop -->
+    <div
+      v-if="alertModal.isOpen"
+      class="bg-black z-10 opacity-80 w-full h-screen absolute top-0 left-0"
+    ></div>
+  </div>
+  <AlertModal class="z-50" v-bind="alertModal"></AlertModal>
 </template>

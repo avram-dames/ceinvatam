@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -7,6 +7,7 @@ import supabase from "../utils/supabase";
 
 import Navbar from "../components/Navbar.vue";
 import ReviewClassForm from "../components/ReviewClassForm.vue";
+import AlertModal from "../components/AlertModal.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -20,16 +21,31 @@ const reviewScore = ref(0);
 const reviewText = ref("");
 const className = ref("");
 
-async function upgradeUserToReviewer() {
-  const { user, error } = await supabase.auth.update({
-    data: { is_reviewer: true },
-  });
+const alertModal = ref({
+  isOpen: false,
+  title: "",
+  message: "",
+});
 
-  if (error) throw error;
+function openAlertModal(title, message) {
+  alertModal.value.isOpen = true;
+  alertModal.value.title = title;
+  alertModal.value.message = message;
 }
 
-// in case of updates
-async function fetchReview() {
+function returnToPrevPage() {
+  router.go(-1);
+}
+
+function handleError(error, message) {
+  // alertMessages.value.push(message);
+  // send error somewhere
+  console.log(message)
+  throw error;
+}
+
+// when updating an existing review
+async function fetchReviewInfo(reviewId) {
   let { data: class_reviews, error } = await supabase
     .from("class_reviews")
     .select("text, score, classes(name)")
@@ -37,9 +53,11 @@ async function fetchReview() {
     .single();
 
   if (error) {
-    console.log(error);
-    alert("Resursa nu exista");
-    returnToPrevPage();
+    openAlertModal(
+      "Conexiune nereușită",
+      "Recenzia pe care doriți să o editați nu există sau conexiunea cu baza de date nu se poate efectua la acest moment. Reveniți mai târziu."
+    );
+    handleError(error);
   }
 
   reviewScore.value = class_reviews.score;
@@ -47,31 +65,32 @@ async function fetchReview() {
   className.value = class_reviews.classes.name;
 }
 
-// in case of create
-async function fetchClassInfo() {
+// when creating a new review
+async function fetchClassInfo(id) {
   let { data: classes, error } = await supabase
     .from("classes")
     .select("name")
-    .eq("id", classId)
+    .eq("id", id)
     .single();
 
   if (error) {
-    console.log(error);
-    alert("Resursa nu exista");
-    returnToPrevPage();
+    openAlertModal(
+      "Conexiune nereușită",
+      "Conexiune nereușită cu baza de date. Reveniți mai târziu."
+    );
+    handleError(error);
   }
 
   className.value = classes.name;
 }
 
-async function updateClassScore(classId) {
-  const { data, error } = await supabase
-    .rpc("update_class_score", { classid: classId })
+// runs a remote procedure on postgres that updates the class score and score_count
+async function updateClassScore(id) {
+  const { data, error } = await supabase.rpc("update_class_score", {
+    classid: id,
+  });
 
-  if (error) {
-    console.log(error);
-    alert("Error during update");
-  }
+  if (error) handleError(error);
 }
 
 async function createReview() {
@@ -86,9 +105,13 @@ async function createReview() {
     },
   ]);
 
-  if (error) throw error;
-
-  upgradeUserToReviewer();
+  if (error) {
+    openAlertModal(
+      "Conexiune nereușită",
+      "Conexiune nereușită cu baza de date. Receniza nu a fost salvată. Reveniți mai târziu."
+    );
+    handleError(error);
+  }
 
   router.push({
     name: "ReviewConfirmed",
@@ -96,7 +119,7 @@ async function createReview() {
   });
 }
 
-async function updateReview() {
+async function updateReview(id) {
   const { data, error } = await supabase
     .from("class_reviews")
     .update({
@@ -104,43 +127,70 @@ async function updateReview() {
       score: reviewScore.value,
       updated_at: new Date().toISOString(),
     })
-    .eq("id", reviewId);
+    .eq("id", id);
 
-  if (error) throw error;
+  if (error) {
+    openAlertModal(
+      "Conexiune nereușită",
+      "Conexiune nereușită cu baza de date. Receniza nu a fost salvată. Reveniți mai târziu."
+    );
+    handleError(error);
+  }
 
   router.push({ name: "CustomerReviews" });
 }
 
-function returnToPrevPage() {
-  router.go(-1);
-}
-
 async function handleSubmit() {
   if (route.path.includes("update")) {
-    await updateReview();
+    await updateReview(reviewId);
   } else {
     await createReview();
   }
-  await updateClassScore(classId)
+  updateClassScore(classId);
 }
 
-if (route.path.includes("update")) {
-  fetchReview();
+async function checkIfUserLeftReviewAlready(classId, userId) {
+  let { data: class_reviews, error } = await supabase
+    .from("class_reviews")
+    .select("score")
+    .eq("class_id", classId)
+    .eq("user_id", userId)
+    .single();
+  console.log(class_reviews)
+  if (class_reviews) {
+    openAlertModal(
+      "Recenzie existentă",
+      "Deja ați lăsat o recenzie pentru acest curs. Puteți modifica recenzia din secțiunea Contul meu -> Recenziile mele."
+    );
+  }
+}
+
+if (route.path.includes("create")) {
+  fetchClassInfo(classId);
+  checkIfUserLeftReviewAlready(classId, userId.value);
 } else {
-  fetchClassInfo();
+  fetchReviewInfo(reviewId);
 }
-
 </script>
 
 <template>
-  <Navbar></Navbar>
-  <ReviewClassForm
-    :className="className"
-    :sliderValue="reviewScore"
-    :textAreaValue="reviewText"
-    @update:sliderValue="(newValue) => (reviewScore = newValue)"
-    @update:textAreaValue="(newValue) => (reviewText = newValue)"
-    @submit="handleSubmit()"
-    @cancel="returnToPrevPage()"
-  ></ReviewClassForm>
+  <div class="relative">
+    <Navbar></Navbar>
+    <ReviewClassForm
+      :className="className"
+      :sliderValue="reviewScore"
+      :textAreaValue="reviewText"
+      @update:sliderValue="(newValue) => (reviewScore = newValue)"
+      @update:textAreaValue="(newValue) => (reviewText = newValue)"
+      @submit="handleSubmit()"
+      @cancel="returnToPrevPage()"
+    ></ReviewClassForm>
+    
+    <!-- Black overlay in order to make the modal pop -->
+    <div
+      v-if="alertModal.isOpen"
+      class="bg-black z-10 opacity-80 w-full h-screen absolute top-0 left-0"
+    ></div>
+  </div>
+  <AlertModal class="z-50" v-bind="alertModal"></AlertModal>
 </template>

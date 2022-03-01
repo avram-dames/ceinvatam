@@ -7,6 +7,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.5.0",
     "@supabase/supabase-js": "^1.29.3",
     "@vueform/multiselect": "^2.2.1",
     "@vueform/slider": "^2.0.8",

@@ -1,24 +1,40 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import supabase from "../utils/supabase";
 
 import NavbarPlaceholder from "../components/NavbarPlaceholder.vue";
+import AlertError from "../components/AlertError.vue";
 
 const router = useRouter();
 const store = useStore();
-const email = computed(() => store.getters.userEmail)
-const password = ref("")
+const email = computed(() => store.getters.userEmail);
+const password = ref("");
+const showPassword = ref();
+const passwordIncludesSpaces = ref(false);
+const passwordIsTooShort = ref(false);
+
+function validatePassword() {
+  // check for spaces
+  passwordIncludesSpaces.value = password.value.includes(" ") ? true : false;
+  // check for length
+  passwordIsTooShort.value = password.value.length < 6 ? true : false;
+  return !passwordIncludesSpaces.value && !passwordIsTooShort.value;
+}
+
+watch(password, validatePassword)
 
 async function updateUserPassword() {
-  const { user, error } = await supabase.auth.update({
-    password: password.value
-  });
+  if (validatePassword()) {
+    const { user, error } = await supabase.auth.update({
+      password: password.value,
+    });
 
-  if (error) throw error;
+    if (error) throw error
 
-  router.push({name: "Home"})
+    router.push({ name: "Home" });
+  }
 }
 </script>
 
@@ -41,9 +57,12 @@ async function updateUserPassword() {
         />
         <!-- Password Input -->
 
-        <label for="password">Parolă</label>
+        <label for="password"
+          >Parolă
+          <span class="text-sm text-gray-400">(minim 6 caractere)</span></label
+        >
         <input
-          type="password"
+          :type="showPassword ? 'text' : 'password'"
           name="password"
           id="password"
           class="p-2 border rounded-md"
@@ -51,9 +70,31 @@ async function updateUserPassword() {
           required
           placeholder="Parola"
         />
+
+        <div class="text-gray-400 text-sm">
+          <input
+            type="checkbox"
+            name="show-password"
+            id="show-password"
+            v-model="showPassword"
+          />
+          <label for="show-password" class="ml-2">Arată parola</label>
+        </div>
+        <ul>
+          <li v-if="passwordIsTooShort">
+            <AlertError
+              message="Parola trebuie să conțină minim 6 caractere"
+            ></AlertError>
+          </li>
+          <li v-if="passwordIncludesSpaces">
+            <AlertError
+              message="Spațiile goale nu sunt admise în parolă"
+            ></AlertError>
+          </li>
+        </ul>
       </div>
       <!-- Submit -->
-      <button class="p-2 bg-blue-600 text-white rounded-md mt-8 w-full">
+      <button class="p-2 mt-4 bg-blue-600 text-white rounded-md w-full">
         Schimbă Parola
       </button>
     </form>

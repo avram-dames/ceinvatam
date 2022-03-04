@@ -12,6 +12,7 @@ import gLogoUrl from "../assets/g_logo.png";
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
+const showPassword = ref();
 
 // the following trick is used to handle the situation when a social provider takes
 // longer to return the auth user object
@@ -113,7 +114,7 @@ async function handleLogin(provider) {
           >
         </div>
         <input
-          type="password"
+          :type="showPassword ? 'text' : 'password'"
           name="password"
           id="password"
           class="p-2 border rounded-md"
@@ -121,6 +122,15 @@ async function handleLogin(provider) {
           required
           placeholder="parola"
         />
+        <div class="text-gray-400 text-sm">
+          <input
+            type="checkbox"
+            name="show-password"
+            id="show-password"
+            v-model="showPassword"
+          />
+          <label for="show-password" class="ml-2">Arată parola</label>
+        </div>
       </div>
       <!-- Submit -->
       <button class="p-2 bg-blue-600 text-white rounded-md mt-8 w-full">

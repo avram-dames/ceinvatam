@@ -23,7 +23,7 @@ function validatePassword() {
   return !passwordIncludesSpaces.value && !passwordIsTooShort.value;
 }
 
-watch(password, validatePassword)
+watch(password, validatePassword);
 
 async function updateUserPassword() {
   if (validatePassword()) {
@@ -31,7 +31,7 @@ async function updateUserPassword() {
       password: password.value,
     });
 
-    if (error) throw error
+    if (error) throw error;
 
     router.push({ name: "Home" });
   }
@@ -57,9 +57,7 @@ async function updateUserPassword() {
         />
         <!-- Password Input -->
 
-        <label for="password"
-          >Parolă
-          <span class="text-sm text-gray-400">(minim 6 caractere)</span></label
+        <label for="password">Parolă </label>
         >
         <input
           :type="showPassword ? 'text' : 'password'"

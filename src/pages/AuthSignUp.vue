@@ -1,19 +1,28 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import supabase from "../utils/supabase";
 
 import NavbarPlaceholder from "../components/NavbarPlaceholder.vue";
+import AlertError from "../components/AlertError.vue";
 
 import fbLogoUrl from "../assets/fb_logo.png";
 import gLogoUrl from "../assets/g_logo.png";
 
 const router = useRouter();
+const email = ref("");
+const password = ref("");
+const showPassword = ref();
+const passwordIncludesSpaces = ref(false);
+const passwordIsTooShort = ref(false);
 
-const form = ref({
-  email: "",
-  password: "",
-});
+function validatePassword() {
+  passwordIncludesSpaces.value = password.value.includes(" ") ? true : false;
+  passwordIsTooShort.value = password.value.length < 6 ? true : false;
+  return !passwordIncludesSpaces.value && !passwordIsTooShort.value;
+}
+
+watch(password, validatePassword);
 
 const socialProviders = [
   { name: "Google", iconPath: gLogoUrl },
@@ -21,14 +30,16 @@ const socialProviders = [
 ];
 
 async function registerEmail() {
-  let { user, error } = await supabase.auth.signUp({
-    email: form.value.email,
-    password: form.value.password
-  });
+  if (validatePassword) {
+    let { user, error } = await supabase.auth.signUp({
+      email: email.value,
+      password: password.value,
+    });
 
-  if (error) throw error;
+    if (error) throw error;
 
-  router.push({ name: "SignUpConfirmed" });
+    router.push({ name: "SignUpConfirmed" });
+  }
 }
 
 async function loginWithSocial(provider) {
@@ -46,7 +57,8 @@ async function loginWithSocial(provider) {
   <NavbarPlaceholder class=""></NavbarPlaceholder>
   <div class="px-4 py-12 m-auto max-w-md text-gray-600">
     <h2 class="text-4xl font-bold text-gray-800">Crează un cont nou</h2>
-    <p class="py-2 text-gray-400">Crează un cont pentru a putea lăsa recenzii la cursurile urmate și multe
+    <p class="py-2 text-gray-400">
+      Crează un cont pentru a putea lăsa recenzii la cursurile urmate și multe
       alte beneficii.
     </p>
     <!-- Social Login -->
@@ -79,25 +91,46 @@ async function loginWithSocial(provider) {
           type="email"
           name="email"
           id="email"
-          v-model="form.email"
+          v-model="email"
           class="p-2 border rounded-md"
           required
           placeholder="name@email.com"
         />
         <!-- Password Input -->
-        <label for="password">Crează o parolă</label>
+        <label for="password">Crează o parolă </label>
         <input
-          type="password"
+          :type="showPassword ? 'text' : 'password'"
           name="password"
           id="password"
           class="p-2 border rounded-md"
-          v-model="form.password"
+          v-model="password"
           required
           placeholder="Parolă nouă"
         />
+        <div class="text-gray-400 text-sm">
+          <input
+            type="checkbox"
+            name="show-password"
+            id="show-password"
+            v-model="showPassword"
+          />
+          <label for="show-password" class="ml-2">Arată parola</label>
+        </div>
       </div>
+      <ul>
+        <li v-if="passwordIsTooShort">
+          <AlertError
+            message="Parola trebuie să conțină minim 6 caractere"
+          ></AlertError>
+        </li>
+        <li v-if="passwordIncludesSpaces">
+          <AlertError
+            message="Spațiile goale nu sunt admise în parolă"
+          ></AlertError>
+        </li>
+      </ul>
       <!-- Sign In -->
-      <button class="p-2 bg-blue-600 text-white rounded-md mt-8 w-full">
+      <button class="p-2 bg-blue-600 text-white rounded-md mt-4 w-full">
         Crează cont
       </button>
     </form>

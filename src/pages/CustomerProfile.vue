@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -9,17 +9,10 @@ import Navbar from "../components/Navbar.vue";
 
 const router = useRouter();
 const store = useStore();
-
-const providers = computed(() => store.getters.userLinkedAccounts);
-const userHasEmailAccount = computed(() => providers.value.includes("Email"));
-const alerts = ref(store.state.alerts);
-alerts.value.forEach((item) => alert(item.msg));
-store.commit("deleteAlerts");
+const updateStatus = ref('');
 
 const form = ref({
   email: store.state.user?.email,
-  old_password: null,
-  new_password: null,
   firstname: store.getters.userFirstName,
   lastname: store.getters.userLastName,
   fullname: store.getters.userFullName,
@@ -33,18 +26,8 @@ async function updateReviewsUserData(userId) {
     .eq("user_id", userId);
 
   if (error) {
-    alert(error.message);
     throw error;
   }
-}
-
-async function validateOldPassword() {
-  let { user, error } = await supabase.auth.signIn({
-    email: form.value.email,
-    password: form.value.old_password,
-  });
-
-  return user ? true : false;
 }
 
 async function updateProfile() {
@@ -60,27 +43,13 @@ async function updateProfile() {
     },
   });
 
-  if (error) throw error;
-
-  if (user.user_metadata?.is_reviewer) {
-    updateReviewsUserData(user.id);
+  if (error) {
+    throw error;
+    updateStatus.value = 'error';  
   }
+  updateStatus.value = 'success';
 
-  alert("Update successful.");
-}
-
-async function updatePassword() {
-  if (await validateOldPassword()) {
-    const { user, error } = await supabase.auth.update({
-      password: form.value.new_password,
-    });
-
-    if (error) throw error;
-
-    alert("Update successful.");
-  } else {
-    alert("Old password is not correct!");
-  }
+  updateReviewsUserData(user.id);
 }
 </script>
 
@@ -138,38 +107,44 @@ async function updatePassword() {
       <button class="p-2 bg-blue-600 text-white rounded-md mt-8 w-full">
         Actualizează date
       </button>
-    </form>
+      <div v-if="updateStatus === 'success'" class="text-green-600 mt-2 flex">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
 
-    <form v-if="userHasEmailAccount" @submit.prevent="updatePassword()">
-      <!-- Name Input -->
-      <div class="flex flex-col space-y-2 mt-12">
-        <!-- Old Password Input -->
-        <label for="old_password">Confirmă parola veche</label>
-        <input
-          type="old_password"
-          name="old_password"
-          id="old_password"
-          class="p-2 border rounded-md"
-          v-model="form.old_password"
-          required
-          placeholder="Parolă veche"
-        />
-        <!-- New Password Input -->
-        <label for="new_password">Crează o parolă</label>
-        <input
-          type="new_password"
-          name="new_password"
-          id="new_password"
-          class="p-2 border rounded-md"
-          v-model="form.new_password"
-          required
-          placeholder="Parolă nouă"
-        />
+        <div class="ml-2">
+          Datele au fost actualizate cu success.
+        </div>
       </div>
-      <!-- Sign In -->
-      <button class="p-2 bg-blue-600 text-white rounded-md mt-8 w-full">
-        Schimbă parola
-      </button>
+      <div v-if="updateStatus === 'error'" class="text-red-500 mt-2 flex">
+        <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        viewBox="0 0 20 20"
+        fill="#ef4444"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+          clip-rule="evenodd"
+        />
+      </svg>
+
+        <div class="ml-2">
+          Datele nu au putut fi actualizate. Încercați mai târziu!
+        </div>
+      </div>
     </form>
 
     <h2 class="mt-12">Date personale</h2>

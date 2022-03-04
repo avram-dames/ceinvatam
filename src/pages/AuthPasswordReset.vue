@@ -58,7 +58,6 @@ async function updateUserPassword() {
         <!-- Password Input -->
 
         <label for="password">Parolă </label>
-        >
         <input
           :type="showPassword ? 'text' : 'password'"
           name="password"

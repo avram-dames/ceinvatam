@@ -33,7 +33,7 @@ async function getCertifications(classId) {
 
   if (error) throw error;
 
-  return classes.certifications;
+  return classes.certifications ? classes.certifications : [];
 }
 
 const reviews = ref(await getReviews(props.id));
@@ -52,31 +52,45 @@ function addReview() {
     <Tab title="Descriere">
       <!-- Info -->
       <div class="mt-8">
-        <p class="">
+        <p v-if="description">
           {{ description }}
         </p>
+        <p v-else>Momentan nu avem o descriere a acestui curs.</p>
         <p class="text-blue-600 hover:text-blue-400 visited:text-blue-200">
-          <a :href="props.url" target="_">Viziteaza pagina cursului.</a>
+          <a :href="props.url" target="_">Vezi website-ul cursului.</a>
         </p>
       </div>
     </Tab>
     <Tab title="Recenzii">
-      <!-- Reviews -->
-      <div class="mt-8 divide-y divide-solid">
-        <ReviewCard
-          v-for="review in reviews"
-          v-bind="review"
-          :key="review.id"
-        ></ReviewCard>
+      <div class="mt-8">
+        <div v-if="reviews.length" class="divide-y divide-solid">
+          <ReviewCard
+            v-for="review in reviews"
+            v-bind="review"
+            :key="review.id"
+          ></ReviewCard>
+        </div>
+        <div v-else>
+          Momentan nu există recenzii pentru acest curs.
+        </div>
       </div>
     </Tab>
     <Tab title="Certificări">
-      <div class="px-4 mt-8">
-        <ul>
-          <li v-for="cert in certifications" :key="cert" class="list-disc">
-            {{ cert }}
-          </li>
-        </ul>
+      <div class="mt-8">
+        <div v-if="certifications.length" class="px-4">
+          <ul>
+            <li
+              v-for="certification in certifications"
+              :key="certification"
+              class="list-disc"
+            >
+              {{ certification }}
+            </li>
+          </ul>
+        </div>
+        <div v-else>
+          <p>Nu avem informații despre certificări ofertie de acest curs.</p>
+        </div>
       </div>
     </Tab>
   </TabsWrapper>

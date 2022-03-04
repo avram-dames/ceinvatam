@@ -43,9 +43,10 @@ const reviews = ref(await getReviews(props.id));
     <Tab title="Descriere">
       <!-- Info -->
       <div class="mt-8">
-        <p class="">
+        <p v-if="about">
           {{ about }}
         </p>
+        <p v-else>Momentan nu avem o descriere a acestei companii.</p>
         <p class="text-blue-600 hover:text-blue-400 visited:text-blue-200">
           <a :href="props.homepage" target="_">Viziteaza pagina companiei.</a>
         </p>
@@ -53,21 +54,31 @@ const reviews = ref(await getReviews(props.id));
     </Tab>
     <Tab title="Cursuri">
       <div class="mt-8">
-        <CardClassInfo
-          v-for="cl in classes"
-          :key="cl.id"
-          v-bind="cl"
-        ></CardClassInfo>
+        <div v-if="classes">
+          <CardClassInfo
+            v-for="cl in classes"
+            :key="cl.id"
+            v-bind="cl"
+          ></CardClassInfo>
+        </div>
+        <div v-else>
+          Momentan nu avem cursuri pentru această companie, în baza noastră de
+          date.
+        </div>
       </div>
     </Tab>
     <Tab title="Recenzii">
-      <!-- Reviews -->
-      <div class="mt-8 divide-y divide-solid">
-        <ReviewCard
-          v-for="review in reviews"
-          v-bind="review"
-          :key="review.id"
-        ></ReviewCard>
+      <div class="mt-8">
+        <div v-if="reviews.length" class="divide-y divide-solid">
+          <ReviewCard
+            v-for="review in reviews"
+            v-bind="review"
+            :key="review.id"
+          ></ReviewCard>
+        </div>
+        <div v-else>
+          Momentan nu există recenzii pentru această companie.
+        </div>
       </div>
     </Tab>
   </TabsWrapper>

@@ -52,14 +52,6 @@ async function getPartnerReviews() {
   partnerReviews.value = partner_reviews;
 }
 
-async function downgradeUserFromReviewer() {
-  const { user, error } = await supabase.auth.update({
-    data: { is_reviewer: false },
-  });
-
-  if (error) throw error;
-}
-
 async function deleteClassReview(classId, reviewId) {
   const { data, error } = await supabase
     .from("class_reviews")
@@ -103,8 +95,6 @@ getPartnerReviews();
 
 if (classReviews.value) {
   console.log(classReviews.value.length)
-  // downgradeUserFromReviewer();
-  // router.push({ name: "Home" });
 }
 </script>
 

@@ -138,7 +138,7 @@ async function logout() {
               <span class="ml-2">Providers</span>
             </a>
           </li>
-          <li v-if="store.getters.userIsReviewer" class="nav-item">
+          <li class="nav-item">
             <a
               class="
                 px-3

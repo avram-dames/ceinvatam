@@ -8,11 +8,13 @@ import NavbarPlaceholder from "../components/NavbarPlaceholder.vue";
 
 import fbLogoUrl from "../assets/fb_logo.png";
 import gLogoUrl from "../assets/g_logo.png";
+import AlertError from "../components/AlertError.vue";
 
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
 const showPassword = ref();
+const alertErrorMessage = ref('');
 
 // the following trick is used to handle the situation when a social provider takes
 // longer to return the auth user object
@@ -54,7 +56,9 @@ async function handleLogin(provider) {
     : await loginWithEmail();
 
   if (error) {
-    alert(error.message);
+    if (error.status === 400) {
+      alertErrorMessage.value = 'Datele de autentificare sunt incorecte. Te rugăm să încerci din nou!'
+    }
     throw error;
   }
 
@@ -136,6 +140,7 @@ async function handleLogin(provider) {
       <button class="p-2 bg-blue-600 text-white rounded-md mt-8 w-full">
         Autentificare
       </button>
+      <AlertError :message="alertErrorMessage"></AlertError>
     </form>
 
     <!-- Sign Up -->

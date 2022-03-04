@@ -5,7 +5,7 @@ const store = useStore();
 </script>
 
 <template>
-  <div class="lg:flex">
+  <div class="lg:flex lg:space-x-2">
     <!-- Sorters -->
     <div class="flex space-x-1 overflow-x-auto hide-scroll-bar">
       <!-- Sort by name -->

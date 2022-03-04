@@ -143,6 +143,12 @@ const router = createRouter({
         meta: { requiresAuth: false }
     },
     {
+        path: '/contact/submitpartner',
+        name: 'ContactSubmitPartner',
+        component: () => import('../pages/ContactSubmitPartner.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
         path: '/contact/confirmation',
         name: 'ContactFormConfirmation',
         component: () => import('../pages/ContactFormConfirmation.vue'),

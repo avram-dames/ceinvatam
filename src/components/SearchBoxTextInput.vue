@@ -100,7 +100,7 @@ onUnmounted(() => {
     <!-- User Input -->
     <input
       type="text"
-      placeholder="Ce dorești să înveți?"
+      placeholder="ex. curs machiaj"
       v-model="userInput"
       @focus="moveToTop"
       @keydown.enter.prevent

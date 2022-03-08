@@ -155,6 +155,18 @@ const router = createRouter({
         meta: { requiresAuth: false }
     },
     {
+        path: '/confidentiality-policy',
+        name: 'ConfPolicy',
+        component: () => import('../pages/ConfPolicy.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
+        path: '/terms',
+        name: 'Terms',
+        component: () => import('../pages/Terms.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         component: () => import('../pages/NotFound.vue')

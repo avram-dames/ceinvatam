@@ -15,7 +15,7 @@ const firstName = computed(() => store.getters.userFirstName);
   <Navbar></Navbar>
   <div class="px-4">
     <h1 class="mt-4 lg:mt-8 text-3xl font-semibold">
-      <span v-if="firstName">Bine ai venit, {{ firstName }}</span>
+      <span v-if="firstName">Bine ai venit, <router-link to="/profile" class="hover:text-blue-600">{{ firstName }}</router-link></span>
       <span v-else>Descoperă cursul potrivit pentru tine</span>
     </h1>
     <SearchBox class="mt-10"></SearchBox>

@@ -55,6 +55,11 @@ export default createStore({
         cityIds: [],
         online: false,
         offline: false,
+        demographic: {
+          adults: false,
+          teens: false,
+          children: false
+        }
       },
       orderSearchBy: {
         name: false,
@@ -177,13 +182,13 @@ export default createStore({
 
       if (state.searchByTopic) {
         query = supabase.from('classes')
-          .select("id, name, score, score_count, offline, online, duration, partners(name), class2cities(city_id)")
+          .select("id, name, score, score_count, offline, online, duration, partners(name), class2cities(city_id), target_demographic")
           .eq('topic', state.searchByTopic)
       }
       else if (state.searchPhrase === '') {
         commit('setSearchTypeToPartner')
         query = supabase.from('partners_with_cities')
-          .select('id, name, score, score_count, offline, online, cities, city_ids')
+          .select('id, name, score, score_count, offline, online, cities, city_ids, target_demographic')
           .contains('city_ids', prepareCityFilter(state.filterSearchBy.cityIds))
       }
       else {
@@ -199,10 +204,18 @@ export default createStore({
         query = query.is('offline', true)
       }
 
+      if (state.filterSearchBy.demographic.adults) {
+        query = query.overlaps('target_demographic', ['Adults', 'All Ages'])
+      } else if (state.filterSearchBy.demographic.teens) {
+        query = query.overlaps('target_demographic', ['Teens', 'All Ages'])
+      } else if (state.filterSearchBy.demographic.children) {
+        query = query.overlaps('target_demographic', ['Children', 'All Ages'])
+      }
+
       if (state.orderSearchBy.name) { query = query.order('name') }
       if (state.orderSearchBy.score) { query = query.order('score', { ascending: false }) }
       if (state.orderSearchBy.scoreCount) { query = query.order('score_count', { ascending: false }) }
-      
+
       let { data: classes, error } = await query
 
       if (error) throw error
@@ -230,6 +243,18 @@ export default createStore({
     },
     showOnlyOfflineClasses({ dispatch, commit }) {
       commit('switchShowOnlyOfflineClasses')
+      dispatch('fetchSearchResults')
+    },
+    showOnlyAdultsClasses({ dispatch, commit }) {
+      commit('switchShowOnlyAdultsClasses')
+      dispatch('fetchSearchResults')
+    },
+    showOnlyTeensClasses({ dispatch, commit }) {
+      commit('switchShowOnlyTeensClasses')
+      dispatch('fetchSearchResults')
+    },
+    showOnlyChildrenClasses({ dispatch, commit }) {
+      commit('switchShowOnlyChildrenClasses')
       dispatch('fetchSearchResults')
     },
   },
@@ -265,7 +290,7 @@ export default createStore({
     },
 
     clearFilterSearchByCityIds(state) {
-      state.filterSearchBy.cityIds =  []
+      state.filterSearchBy.cityIds = []
     },
 
     clearSearchResults(state) {
@@ -319,6 +344,33 @@ export default createStore({
 
       if (state.filterSearchBy.online) {
         state.filterSearchBy.offline = false
+      }
+    },
+
+    switchShowOnlyAdultsClasses(state) {
+      state.filterSearchBy.demographic.adults = !state.filterSearchBy.demographic.adults
+
+      if (state.filterSearchBy.demographic.adults) {
+        state.filterSearchBy.demographic.teens = false
+        state.filterSearchBy.demographic.children = false
+      }
+    },
+
+    switchShowOnlyTeensClasses(state) {
+      state.filterSearchBy.demographic.teens = !state.filterSearchBy.demographic.teens
+
+      if (state.filterSearchBy.demographic.teens) {
+        state.filterSearchBy.demographic.adults = false
+        state.filterSearchBy.demographic.children = false
+      }
+    },
+
+    switchShowOnlyChildrenClasses(state) {
+      state.filterSearchBy.demographic.children = !state.filterSearchBy.demographic.children
+
+      if (state.filterSearchBy.demographic.children) {
+        state.filterSearchBy.demographic.teens = false
+        state.filterSearchBy.demographic.adults = false
       }
     },
 

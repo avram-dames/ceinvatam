@@ -5,7 +5,15 @@ const props = defineProps({
   score_count: Number,
   name: String,
   cities: Array,
+  target_demographic: Array[String]
 })
+
+const targetDemographicBgColor = {
+  'Adults': 'bg-purple-100',
+  'Teens': 'bg-yellow-100',
+  'Children': 'bg-green-100',
+  'All Ages': 'bg-blue-100',
+}
 </script>
 
 <template>
@@ -17,6 +25,16 @@ const props = defineProps({
     <div class="mt-2 cursor-pointer">
       <h2>{{ name }}</h2>
       <p class="truncate text-sm text-gray-400">{{ cities.join(', ') }}</p>
+    </div>
+
+    <div class="flex space-x-1">
+      <span
+        v-for="target in target_demographic"
+        :key="target"
+        class="text-sm rounded-lg px-2 text-gray-500"
+        :class="targetDemographicBgColor[target]"
+        >{{ target }}</span
+      >
     </div>
 
     <div class="flex justify-between mt-4">

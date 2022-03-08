@@ -64,7 +64,7 @@ const store = useStore();
     </div>
 
     <!-- Filters -->
-    <div class="flex space-x-1 mt-2 lg:mt-0 lg:px-0">
+    <div class="mt-1 flex space-x-1 overflow-x-auto hide-scroll-bar">
       <div
         @click="store.dispatch('showOnlyOnlineClasses')"
         class="
@@ -79,7 +79,7 @@ const store = useStore();
         "
         :class="{ 'bg-blue-300': store.state.filterSearchBy.online }"
       >
-        <span>Doar Online</span>
+        <span>Online</span>
       </div>
 
       <div
@@ -96,7 +96,58 @@ const store = useStore();
         "
         :class="{ 'bg-blue-300': store.state.filterSearchBy.offline }"
       >
-        <span>Doar Offline</span>
+        <span>Offline</span>
+      </div>
+
+      <div
+        @click="store.dispatch('showOnlyAdultsClasses')"
+        class="
+          flex
+          items-center
+          space-x-1
+          bg-gray-200
+          rounded-2xl
+          px-4
+          py-1
+          cursor-pointer
+        "
+        :class="{ 'bg-blue-300': store.state.filterSearchBy.demographic.adults }"
+      >
+        <span>Adulți</span>
+      </div>
+
+      <div
+        @click="store.dispatch('showOnlyTeensClasses')"
+        class="
+          flex
+          items-center
+          space-x-1
+          bg-gray-200
+          rounded-2xl
+          px-4
+          py-1
+          cursor-pointer
+        "
+        :class="{ 'bg-blue-300': store.state.filterSearchBy.demographic.teens }"
+      >
+        <span>Adolescenți</span>
+      </div>
+
+      <div
+        @click="store.dispatch('showOnlyChildrenClasses')"
+        class="
+          flex
+          items-center
+          space-x-1
+          bg-gray-200
+          rounded-2xl
+          px-4
+          py-1
+          cursor-pointer
+        "
+        :class="{ 'bg-blue-300': store.state.filterSearchBy.demographic.children }"
+      >
+        <span>Copii</span>
       </div>
     </div>
   </div>

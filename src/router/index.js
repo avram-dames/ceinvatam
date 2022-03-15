@@ -19,13 +19,6 @@ const router = createRouter({
         name: 'Results',
         component: () => import('../pages/Results.vue'),
         meta: { requiresAuth: false },
-        beforeEnter(to, from) {
-            if (store.getters.userInputIsEmpty && !store.getters.searchByTopic) {
-                alert('User input is empty')
-                return false
-            }
-            return true
-        }
     },
     {
         path: '/details/partner/:id',

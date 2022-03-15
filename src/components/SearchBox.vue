@@ -14,7 +14,7 @@ const userInputIsEmptyAlert = ref("");
 
 store.commit("clearSearchPhrase");
 store.commit("clearFilterSearchByCityIds");
-store.commit("clearSearchResults");
+// store.commit("clearSearchResults");
 
 watchEffect(() => {
   if (!userInputIsEmpty.value) userInputIsEmptyAlert.value = "";

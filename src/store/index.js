@@ -83,6 +83,14 @@ export default createStore({
       return state.user?.user_metadata.is_reviewer
     },
 
+    filteresSelected(state) {
+      return state.filterSearchBy.online ||
+        state.filterSearchBy.offline ||
+        state.filterSearchBy.demographic.adults ||
+        state.filterSearchBy.demographic.teens ||
+        state.filterSearchBy.demographic.children
+    },
+
     userInputIsEmpty(state) {
       return state.searchPhrase === '' && state.filterSearchBy.cityIds.length === 0
     },
@@ -257,6 +265,10 @@ export default createStore({
       commit('switchShowOnlyChildrenClasses')
       dispatch('fetchSearchResults')
     },
+    resetFilters({ dispatch, commit }) {
+      commit('resetFilters')
+      dispatch('fetchSearchResults')
+    }
   },
   mutations: {
     switchOnSearchByTopic(state, payload) {
@@ -409,6 +421,14 @@ export default createStore({
     setSearchTypeToPartner(state) {
       state.searchResultsType = 'partner'
     },
+
+    resetFilters(state) {
+      state.filterSearchBy.online = false
+      state.filterSearchBy.offline = false
+      state.filterSearchBy.demographic.adults = false
+      state.filterSearchBy.demographic.teens = false
+      state.filterSearchBy.demographic.children = false
+    }
   },
   plugins: [vuexLocal.plugin]
 })

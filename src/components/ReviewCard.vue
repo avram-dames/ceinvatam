@@ -17,7 +17,7 @@ const props = defineProps([
     <div class="w-full">
       <div class="flex pb-4 pt-1 justify-between">
         <div>{{ first_name }}</div>
-        <div class="px-4 py-2 bg-orange-400">{{ score }}</div>
+        <div class="px-2 bg-purple-400 rounded-md text-white">{{ score }}</div>
       </div>
       <div>
         {{ text }}

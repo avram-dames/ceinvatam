@@ -1,4 +1,5 @@
 <script setup>
+import { parseDate } from '../utils/parsers';
 const props = defineProps([
   'first_name',
   'avatar_url',
@@ -21,7 +22,7 @@ const props = defineProps([
       <div>
         {{ text }}
       </div>
-      <div class="text-sm text-right text-gray-400">{{ created_at }}</div>
+      <div class="text-sm text-right text-gray-400">{{ parseDate(created_at) }}</div>
     </div>
   </div>
 </template>

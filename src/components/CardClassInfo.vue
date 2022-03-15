@@ -17,11 +17,18 @@ const props = defineProps({
 const router = useRouter();
 const duration_obj = JSON.parse(props.duration);
 const targetDemographicBgColor = {
-  'Adults': 'bg-purple-100',
-  'Teens': 'bg-yellow-100',
-  'Children': 'bg-green-100',
-  'All Ages': 'bg-blue-100',
-}
+  Adults: "bg-purple-100",
+  Teens: "bg-yellow-100",
+  Children: "bg-green-100",
+  "All Ages": "bg-blue-100",
+};
+
+const targetDemographicTranslation = {
+  Adults: "Adulți",
+  Teens: "Tineri",
+  Children: "Copii",
+  "All Ages": "Toate Vârstele",
+};
 
 function navigateToClass(id) {
   router.push({ name: "Class", params: { id: id } });
@@ -44,7 +51,7 @@ function navigateToClass(id) {
         :key="target"
         class="text-sm rounded-lg px-2 text-gray-500"
         :class="targetDemographicBgColor[target]"
-        >{{ target }}</span
+        >{{ targetDemographicTranslation[target] }}</span
       >
     </div>
 

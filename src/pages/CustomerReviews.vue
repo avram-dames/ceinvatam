@@ -1,22 +1,25 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
 import supabase from "../utils/supabase";
 
 import Navbar from "../components/Navbar.vue";
-import ReviewCard from "../components/ReviewCard.vue";
+import ReviewCardPersonal from "../components/ReviewCardPersonal.vue";
 
 const store = useStore();
 const router = useRouter();
 
 const classReviews = ref();
 const partnerReviews = ref();
+const userAvatar = computed(() => store.getters.userAvatar)
+const userFullName = computed(() => store.getters.userFullName)
 
 async function updateClassScore(classId) {
-  const { data, error } = await supabase
-    .rpc("update_class_score", {classid: classId})
+  const { data, error } = await supabase.rpc("update_class_score", {
+    classid: classId,
+  });
 
   if (error) {
     console.log(error);
@@ -25,8 +28,9 @@ async function updateClassScore(classId) {
 }
 
 async function updatePartnerScore(partnerId) {
-  const { data, error } = await supabase
-    .rpc("update_partner_score", {partnerid: partnerId})
+  const { data, error } = await supabase.rpc("update_partner_score", {
+    partnerid: partnerId,
+  });
 
   if (error) {
     console.log(error);
@@ -37,7 +41,9 @@ async function updatePartnerScore(partnerId) {
 async function getClassReviews() {
   let { data: class_reviews, error } = await supabase
     .from("class_reviews")
-    .select("id, text, score, created_at, first_name, avatar_url, class_id")
+    .select(
+      "id, text, score, created_at, first_name, avatar_url, class_id, classes(name)"
+    )
     .eq("user_id", store.state.user.id);
 
   classReviews.value = class_reviews;
@@ -46,7 +52,9 @@ async function getClassReviews() {
 async function getPartnerReviews() {
   let { data: partner_reviews, error } = await supabase
     .from("partner_reviews")
-    .select("id, text, score, created_at, first_name, avatar_url, partner_id")
+    .select(
+      "id, text, score, created_at, first_name, avatar_url, partner_id, partners(name)"
+    )
     .eq("user_id", store.state.user.id);
 
   partnerReviews.value = partner_reviews;
@@ -94,7 +102,7 @@ getClassReviews();
 getPartnerReviews();
 
 if (classReviews.value) {
-  console.log(classReviews.value.length)
+  console.log(classReviews.value.length);
 }
 </script>
 
@@ -102,11 +110,21 @@ if (classReviews.value) {
   <Navbar class=""></Navbar>
   <Suspense>
     <template #default>
-      <div class="p-4">
-        <h2>Recenzii Cursuri</h2>
-        <div class="flex flex-col space-y-4 divide-y divide-solid">
+      <div class="px-4 py-12 m-auto max-w-md text-gray-600">
+        <div class="flex flex-col items-center space-y-4">
+          <img
+            :src="userAvatar"
+            alt="User Avatar"
+            class="h-12 w-12 rounded-2xl object-cover"
+          />
+          <h2 class="text-3xl font-medium text-gray-800">
+            {{ userFullName }}
+          </h2>
+        </div>
+        <h2 class="text-center mt-8">Recenzii Cursuri</h2>
+        <div class="mt-4 flex flex-col space-y-4 divide-y divide-solid">
           <div v-for="review in classReviews" :key="review.id">
-            <ReviewCard v-bind="review"></ReviewCard>
+            <ReviewCardPersonal v-bind="review"></ReviewCardPersonal>
             <div class="flex justify-end space-x-4">
               <button
                 id="edit-icon"
@@ -127,7 +145,10 @@ if (classReviews.value) {
                   />
                 </svg>
               </button>
-              <button class="delete-icon" @click="deleteClassReview(review.class_id, review.id)">
+              <button
+                class="delete-icon"
+                @click="deleteClassReview(review.class_id, review.id)"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-8 w-8"
@@ -147,10 +168,10 @@ if (classReviews.value) {
           </div>
         </div>
 
-        <h2 class="pt-8">Recenzii Academii</h2>
-        <div class="flex flex-col space-y-4 divide-y divide-solid"></div>
+        <h2 class="text-center mt-12">Recenzii Academii</h2>
+        <div class="mt-8 flex flex-col space-y-4 divide-y divide-solid"></div>
         <div v-for="review in partnerReviews" :key="review.id">
-          <ReviewCard v-bind="review"></ReviewCard>
+          <ReviewCardPersonal v-bind="review"></ReviewCardPersonal>
           <div class="flex justify-end space-x-4">
             <button
               id="edit-icon"
@@ -171,7 +192,10 @@ if (classReviews.value) {
                 />
               </svg>
             </button>
-            <button class="delete-icon" @click="deletePartnerReview(review.partner_id, review.id)">
+            <button
+              class="delete-icon"
+              @click="deletePartnerReview(review.partner_id, review.id)"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-8 w-8"

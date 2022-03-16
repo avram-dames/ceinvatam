@@ -1,13 +1,18 @@
 <script setup>
 import { useStore } from "vuex";
 
+import Home from "../pages/Home.vue";
+
+import ArrowDown from "./icons/ArrowDown.vue";
+import Close from "./icons/Close.vue";
+
 const store = useStore();
 </script>
 
 <template>
   <div class="lg:flex lg:space-x-1">
     <!-- Sorters -->
-    <div class="mt-1 flex overflow-x-auto hide-scroll-bar">
+    <div class="mt-1 flex overflow-x-auto hide-scroll-bar space-x-1">
       <!-- Sort by name -->
       <div
         @click="store.dispatch('orderResultsByName')"
@@ -17,15 +22,16 @@ const store = useStore();
           space-x-1
           bg-gray-200
           rounded-2xl
-          px-4
+          pl-4
           py-1
           cursor-pointer
         "
         :class="
-          store.state.orderSearchBy.name ? ['bg-green-200', 'order-first', 'ml-0'] : ['ml-1']
+          store.state.orderSearchBy.name ? ['bg-green-200', 'pr-2'] : ['pr-4']
         "
       >
         <span>Nume</span>
+        <ArrowDown v-if="store.state.orderSearchBy.name" class="h-5 w-5"></ArrowDown>
       </div>
 
       <!-- Sort by score -->
@@ -37,15 +43,16 @@ const store = useStore();
           space-x-1
           bg-gray-200
           rounded-2xl
-          px-4
+          pl-4
           py-1
           cursor-pointer
         "
         :class="
-          store.state.orderSearchBy.score ? ['bg-green-200', 'order-first', 'ml-0'] : ['ml-1']
+          store.state.orderSearchBy.score ? ['bg-green-200', 'pr-2'] : ['pr-4']
         "
       >
         <span>Nota</span>
+        <ArrowDown v-if="store.state.orderSearchBy.score" class="h-5 w-5"></ArrowDown>
       </div>
 
       <!-- Sort by score count -->
@@ -57,16 +64,17 @@ const store = useStore();
           space-x-1
           bg-gray-200
           rounded-2xl
-          px-4
+          pl-4
           py-1
           cursor-pointer
         "
         :class="
-          store.state.orderSearchBy.scoreCount ? ['bg-green-200', 'order-first', 'ml-0'] : ['ml-1']
+          store.state.orderSearchBy.scoreCount ? ['bg-green-200', 'pr-2'] : ['pr-4']
           
         "
       >
         <span>Număr Evaluări</span>
+        <ArrowDown v-if="store.state.orderSearchBy.scoreCount" class="h-5 w-5"></ArrowDown>
       </div>
     </div>
 
@@ -81,29 +89,19 @@ const store = useStore();
           space-x-1
           bg-gray-200
           rounded-2xl
-          px-4
+          pl-4
           py-1
           cursor-pointer
+          overflow-clip
         "
         :class="
           store.state.filterSearchBy.online
             ? ['bg-blue-300', 'pr-2']
-            : ''
+            : ['pr-4']
         "
       >
         <span>Online</span>
-         <svg v-if="store.state.filterSearchBy.online"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        <Close v-if="store.state.filterSearchBy.online" class="h-5 w-5"></Close>
       </div>
 
       <div
@@ -115,29 +113,18 @@ const store = useStore();
           space-x-1
           bg-gray-200
           rounded-2xl
-          px-4
+          pl-4
           py-1
           cursor-pointer
         "
         :class="
           store.state.filterSearchBy.offline
             ? ['bg-blue-300', 'pr-2']
-            : ''
+            : ['pr-4']
         "
       >
         <span>Offline</span>
-         <svg v-if="store.state.filterSearchBy.offline"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        <Close v-if="store.state.filterSearchBy.offline" class="h-5 w-5"></Close>
       </div>
 
       <div
@@ -149,29 +136,18 @@ const store = useStore();
           space-x-1
           bg-gray-200
           rounded-2xl
-          px-4
+          pl-4
           py-1
           cursor-pointer
         "
         :class="
           store.state.filterSearchBy.demographic.adults
             ? ['bg-blue-300', 'pr-2']
-            : ''
+            : ['pr-4']
         "
       >
         <span>Adulți</span>
-         <svg v-if="store.state.filterSearchBy.demographic.adults"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        <Close v-if="store.state.filterSearchBy.demographic.adults" class="h-5 w-5"></Close>
       </div>
 
       <div
@@ -194,18 +170,7 @@ const store = useStore();
         "
       >
         <span>Adolescenți</span>
-         <svg v-if="store.state.filterSearchBy.demographic.teens"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        <Close v-if="store.state.filterSearchBy.demographic.teens" class="h-5 w-5"></Close>
       </div>
 
       <div
@@ -228,18 +193,7 @@ const store = useStore();
         "
       >
         <span>Copii</span>
-        <svg v-if="store.state.filterSearchBy.demographic.children"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        <Close v-if="store.state.filterSearchBy.demographic.children" class="h-5 w-5"></Close>
       </div>
     </div>
   </div>

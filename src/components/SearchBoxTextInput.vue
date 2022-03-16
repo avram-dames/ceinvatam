@@ -115,7 +115,7 @@ onUnmounted(() => {
         h-12
         w-full
         m-0
-        px-4
+        px-2
         py-2
         border border-gray-300
         rounded-md

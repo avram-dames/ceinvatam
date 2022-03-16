@@ -19,6 +19,6 @@ const firstName = computed(() => store.getters.userFirstName);
       <span v-else>Descoperă cursul potrivit pentru tine</span>
     </h1>
     <SearchBox class="mt-10"></SearchBox>
-    <CategoryDrillDown class="mt-20 lg:mt-32"></CategoryDrillDown>
+    <CategoryDrillDown class="mt-10 lg:mt-32"></CategoryDrillDown>
   </div>
 </template>

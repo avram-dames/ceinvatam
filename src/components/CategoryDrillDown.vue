@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
@@ -32,13 +32,27 @@ function showResultsByTopic(topic) {
 
 <template>
   <div>
-    <h2 v-if="showCategories" class="text-center">Categorii</h2>
+    <h2 v-if="showCategories" class="">Cauta dupa categorii</h2>
     <div v-else>
-      <h2 class="text-center">Topics</h2>
+      <h2 class="">Alege o subcategorie</h2>
       <div
         @click="showCategories = true"
-        class="mt-4 text-right w-full text-gray-600 cursor-pointer"
+        class="mt-4 text-gray-600 cursor-pointer rounded-md flex items-center"
       >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          />
+        </svg>
         Înapoi la categorii
       </div>
     </div>

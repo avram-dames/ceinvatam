@@ -6,10 +6,14 @@ import { useStore } from "vuex";
 import supabase from "../utils/supabase";
 
 import Navbar from "../components/Navbar.vue";
+import AlertDeleteAccountModal from "../components/AlertDeleteAccountModal.vue";
+import DownloadIcon from "../components/icons/Download.vue";
 
 const router = useRouter();
 const store = useStore();
-const updateStatus = ref('');
+const updateStatus = ref("");
+
+const alertDeleteAccountModalIsOpen = ref(false);
 
 const form = ref({
   email: store.state.user?.email,
@@ -45,11 +49,52 @@ async function updateProfile() {
 
   if (error) {
     throw error;
-    updateStatus.value = 'error';  
+    updateStatus.value = "error";
   }
-  updateStatus.value = 'success';
+  updateStatus.value = "success";
 
   updateReviewsUserData(user.id);
+}
+
+async function downloadReviewsAsCsv(table) {
+  const { data, error } = await supabase
+    .from(table)
+    .select()
+    .eq("user_id", store.state.user.id)
+    .csv();
+  if (error) throw error;
+
+  const link = window.document.createElement("a");
+  link.setAttribute(
+    "href",
+    "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(data)
+  );
+  link.setAttribute("download", "data.csv");
+  link.click();
+}
+
+async function downloadPersonalDataAsCsv(table) {
+  const user = supabase.auth.user();
+  const header = "user_id,email,email_confirmed_at,user_metadata\n";
+  const data = [
+    user.id,
+    user.email,
+    user.email_confirmed_at,
+    JSON.stringify(user.user_metadata),
+  ];
+  const link = window.document.createElement("a");
+  link.setAttribute(
+    "href",
+    "data:text/csv;charset=utf-8,%EF%BB%BF" +
+      encodeURI(header + data.join(",") + "\n")
+  );
+  link.setAttribute("download", "data.csv");
+  link.click();
+}
+
+async function deleteAccount() {
+  //to be implemented
+  alertDeleteAccountModalIsOpen.value = false
 }
 </script>
 
@@ -148,21 +193,31 @@ async function updateProfile() {
     </form>
 
     <h2 class="mt-12">Date personale</h2>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil nulla
-      aperiam iure doloribus amet facere, veritatis error nemo possimus deleniti
-      fugit maxime, id nam commodi? Expedita odio iusto sunt tempore.
-      <span class="text-green-400"
-        ><a href="">Descarca date personale.</a></span
-      >
+    <p class="mt-4">
+      Conform politici Europene de protecție a datelor cu caracter 
+      personal, aveți dreptul de a vă descărca datele dumneavoastră.
+      Puteți citi mai multe despre drepturile dumneavoastră cu legătura
+      la protecția datelor, <router-link :to="{name: 'ConfPolicy'}" class="text-blue-600 hover:text-blue-400">aici.</router-link>
+      <ul class="mt-4">
+      <li class="text-green-500 flex items-center px-2 cursor-pointer" @click="downloadPersonalDataAsCsv()"><DownloadIcon class="h-4 w-4 mr-1"></DownloadIcon>Descarca date personale</li>
+      <li class="text-green-500 flex items-center px-2 cursor-pointer" @click="downloadReviewsAsCsv('class_reviews')"><DownloadIcon class="h-4 w-4 mr-1"></DownloadIcon>Descarca recenzii cursuri</li>
+      <li class="text-green-500 flex items-center px-2 cursor-pointer" @click="downloadReviewsAsCsv('partner_reviews')"><DownloadIcon class="h-4 w-4 mr-1"></DownloadIcon>Descarca recenzii companii</li>
+      </ul>
     </p>
 
     <h2 class="mt-12">Șterge cont</h2>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil nulla
-      aperiam iure doloribus amet facere, veritatis error nemo possimus deleniti
-      fugit maxime, id nam commodi? Expedita odio iusto sunt tempore.
-      <span class="text-red-400"><a href="">Sterge Cont.</a></span>
+    <p class="mt-4">
+      În cazul în care doriți să vă ștergeți contul, puteți accesa linkul următor. Acest proces v-a șterge 
+      datele dumneavoastră din baza noastră de date în mod irevocabil. În cazul în care doriți să vă salvați 
+      datele personale înainte de a vă șterge contul, vedeți secținea "Date personale" de mai sus.
     </p>
+    <button class="text-white bg-red-500 w-full py-2 rounded-md text-center mt-4" @click="alertDeleteAccountModalIsOpen = true">Șterge Cont</button>
   </div>
+  <!-- Black overlay in order to make the modal pop -->
+  <div
+      v-if="alertDeleteAccountModalIsOpen"
+      class="bg-black z-10 opacity-80 w-full h-full fixed top-0 left-0"
+    >
+  </div>
+  <AlertDeleteAccountModal class="z-50" :isOpen="alertDeleteAccountModalIsOpen" @close-modal="alertDeleteAccountModalIsOpen = false" @delete-account="deleteAccount"></AlertDeleteAccountModal>
 </template>

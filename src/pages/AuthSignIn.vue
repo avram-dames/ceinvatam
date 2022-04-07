@@ -9,17 +9,18 @@ import NavbarPlaceholder from "../components/NavbarPlaceholder.vue";
 import fbLogoUrl from "../assets/fb_logo.png";
 import gLogoUrl from "../assets/g_logo.png";
 import AlertError from "../components/AlertError.vue";
+import ArrowBack from "../components/icons/ArrowBack.vue";
 
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
 const showPassword = ref();
-const alertErrorMessage = ref('');
+const alertErrorMessage = ref("");
 
 // the following trick is used to handle the situation when a social provider takes
 // longer to return the auth user object
-const userIsAuthenticated = computed(() => store.getters.userIsAuthenticated)
-watch(userIsAuthenticated, () => router.push('Home'))
+const userIsAuthenticated = computed(() => store.getters.userIsAuthenticated);
+watch(userIsAuthenticated, () => router.push("Home"));
 
 const alerts = ref(store.state.alerts);
 alerts.value.forEach((item) => alert(item.msg));
@@ -57,7 +58,8 @@ async function handleLogin(provider) {
 
   if (error) {
     if (error.status === 400) {
-      alertErrorMessage.value = 'Datele de autentificare sunt incorecte. Te rugăm să încerci din nou!'
+      alertErrorMessage.value =
+        "Datele de autentificare sunt incorecte. Te rugăm să încerci din nou!";
     }
     throw error;
   }
@@ -140,6 +142,25 @@ async function handleLogin(provider) {
       <button class="p-2 bg-blue-600 text-white rounded-md mt-8 w-full">
         Autentificare
       </button>
+
+      <div
+        @click="$router.go(-1);"
+        class="
+          p-2
+          bg-gray-400
+          text-white
+          rounded-md
+          mt-2
+          w-full
+          flex
+          items-center
+          justify-center
+        "
+      >
+        <ArrowBack></ArrowBack>
+        <span class="ml-1">Înapoi</span>
+      </div>
+
       <AlertError :message="alertErrorMessage"></AlertError>
     </form>
 

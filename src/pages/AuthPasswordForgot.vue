@@ -6,6 +6,7 @@ import supabase from "../utils/supabase";
 import NavbarPlaceholder from "../components/NavbarPlaceholder.vue";
 import AlertModal from "../components/AlertModal.vue";
 import AlertError from "../components/AlertError.vue";
+import ArrowBack from "../components/icons/ArrowBack.vue";
 
 const router = useRouter();
 const props = defineProps(["query"]);
@@ -87,6 +88,23 @@ async function submitPasswordResetRequest() {
       <button class="p-2 mt-4 bg-red-500 text-white rounded-md w-full">
         Resetează Parola
       </button>
+      <div
+        @click="$router.go(-1);"
+        class="
+          p-2
+          bg-gray-400
+          text-white
+          rounded-md
+          mt-2
+          w-full
+          flex
+          items-center
+          justify-center
+        "
+      >
+        <ArrowBack></ArrowBack>
+        <span class="ml-1">Înapoi</span>
+      </div>
     </form>
     <!-- Black overlay in order to make the modal pop -->
     <div

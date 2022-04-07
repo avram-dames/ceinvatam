@@ -8,6 +8,7 @@ import AlertError from "../components/AlertError.vue";
 
 import fbLogoUrl from "../assets/fb_logo.png";
 import gLogoUrl from "../assets/g_logo.png";
+import ArrowBack from "../components/icons/ArrowBack.vue";
 
 const router = useRouter();
 const email = ref("");
@@ -133,6 +134,23 @@ async function loginWithSocial(provider) {
       <button class="p-2 bg-blue-600 text-white rounded-md mt-4 w-full">
         Crează cont
       </button>
+       <div
+        @click="$router.go(-1);"
+        class="
+          p-2
+          bg-gray-400
+          text-white
+          rounded-md
+          mt-2
+          w-full
+          flex
+          items-center
+          justify-center
+        "
+      >
+        <ArrowBack></ArrowBack>
+        <span class="ml-1">Înapoi</span>
+      </div>
     </form>
 
     <!-- Sign Up -->

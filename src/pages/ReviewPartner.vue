@@ -142,9 +142,9 @@ async function updateReview(id) {
   router.push({ name: "CustomerReviews" });
 }
 
-function handleSubmit(partnerId) {
+function handleSubmit(reviewId) {
   if (route.path.includes("update")) {
-    updateReview(partnerId);
+    updateReview(reviewId);
   } else {
     createReview();
   }
@@ -184,7 +184,7 @@ if (route.path.includes("create")) {
       :textAreaValue="reviewText"
       @update:sliderValue="(newValue) => (reviewScore = newValue)"
       @update:textAreaValue="(newValue) => (reviewText = newValue)"
-      @submit="handleSubmit(partnerId)"
+      @submit="handleSubmit(reviewId)"
       @cancel="returnToPrevPage()"
     ></ReviewPartnerForm>
     <!-- Black overlay in order to make the modal pop -->

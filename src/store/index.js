@@ -187,17 +187,19 @@ export default createStore({
       commit('startLoadingResults');
       commit('setSearchTypeToClass')
       let query;
-
+      
+      // category drill down search
       if (state.searchByTopic) {
         query = supabase.from('classes')
           .select("id, name, score, score_count, offline, online, duration, partners(name), class2cities(city_id), target_demographic")
           .eq('topic', state.searchByTopic)
       }
+      // search by city - no user keywords input
       else if (state.searchPhrase === '') {
         commit('setSearchTypeToPartner')
         query = supabase.from('partners_with_cities')
           .select('id, name, score, score_count, offline, online, cities, city_ids, target_demographic')
-          .contains('city_ids', prepareCityFilter(state.filterSearchBy.cityIds))
+          .overlaps('city_ids', prepareCityFilter(state.filterSearchBy.cityIds))
       }
       else {
         query = supabase.rpc('query_classes', {

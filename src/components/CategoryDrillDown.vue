@@ -32,7 +32,7 @@ function showResultsByTopic(topic) {
 
 <template>
   <div>
-    <h2 v-if="showCategories" class="">Cauta dupa categorii</h2>
+    <h2 v-if="showCategories" class="">Alege o categorie</h2>
     <div v-else>
       <h2 class="">Alege o subcategorie</h2>
       <div

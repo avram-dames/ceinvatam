@@ -70,9 +70,7 @@ function addReview() {
             :key="review.id"
           ></ReviewCard>
         </div>
-        <div v-else>
-          Momentan nu există recenzii pentru acest curs.
-        </div>
+        <div v-else>Momentan nu există recenzii pentru acest curs.</div>
       </div>
     </Tab>
     <Tab title="Certificări">
@@ -97,8 +95,11 @@ function addReview() {
 
   <!-- Call To Action -->
   <div class="mt-12 flex justify-around">
-    <button class="px-4 py-2 w-full bg-purple-400 text-white rounded-md">
+    <router-link
+      :to="{ name: 'ClassSignUp', id: props.id }"
+      class="px-4 py-2 w-full bg-purple-400 text-white rounded-md text-center"
+    >
       Sunt interesat!
-    </button>
+    </router-link>
   </div>
 </template>

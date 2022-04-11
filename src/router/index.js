@@ -33,6 +33,18 @@ const router = createRouter({
         meta: { requiresAuth: false }
     },
     {
+        path: '/details/class/:id(\\d+)/signup',
+        name: 'ClassSignUp',
+        component: () => import('../pages/ClassSignUp.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
+        path: '/details/class/:id(\\d+)/signup/confirmed',
+        name: 'ClassSignUpConfirmation',
+        component: () => import('../pages/ClassSignUpConfirmation.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
         path: '/details/partner/:partner_id(\\d+)/review/create',
         name: 'ReviewPartnerCreate',
         component: () => import('../pages/ReviewPartner.vue'),

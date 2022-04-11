@@ -116,6 +116,9 @@ export default createStore({
       const socialFullName = state.user?.user_metadata?.full_name || state.user?.user_metadata?.name
       return defaultValue || socialFullName
     },
+    userPhoneNumber(state) {
+      return state.user?.user_metadata?.phone_number
+    },
     userAvatar(state) {
       const defaultAvatarUrl = 'https://res.cloudinary.com/avram-dev/image/upload/v1644927764/test/default_avatar_pnkzp3.svg';
       const userAvatar = state.user?.user_metadata?.user_avatar;
@@ -201,6 +204,7 @@ export default createStore({
           .select('id, name, score, score_count, offline, online, cities, city_ids, target_demographic')
           .overlaps('city_ids', prepareCityFilter(state.filterSearchBy.cityIds))
       }
+      // query classes with a search phrase and city ids optional
       else {
         query = supabase.rpc('query_classes', {
           search_term: prepareTextSearchTerms(state.searchPhrase),

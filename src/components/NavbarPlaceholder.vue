@@ -23,7 +23,7 @@
         "
       >
         <router-link
-          to="/"
+          :to="{name: 'Home'}"
           class="
             text-xl
             font-bold

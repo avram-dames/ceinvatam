@@ -41,7 +41,7 @@ async function updateUserPassword() {
 <template>
   <NavbarPlaceholder class=""></NavbarPlaceholder>
   <div class="px-4 py-12 m-auto max-w-md text-gray-600">
-    <h2 class="text-4xl font-bold text-gray-800">Creare parolă nouă</h2>
+    <h2 class="text-4xl font-bold text-gray-800">Crează o parolă nouă</h2>
     <!-- Email Login -->
     <form @submit.prevent="updateUserPassword()">
       <!-- Email Input -->

@@ -27,9 +27,14 @@ function addReview() {
 <template>
   <div>
     <h1>{{ name }}</h1>
-    <div class="text-xl mt-2">
-      <router-link :to="`/details/partner/${partnerId}`">{{ partnerName }}</router-link>
-    </div>
+    <h2 class="text-xl mt-2">
+      <span class="text-md font-normal">oferit de </span
+      ><router-link
+        :to="`/details/partner/${partnerId}`"
+        class="text-blue-600 hover:underline"
+        >{{ partnerName }}</router-link
+      >
+    </h2>
 
     <Suspense>
       <template #default>
@@ -42,7 +47,9 @@ function addReview() {
 
     <div class="mt-8 flex justify-between">
       <div v-if="score">
-        <span class="text-white px-2 py-1 bg-purple-700 rounded-md">{{ score }}</span>
+        <span class="text-white px-2 py-1 bg-purple-700 rounded-md">{{
+          score
+        }}</span>
         <span class="pl-1 pr-2">{{ scoreCount }} evaluări</span>
       </div>
       <div v-else>

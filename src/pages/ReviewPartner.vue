@@ -158,7 +158,6 @@ async function checkIfUserLeftReviewAlready(partnerId, userId) {
     .eq("partner_id", partnerId)
     .eq("user_id", userId)
     .single();
-  console.log(partner_reviews)
   if (partner_reviews) {
     openAlertModal(
       "Recenzie existentă",

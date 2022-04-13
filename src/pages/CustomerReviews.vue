@@ -100,10 +100,6 @@ function editPartnerReview(partner_id, review_id) {
 
 getClassReviews();
 getPartnerReviews();
-
-if (classReviews.value) {
-  console.log(classReviews.value.length);
-}
 </script>
 
 <template>

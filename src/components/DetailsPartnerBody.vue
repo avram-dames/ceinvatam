@@ -27,7 +27,8 @@ async function getReviews(partnerId) {
   let { data: partner_reviews, error } = await supabase
     .from("partner_reviews")
     .select("id, text, score, created_at, first_name, avatar_url")
-    .eq("partner_id", partnerId);
+    .eq("partner_id", partnerId)
+    .eq("status", 'approved');
 
   if (error) throw error;
 

@@ -17,7 +17,8 @@ async function getReviews(classId) {
   let { data: class_reviews, error } = await supabase
     .from("class_reviews")
     .select("id, text, score, created_at, first_name, avatar_url")
-    .eq("class_id", classId);
+    .eq("class_id", classId)
+    .eq("status", "approved");
 
   if (error) throw error;
 

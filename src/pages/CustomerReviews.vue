@@ -109,6 +109,7 @@ getPartnerReviews();
   <Suspense>
     <template #default>
       <div class="px-4 py-12 m-auto max-w-md text-gray-600">
+        <!-- User Profile -->
         <div class="flex flex-col items-center space-y-4">
           <img
             :src="userAvatar"
@@ -119,8 +120,14 @@ getPartnerReviews();
             {{ userFullName }}
           </h2>
         </div>
+
+        <!-- Class Reviews -->
         <h2 class="text-center mt-8">Recenzii Cursuri</h2>
-        <div class="mt-4 flex flex-col space-y-4 divide-y divide-solid">
+        <!-- In case user left reviews -->
+        <div
+          v-if="classReviews.length"
+          class="mt-4 flex flex-col space-y-4 divide-y divide-solid"
+        >
           <div v-for="review in classReviews" :key="review.id">
             <ReviewCardPersonal v-bind="review"></ReviewCardPersonal>
             <div class="flex justify-end space-x-4 mt-2">
@@ -128,20 +135,27 @@ getPartnerReviews();
                 id="edit-icon"
                 @click="editClassReview(review.class_id, review.id)"
               >
-              <Edit></Edit>
+                <Edit></Edit>
               </button>
               <button
                 class="delete-icon"
                 @click="deleteClassReview(review.class_id, review.id)"
               >
-              <Trash></Trash>
+                <Trash></Trash>
               </button>
             </div>
           </div>
         </div>
+        <!-- In case user did not left reviews -->
+        <div v-else>
+          <p class="text-center mt-8">Încă nu ai lăsat nici o recenzie.</p>
+        </div>
 
         <h2 class="text-center mt-12">Recenzii Academii</h2>
-        <div class="mt-4 flex flex-col space-y-4 divide-y divide-solid">
+        <div
+          v-if="partnerReviews.length"
+          class="mt-4 flex flex-col space-y-4 divide-y divide-solid"
+        >
           <div v-for="review in partnerReviews" :key="review.id">
             <ReviewCardPersonal v-bind="review"></ReviewCardPersonal>
             <div class="flex justify-end space-x-4 mt-2">
@@ -159,6 +173,10 @@ getPartnerReviews();
               </button>
             </div>
           </div>
+        </div>
+        <!-- In case user did not left reviews -->
+        <div v-else>
+          <p class="text-center mt-8">Încă nu ai lăsat nici o recenzie.</p>
         </div>
       </div>
     </template>

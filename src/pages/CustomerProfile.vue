@@ -147,6 +147,7 @@ async function deleteAccount() {
           required
           placeholder="name@email.com"
         />
+        <div class="px-2 text-sm text-gray-400">Schimbarea adresei de email, necesită confirmare de la noua adresă de email.</div>
       </div>
       <!-- Sign In -->
       <button class="p-2 bg-blue-600 text-white rounded-md mt-8 w-full">

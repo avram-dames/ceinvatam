@@ -7,14 +7,16 @@ import supabase from "../utils/supabase";
 
 import Navbar from "../components/Navbar.vue";
 import ReviewCardPersonal from "../components/ReviewCardPersonal.vue";
+import Edit from "../components/icons/Edit.vue";
+import Trash from "../components/icons/Trash.vue";
 
 const store = useStore();
 const router = useRouter();
 
 const classReviews = ref();
 const partnerReviews = ref();
-const userAvatar = computed(() => store.getters.userAvatar)
-const userFullName = computed(() => store.getters.userFullName)
+const userAvatar = computed(() => store.getters.userAvatar);
+const userFullName = computed(() => store.getters.userFullName);
 
 async function updateClassScore(classId) {
   const { data, error } = await supabase.rpc("update_class_score", {
@@ -42,7 +44,7 @@ async function getClassReviews() {
   let { data: class_reviews, error } = await supabase
     .from("class_reviews")
     .select(
-      "id, text, score, created_at, first_name, avatar_url, class_id, classes(name)"
+      "id, text, score, created_at, first_name, avatar_url, class_id, classes(name), status"
     )
     .eq("user_id", store.state.user.id);
 
@@ -53,7 +55,7 @@ async function getPartnerReviews() {
   let { data: partner_reviews, error } = await supabase
     .from("partner_reviews")
     .select(
-      "id, text, score, created_at, first_name, avatar_url, partner_id, partners(name)"
+      "id, text, score, created_at, first_name, avatar_url, partner_id, partners(name), status"
     )
     .eq("user_id", store.state.user.id);
 
@@ -121,92 +123,41 @@ getPartnerReviews();
         <div class="mt-4 flex flex-col space-y-4 divide-y divide-solid">
           <div v-for="review in classReviews" :key="review.id">
             <ReviewCardPersonal v-bind="review"></ReviewCardPersonal>
-            <div class="flex justify-end space-x-4">
+            <div class="flex justify-end space-x-4 mt-2">
               <button
                 id="edit-icon"
                 @click="editClassReview(review.class_id, review.id)"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                  />
-                </svg>
+              <Edit></Edit>
               </button>
               <button
                 class="delete-icon"
                 @click="deleteClassReview(review.class_id, review.id)"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
+              <Trash></Trash>
               </button>
             </div>
           </div>
         </div>
 
         <h2 class="text-center mt-12">Recenzii Academii</h2>
-        <div class="mt-8 flex flex-col space-y-4 divide-y divide-solid"></div>
-        <div v-for="review in partnerReviews" :key="review.id">
-          <ReviewCardPersonal v-bind="review"></ReviewCardPersonal>
-          <div class="flex justify-end space-x-4">
-            <button
-              id="edit-icon"
-              @click="editPartnerReview(review.partner_id, review.id)"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+        <div class="mt-4 flex flex-col space-y-4 divide-y divide-solid">
+          <div v-for="review in partnerReviews" :key="review.id">
+            <ReviewCardPersonal v-bind="review"></ReviewCardPersonal>
+            <div class="flex justify-end space-x-4 mt-2">
+              <button
+                id="edit-icon"
+                @click="editPartnerReview(review.partner_id, review.id)"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
-              </svg>
-            </button>
-            <button
-              class="delete-icon"
-              @click="deletePartnerReview(review.partner_id, review.id)"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+                <Edit></Edit>
+              </button>
+              <button
+                class="delete-icon"
+                @click="deletePartnerReview(review.partner_id, review.id)"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
-            </button>
+                <Trash></Trash>
+              </button>
+            </div>
           </div>
         </div>
       </div>
